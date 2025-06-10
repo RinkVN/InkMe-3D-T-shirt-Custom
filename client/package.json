@@ -43,7 +43,7 @@
     "yet-another-react-lightbox": "^3.12.3"
   },
   "scripts": {
-    "vite": "react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
