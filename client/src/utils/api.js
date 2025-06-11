@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const fetchDataFromApi = async (url) => {
     try {
-        const { data } = await axios.get(import.meta.env.VITE_APP_BASE_URL + url );
+        const { data } = await axios.get(process.env.REACT_APP_BASE_URL + url );
         return data;
     } catch (error) {
         console.log('API fetch error:', error);
@@ -14,7 +14,7 @@ export const fetchDataFromApi = async (url) => {
 
 export const postData = async (url, formData) => {
     try {
-        const response = await fetch(import.meta.env.VITE_APP_BASE_URL + url, {
+        const response = await fetch(process.env.REACT_APP_BASE_URL + url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export const postData = async (url, formData) => {
 
 export const editData = async (url, updatedData) => {
     try {
-        const { res } = await axios.put(`${import.meta.env.VITE_APP_BASE_URL}${url}`, updatedData);
+        const { res } = await axios.put(`${process.env.REACT_APP_BASE_URL}${url}`, updatedData);
         return res
     } catch (error) {
         console.log('API edit error:', error);
@@ -46,7 +46,7 @@ export const editData = async (url, updatedData) => {
 
 export const deleteData = async (url) => {
     try {
-        const { res } = await axios.delete(`${import.meta.env.VITE_APP_BASE_URL}${url}`);
+        const { res } = await axios.delete(`${process.env.REACT_APP_BASE_URL}${url}`);
         return res
     } catch (error) {
         console.log('API edit error:', error);
@@ -56,7 +56,7 @@ export const deleteData = async (url) => {
 
 export const uploadImage = async (url, formData) => {
     try {
-        const { res } = await axios.post(import.meta.env.VITE_APP_BASE_URL + url, formData);
+        const { res } = await axios.post(process.env.REACT_APP_BASE_URL + url, formData);
         return res
     } catch (error) {
         console.log('API edit error:', error);
@@ -65,7 +65,7 @@ export const uploadImage = async (url, formData) => {
 }
 
 export const deleteImages = async (url, image) => {
-    const { res } = await axios.delete(`${import.meta.env.VITE_APP_BASE_URL}${url}`, image);
+    const { res } = await axios.delete(`${process.env.REACT_APP_BASE_URL}${url}`, image);
     return res
 }
 

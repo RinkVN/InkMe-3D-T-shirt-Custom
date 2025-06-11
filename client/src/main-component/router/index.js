@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import Homepage from '../HomePage/HomePage'
 import HomePage2 from '../HomePage2/HomePage2';
@@ -17,13 +17,36 @@ import BlogPage from '../BlogPage/BlogPage'
 import BlogDetails from '../BlogDetails/BlogDetails'
 import ContactPage from '../ContactPage/ContactPage';
 import ErrorPage from '../ErrorPage/ErrorPage';
+import { fetchDataFromApi } from '../../utils/api';
+
+const MyContext = createContext();
 
 
 const AllRoute = () => {
 
+  const [categoryData, setCategoryData] = useState([]);
+  const [activeCat, setActiveCat] = useState('');
+
+  useEffect(() => {
+
+    fetchDataFromApi('/api/category').then((res) => {
+      setCategoryData(res.categoryList);
+      // setActiveCat(res.categoryList[0]?.name);
+    });
+
+  }, []);
+
+  const values = {
+    categoryData,
+    setCategoryData,
+    activeCat,
+    setActiveCat
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
+      <MyContext.Provider value={values}>
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="home" element={<Homepage />} />
@@ -44,6 +67,7 @@ const AllRoute = () => {
           <Route path='contact' element={<ContactPage />} />
           <Route path='404' element={<ErrorPage />} />
         </Routes>
+        </MyContext.Provider>
       </BrowserRouter>
 
     </div>
@@ -51,3 +75,4 @@ const AllRoute = () => {
 }
 
 export default AllRoute;
+export { MyContext };

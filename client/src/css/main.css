@@ -6432,16 +6432,16 @@ input.main-search-input::placeholder {
 }
 
 .section-padding {
-  padding: 130px 0;
+  padding: 60px 0;
 }
 @media (max-width: 1199px) {
   .section-padding {
-    padding: 100px 0;
+    padding: 40px 0;
   }
 }
 @media (max-width: 991px) {
   .section-padding {
-    padding: 80px 0;
+    padding: 30px 0;
   }
 }
 

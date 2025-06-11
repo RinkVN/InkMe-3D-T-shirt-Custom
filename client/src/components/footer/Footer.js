@@ -5,7 +5,7 @@ import Services from "../../api/Services";
 import Fi1 from '../../img/footer/dot.png'
 import Fi2 from '../../img/footer/footer-shape-1.png'
 import Fi3 from '../../img/footer/footer-shape-2.png'
-import Logo from '../../img/logo/black-logo.svg'
+import Logo from '../../img/logo/inkme-logo.png'
 import Fi4 from '../../img/QRcode.png'
 import Fi5 from '../../img/apple.png'
 import Fi6 from '../../img/play-store.png'
@@ -33,8 +33,8 @@ const Footer = () => {
                         <div className="col-xl-3 col-sm-6 col-md-6 col-lg-4" >
                             <div className="single-footer-widget">
                                 <div className="widget-head">
-                                    <Link onClick={ClickHandler} to="/home">
-                                        <img src={Logo} alt="logo-img" />
+                                    <Link to="/home">
+                                        <img src={Logo} alt="logo-img" style={{ width: '-webkit-fill-available' }} />
                                     </Link>
                                 </div>
                                 <div className="footer-content">
@@ -45,11 +45,11 @@ const Footer = () => {
                                     <ul className="contact-list">
                                         <li>
                                             <i className="fa-sharp fa-solid fa-phone-volume"></i>
-                                            <a href="tel:+8060008899">+806 (000) 88 99</a>
+                                            <a href="tel:+84968338829">+84 968 3388 29</a>
                                         </li>
                                         <li>
                                             <i className="fa-sharp fa-solid fa-envelope"></i>
-                                            <a onClick={ClickHandler} href="mailto:contact@info.com" className="link">contact@info.com</a>
+                                            <a href="mailto:datlacve2@gmail.com" className="link">datlacve2@gmail.com</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -63,13 +63,13 @@ const Footer = () => {
                                 <ul className="list-items">
                                     {Services.slice(0, 5).map((service, sitem) => (
                                         <li key={sitem}>
-                                        <Link onClick={ClickHandler} to={`/service-details/${service.slug}`}>
+                                            <Link to={`/service-details/${service.slug}`}>
                                                 {service.title}
-                                        </Link>
-                                    </li>
-                                    ))} 
-                                   
-                                 
+                                            </Link>
+                                        </li>
+                                    ))}
+
+
                                 </ul>
                             </div>
                         </div>
@@ -80,27 +80,27 @@ const Footer = () => {
                                 </div>
                                 <ul className="list-items">
                                     <li>
-                                        <Link onClick={ClickHandler} to="/contact">
+                                        <Link to="/contact">
                                             Help Center
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link onClick={ClickHandler} to="/contact">
+                                        <Link to="/contact">
                                             Partners
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link onClick={ClickHandler} to="/contact">
+                                        <Link to="/contact">
                                             Suggestions
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link onClick={ClickHandler} to="/news">
+                                        <Link to="/news">
                                             Blog
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link onClick={ClickHandler} to="/contact">
+                                        <Link to="/contact">
                                             Newsletters
                                         </Link>
                                     </li>
@@ -119,13 +119,13 @@ const Footer = () => {
                                         </div>
                                         <ul className="store-list">
                                             <li>
-                                                <Link onClick={ClickHandler} to="/contact">
+                                                <Link to="/contact">
                                                     <img src={Fi5} alt="img" />
                                                     App Store
                                                 </Link>
                                             </li>
                                             <li className="active">
-                                                <Link onClick={ClickHandler} to="/contact">
+                                                <Link to="/contact">
                                                     <img src={Fi6} alt="img" />
                                                     Google play
                                                 </Link>
@@ -141,18 +141,18 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <Link onClick={ClickHandler} to="/" id="scrollUp" className="scroll-icon">
+                    <Link to="/" id="scrollUp" className="scroll-icon" onClick={ClickHandler}>
                         <i className="fa-solid fa-chevrons-up"></i>
                     </Link>
                     <div className="footer-wrapper d-flex align-items-center justify-content-between">
                         <p className="fadeInLeft color-2" >
-                            Copyright <span>@2024</span> <Link onClick={ClickHandler} to="/">wpoceans</Link> All Rights Reserved
+                            Copyright <span>@2025</span> <Link to="/">InkMe</Link> All Rights Reserved
                         </p>
                         <div className="social-icon d-flex align-items-center fadeInRight" >
-                            <Link onClick={ClickHandler} to="/"><i className="fab fa-facebook-f"></i></Link>
-                            <Link onClick={ClickHandler} to="/"><i className="fa-brands fa-vimeo-v"></i></Link>
-                            <Link onClick={ClickHandler} to="/"><i className="fab fa-twitter"></i></Link>
-                            <Link onClick={ClickHandler} to="/"><i className="fa-brands fa-linkedin-in"></i></Link>
+                            <Link to="/"><i className="fab fa-facebook-f"></i></Link>
+                            <Link to="/"><i className="fa-brands fa-vimeo-v"></i></Link>
+                            <Link to="/"><i className="fab fa-twitter"></i></Link>
+                            <Link to="/"><i className="fa-brands fa-linkedin-in"></i></Link>
                         </div>
                     </div>
                 </div>
