@@ -337,7 +337,7 @@ span {
   }
 }
 .about-wrapper .about-content .icon-box-items .icon-items .icon {
-  width: 54px;
+  min-width: 54px;
   height: 54px;
   line-height: 50px;
   border-radius: 50%;

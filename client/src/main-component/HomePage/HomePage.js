@@ -39,7 +39,7 @@ const HomePage = ({ addToCart }) => {
             <Hero />
             <FeatureSection />
             <About />
-            <MarqueeSection hclass={'marquee-section margin-top-8 mb-80'} />
+            {/* <MarqueeSection hclass={'marquee-section margin-top-8 mb-80'} /> */}
             <ServiceSection hclass={'service-section bg-cover section-padding'} Bg={ServiceBg} />
             <StoreSection />
             <ProductSection

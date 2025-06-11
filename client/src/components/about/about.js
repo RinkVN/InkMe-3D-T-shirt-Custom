@@ -72,15 +72,15 @@ const about = () => {
                         <div className="col-lg-5">
                             <div className="about-content">
                                 <div className="section-title">
-                                    <h6 className="wow fadeInUp">More about us</h6>
+                                    <h6 className="wow fadeInUp">Về chúng tôi</h6>
                                     <h2 className="wow fadeInUp" data-wow-delay=".3s">
-                                        Create Stunning Print For
-                                        <span> Your Business <img src={Abimg9} alt="img" /></span>
+                                        Biến ý tưởng của bạn
+                                        <span> thành hiện thực <img src={Abimg9} alt="img" /></span>
                                     </h2>
                                 </div>
                                 <p className="mt-3 mt-md-0 wow fadeInUp" data-wow-delay=".5s">
-                                    A full administration printing background. Print shirts for yourself
-                                    or your online business Beautiful, customizable template,
+                                Dù bạn muốn tạo áo cho chính mình hay mở rộng thương hiệu thời trang online – 
+                                InkMe cung cấp kho mẫu thiết kế đẹp mắt, dễ tùy chỉnh và sẵn sàng in ấn.
                                 </p>
                                 <div className="row g-4">
                                     <div className="col-xl-6 col-md-6 col-lg-12 wow fadeInUp" data-wow-delay=".3s">
@@ -89,11 +89,10 @@ const about = () => {
                                                 <div className="icon">
                                                     <img src={Abimg10} alt="img" />
                                                 </div>
-                                                <h6>Smooth Automation</h6>
+                                                <h6>Tự Động Hoá Quy Trình</h6>
                                             </div>
                                             <span>
-                                                No matter how much you know
-                                                about a part icular medical
+                                            Từ thiết kế đến đặt in – mọi thao tác đều được tối ưu hoá
                                             </span>
                                         </div>
                                     </div>
@@ -103,21 +102,20 @@ const about = () => {
                                                 <div className="icon bg-2">
                                                     <img src={Abimg13} alt="" />
                                                 </div>
-                                                <h6>Custom Branding Tools</h6>
+                                                <h6>Công Cụ Xây Dựng Thương Hiệu </h6>
                                             </div>
                                             <span>
-                                                No matter how much you know
-                                                about a part icular medical
+                                                Dễ dàng thêm logo, slogan, hoặc cá nhân hoá từng chi tiết trên áo
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="about-author">
-                                    <Link onClick={ClickHandler} to="/about" className="theme-btn wow fadeInUp" data-wow-delay=".3s">more about us</Link>
+                                    <Link onClick={ClickHandler} to="/about" className="theme-btn wow fadeInUp" data-wow-delay=".3s">Trải nghiệm ngay</Link>
                                     <div className="author-image wow fadeInUp" data-wow-delay=".5s">
                                         <img src={Abimg11} alt="img" />
                                         <div className="content">
-                                            <span>10m+ Trusted Global clients <img src={Abimg12} alt="img" /></span>
+                                            <span>Đội ngũ nhân viên chuyên nghiệp <img src={Abimg12} alt="img" /></span>
                                         </div>
                                     </div>
                                 </div>
