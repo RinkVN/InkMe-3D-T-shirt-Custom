@@ -87,12 +87,6 @@ const productSchema = mongoose.Schema({
             }
         }
     ],
-    productRams: [
-        {
-            type: String,
-            default: null
-        }
-    ],
     productSize: [
         {
             type: String,

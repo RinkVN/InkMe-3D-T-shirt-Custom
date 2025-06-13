@@ -5,7 +5,7 @@ import Services from "../../api/Services";
 import Fi1 from '../../img/footer/dot.png'
 import Fi2 from '../../img/footer/footer-shape-1.png'
 import Fi3 from '../../img/footer/footer-shape-2.png'
-import Logo from '../../img/logo/inkme-logo.png'
+import Logo from '../../img/logo/inkme-logo-gradient.png'
 import Fi4 from '../../img/QRcode.png'
 import Fi5 from '../../img/apple.png'
 import Fi6 from '../../img/play-store.png'
