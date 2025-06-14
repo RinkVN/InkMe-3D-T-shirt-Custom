@@ -8664,7 +8664,7 @@ input.main-search-input::placeholder {
 }
 
 .product-box-items .product-content span {
-  color: var(--theme2);
+  color: #e8492d;
   font-size: 16px;
   font-weight: 700;
   display: inline-block;
@@ -8705,8 +8705,8 @@ input.main-search-input::placeholder {
 
 .product-box-items.style-2 .product-image .product-icon {
   gap: 10px;
-  top: 50%;
-  left: 50%;
+  top: 31%;
+  left: 131%;
   transform: translate(-50%, -50%);
   width: 100%;
 }

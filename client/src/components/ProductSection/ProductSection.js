@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import ProdactShape from '../../img/product/shape-1.png'
 import { Link } from 'react-router-dom';
-import { fetchDataFromApi } from '../../utils/api';
+import { fetchDataFromApi, postData } from '../../utils/api';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const ProductSection = ({ addToCartProduct }) => {
-    const [activeTab, setActiveTab] = useState('Tab2');
+const ProductSection = () => {
+    const [activeTab, setActiveTab] = useState('Tab3');
     const [productsByCategory, setProductsByCategory] = useState({
         Tab1: [], // Business Cards
         Tab2: [], // Books & Prints
-        Tab3: [], // T-shirt & Cloths
+        Tab3: [], // Otaku Vibes (Anime)
         Tab4: []  // Invitation Card
     });
 
@@ -19,6 +21,49 @@ const ProductSection = ({ addToCartProduct }) => {
     const openTab = (TabName) => {
         setActiveTab(TabName);
     }
+
+    const handleAddToCart = async (product) => {
+        try {
+            // const userId = localStorage.getItem('userId'); 
+
+            // if (!userId) {
+            //     toast.error('Vui lòng đăng nhập để thêm vào giỏ hàng');
+            //     return;
+            // }
+
+            const userId = "65f1a2b3c4d5e6f7g8h9i0j1";
+
+            // Chuẩn bị dữ liệu cho cart item
+            const cartData = {
+                productTitle: product.name,
+                images: product.images,
+                rating: product.rating || "0",
+                price: product.price,
+                quantity: 1, // Số lượng mặc định
+                subTotal: product.price, // Tổng tiền ban đầu
+                productId: product._id,
+                userId: userId,
+                classifications: [{
+                    name: "Default",
+                    image: product.images[0],
+                    price: product.price,
+                    quantity: 1,
+                    subTotal: product.price
+                }]
+            };
+
+            const response = await postData('/api/cart/add', cartData);
+
+            if (response.status === false) {
+                toast.error(response.message || 'Không thể thêm vào giỏ hàng');
+            } else {
+                toast.success(`${product.name} đã được thêm vào giỏ hàng`);
+            }
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            toast.error('Có lỗi xảy ra khi thêm vào giỏ hàng');
+        }
+    };
 
     useEffect(() => {
         const fetchProductsByCategory = async () => {
@@ -41,7 +86,7 @@ const ProductSection = ({ addToCartProduct }) => {
         };
 
         fetchProductsByCategory();
-        openTab('Tab2');
+        openTab('Tab3');
     }, []);
 
     const renderProductGrid = (products) => {
@@ -50,13 +95,18 @@ const ProductSection = ({ addToCartProduct }) => {
                 {products.length > 0 &&
                     products.slice(0, 8).map((product, pitem) => (
                         <div className="col-xl-3 col-lg-4 col-md-6" key={pitem}>
-                            <div className="product-box-items">
+                            <div className="product-box-items style-2">
                                 <div className="product-image">
-                                    <img src={product.images[0]} alt={product.name} />
+                                    <Link to={`/shop-details/${product._id}`}>
+                                        <img src={product.images[0]} alt={product.name} />
+                                    </Link>
+                                    <div className="post-box">
+                                        new
+                                    </div>
                                     <ul className="product-icon d-grid align-items-center">
                                         <li>
                                             <button
-                                                onClick={() => addToCartProduct(product)}><i className="fa-sharp fa-regular fa-eye"></i></button>
+                                                onClick={() => handleAddToCart(product)}><i className="fa-sharp fa-regular fa-eye"></i></button>
                                         </li>
                                         <li>
                                             <a href="#">
@@ -64,22 +114,30 @@ const ProductSection = ({ addToCartProduct }) => {
                                             </a>
                                         </li>
                                         <li>
-                                            <Link onClick={ClickHandler} to={`/shop-details/${product._id}`}><i className="fa-regular fa-arrow-up-arrow-down"></i></Link>
+                                            <Link to={`/shop-details/${product._id}`}><i className="fa-regular fa-arrow-up-arrow-down"></i></Link>
                                         </li>
                                     </ul>
                                     <div className="shop-btn">
                                         <button
-                                            onClick={() => addToCartProduct(product)} className="theme-btn">Add To Cart</button>
+                                            onClick={() => handleAddToCart(product)} className="theme-btn">Thêm vào giỏ hàng</button>
                                     </div>
                                 </div>
                                 <div className="product-content">
+                                    <h6><Link to={`/shop-details/${product._id}`}>{product.name}</Link></h6>
                                     <div className="star">
                                         {[...Array(5)].map((_, i) => (
                                             <i key={i} className={`fa-solid fa-star ${i === 4 ? 'color-2' : ''}`}></i>
                                         ))}
                                     </div>
-                                    <h6><Link onClick={ClickHandler} to={`/shop-details/${product._id}`}>{product.name}</Link></h6>
-                                    <span>{product.price.toLocaleString('vi-VN')}đ</span>
+                                    <ul className="price">
+                                        <li>
+                                            {product.oldPrice ? (
+                                                <span>( {product.price.toLocaleString('vi-VN')}đ - <del>{product.oldPrice.toLocaleString('vi-VN')}đ</del> )</span>
+                                            ) : (
+                                                <span>{product.price.toLocaleString('vi-VN')}đ</span>
+                                            )}
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +195,7 @@ const ProductSection = ({ addToCartProduct }) => {
                     </div>
                 </div>
                 <div className="shop-button text-center mt-5 " >
-                    <Link onClick={ClickHandler} to="/shop" className="theme-btn">View all Product</Link>
+                    <Link to="/shop" className="theme-btn">Xem tất cả sản phẩm</Link>
                 </div>
             </div>
         </section>
