@@ -24,7 +24,7 @@ const ProductSection = ({ products, addToCartProduct }) => {
             <div className="container">
                 <div className="section-title text-center">
                     <h6>Digital printing Service</h6>
-                    <h2>Explore Features Product</h2>
+                    <h2>Khám Phá Sản Phẩm Nổi Bật🔥</h2>
                 </div>
                 <div className="product-header mt-4 mt-md-0">
                     <ul className="nav">

@@ -21,8 +21,8 @@ const ProcessSection = () => {
                         </div>
                         <div className="feature-content">
                             <h5>
-                                Certified Print Shop<br/>
-                                    100% Authentic
+                                Cửa hàng in ấn đã<br />
+                                được chứng nhận
                             </h5>
                         </div>
                     </div>
@@ -32,8 +32,8 @@ const ProcessSection = () => {
                         </div>
                         <div className="feature-content">
                             <h5>
-                                Fast Delivery From 10<br/>
-                                    Working Days
+                                Giao hàng nhanh trong <br />
+                                10 ngày làm việc
                             </h5>
                         </div>
                     </div>
@@ -43,8 +43,8 @@ const ProcessSection = () => {
                         </div>
                         <div className="feature-content">
                             <h5>
-                                Well- Founded Print<br/>
-                                    Top - Service
+                                In Ấn Uy Tín<br />
+                                Chất Lượng Bền Lâu
                             </h5>
                         </div>
                     </div>
@@ -54,8 +54,8 @@ const ProcessSection = () => {
                         </div>
                         <div className="feature-content">
                             <h5>
-                                Flexible Orders<br/>
-                                    Module
+                                Linh Hoạt Số Lượng <br />
+                                Không Ép Buộc
                             </h5>
                         </div>
                     </div>
@@ -65,8 +65,8 @@ const ProcessSection = () => {
                         </div>
                         <div className="feature-content">
                             <h5>
-                                Simple & Digital<br/>
-                                    Process
+                                Quy Trình Số Hoá<br />
+                                Thiết Kế Dễ Dàng
                             </h5>
                         </div>
                     </div>
