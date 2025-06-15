@@ -2,13 +2,12 @@ import React, { useContext } from "react";
 import AllRoute from "../router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import { MyContext } from "../../context/MyConext";
+import { MyContext, MyProvider } from "../../context/MyConext";
 import { Alert, Snackbar } from "@mui/material";
 
 // import CustomCursor from '../../components/CustomCursor/CustomCursor';
 
-const App = () => {
+const AppContent = () => {
   const { alterBox, handleClose } = useContext(MyContext);
   return (
     <div className="App" id="scrool">
@@ -33,6 +32,14 @@ const App = () => {
       {/* <CustomCursor/> */}
       <ToastContainer />
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <MyProvider>
+      <AppContent />
+    </MyProvider>
   );
 };
 

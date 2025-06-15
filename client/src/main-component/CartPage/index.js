@@ -5,7 +5,7 @@ import CtaSectionS2 from '../../components/CtaSectionS2/CtaSectionS2';
 import FooterS3 from '../../components/footerS3/FooterS3';
 import CursorMaus from '../../components/CursorMaus/CursorMaus';
 import { Link } from "react-router-dom";
-import { MyContext } from "../router";
+import { MyContext } from '../../context/MyConext';
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import QuantityBox from "../../components/QuantityBox";
 
@@ -28,7 +28,7 @@ const CartPage = () => {
 
   const fetchCartData = () => {
 
-      fetchDataFromApi(`/api/cart`).then((res) => {
+    fetchDataFromApi(`/api/cart`).then((res) => {
       setCartData(res);
       // Initialize quantities
       const initialQuantities = {};
@@ -175,7 +175,7 @@ const CartPage = () => {
                         <span>Áp dụng</span>
                       </button>
                     </form>
-                   
+
                   </div>
                 </div>
               </div>
