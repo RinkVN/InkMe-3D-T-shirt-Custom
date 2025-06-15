@@ -18,6 +18,10 @@ import BlogDetails from '../BlogDetails/BlogDetails'
 import ContactPage from '../ContactPage/ContactPage';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import { fetchDataFromApi } from '../../utils/api';
+import Signup from "../User/signup";
+import LoginScreen from "../User/login";
+import ForgotPassword from "../User/forgot-password";
+import ResetPassword from "../User/reset-password";
 
 const MyContext = createContext();
 
@@ -46,33 +50,36 @@ const AllRoute = () => {
   return (
     <div className="App">
       <BrowserRouter>
-      <MyContext.Provider value={values}>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="home" element={<Homepage />} />
-          <Route path="home-2" element={<HomePage2 />} />
-          <Route path="home-3" element={<HomePage3 />} />
-          <Route path="about" element={<AboutPage />} />
-          <Route path="service" element={<ServicePage />} />
-          <Route path="service-details/:slug" element={<ServiceSinglePage />} />
-          <Route path="project" element={<ProjectPage />} />
-          <Route path="project-details/:slug" element={<ProjectSinglePage />} />
-          <Route path="shop" element={<ShopPage />} />
-          <Route path='shop-details/:slug' element={<ShopSinglePage />} />
-          <Route path='shop-cart' element={<CartPage />} />
-          <Route path='checkout' element={<CheckoutPage />} />
-          <Route path='order_received' element={<OrderRecived />} />
-          <Route path='news' element={<BlogPage />} />
-          <Route path='blog-single/:slug' element={<BlogDetails />} />
-          <Route path='contact' element={<ContactPage />} />
-          <Route path='404' element={<ErrorPage />} />
-        </Routes>
+        <MyContext.Provider value={values}>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="home" element={<Homepage />} />
+            <Route path="home-2" element={<HomePage2 />} />
+            <Route path="home-3" element={<HomePage3 />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="service" element={<ServicePage />} />
+            <Route path="service-details/:slug" element={<ServiceSinglePage />} />
+            <Route path="project" element={<ProjectPage />} />
+            <Route path="project-details/:slug" element={<ProjectSinglePage />} />
+            <Route path="shop" element={<ShopPage />} />
+            <Route path="shop-details/:slug" element={<ShopSinglePage />} />
+            <Route path="shop-cart" element={<CartPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="order_received" element={<OrderRecived />} />
+            <Route path="news" element={<BlogPage />} />
+            <Route path="blog-single/:slug" element={<BlogDetails />} />
+            <Route path="contact" element={<ContactPage />} />
+            <Route path="404" element={<ErrorPage />} />
+            <Route path="login" element={<LoginScreen />} />
+            <Route path="signup" element={<Signup />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password/:token" element={<ResetPassword />} />
+          </Routes>
         </MyContext.Provider>
       </BrowserRouter>
-
     </div>
   );
-}
+};
 
 export default AllRoute;
 export { MyContext };

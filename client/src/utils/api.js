@@ -1,6 +1,5 @@
 import axios from "axios";
 // require('dotenv/config');
-
 export const fetchDataFromApi = async (url) => {
     try {
         const { data } = await axios.get(process.env.REACT_APP_BASE_URL + url );

@@ -1,21 +1,26 @@
 import { useContext, useState } from "react";
-import Logo from "../../assets/images/logo.webp";
-import { MyContext } from "../../App";
+import Logo from "../../img/logo.webp";
 import { useEffect } from "react";
-import patern from "../../assets/images/pattern.webp";
+import patern from "../../img/pattern.webp";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import Button from "@mui/material/Button";
-import { Link, useNavigate, useNavigation } from "react-router-dom";
-import GoogleIcons from "../../assets/images/GoogleIcons.png";
-import { postData } from "../../utils/api";
+import { Link, useNavigate } from "react-router-dom";
+import GoogleIcons from "../../img/GoogleIcons.png";
+import { baseUrl, postData } from "../../utils/api";
 import { CircularProgress } from "@mui/material";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../../App.css";
+import { getUsers, loginWithGoogle } from "../../services/UserServices";
+import { MyContext } from "../../context/MyConext";
+import { GoogleLogin } from "@react-oauth/google";
 
-const Login = () => {
+const LoginScreen = () => {
   const [inputIndex, setInputIndex] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const context = useContext(MyContext);
 
   const [formfields, setFormfields] = useState({
     email: "",
@@ -24,7 +29,7 @@ const Login = () => {
     isAdmin: true,
   });
 
-  const context = useContext(MyContext);
+  //const context = useContext(MyContext);
   const history = useNavigate();
 
   const onChangeInput = (e) => {
@@ -35,12 +40,32 @@ const Login = () => {
   };
 
   useEffect(() => {
-    context.setIsHideSidebarAndHeader(true);
+    //context.setIsHideSidebarAndHeader(true);
   }, []);
 
   const focusInput = (index) => {
     setInputIndex(index);
   };
+
+  // const signIn = (e) => {
+  //   e.preventDefault();
+  //   console.log("formfields", formfields);
+  //   Login("lan@example.com", "lan123");
+  // };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userList = await getUsers(); // Chờ dữ liệu trả về
+        console.log("userList", userList); // In đúng dữ liệu
+        //  setUser(userList);
+      } catch (error) {
+        console.error("Error fetching users", error);
+      }
+    };
+
+    fetchUser(); // Gọi hàm async bên trong useEffect
+  }, []);
 
   const signIn = (e) => {
     e.preventDefault();
@@ -64,37 +89,47 @@ const Login = () => {
 
     setLoading(true);
 
-    postData("/api/user/signin", formfields).then((res) => {
+    postData(`${baseUrl}/user/signin`, formfields).then((res) => {
       try {
-        if (res.error !== true) {
-          localStorage.setItem("token", res.token);
-
-          const user = {
-            name: res.user?.name,
-            email: res.user?.email,
-            userId: res.user?.id,
-          };
-
-          localStorage.setItem("user", JSON.stringify(user));
-
-          context.setAlterBox({
-            open: true,
-            error: false,
-            message: "Sign in successfully",
-          });
-          setTimeout(() => {
-            // history("/dashboard");
-            setLoading(false);
-            window.location.href = "/dashboard";
-          }, 2000);
-        } else {
+        if (res.error === true) {
           setLoading(false);
           context.setAlterBox({
             open: true,
             error: true,
-            message: "Sign in failed",
+            message: res.message || "Sign in failed",
           });
+          return;
         }
+
+        if (!res.token || !res.user) {
+          setLoading(false);
+          context.setAlterBox({
+            open: true,
+            error: true,
+            message: "Invalid response from server",
+          });
+          return;
+        }
+
+        localStorage.setItem("token", res.token);
+
+        const user = {
+          name: res.user.name,
+          email: res.user.email,
+          userId: res.user.id,
+        };
+
+        console.log("user after login", user);
+
+        context.setAlterBox({
+          open: true,
+          error: false,
+          message: "Sign in successfully",
+        });
+        setTimeout(() => {
+          setLoading(false);
+          window.location.href = "/";
+        }, 2000);
       } catch (error) {
         context.setAlterBox({
           open: true,
@@ -104,6 +139,44 @@ const Login = () => {
         setLoading(false);
       }
     });
+  };
+
+  const handleSuccess = async (response) => {
+    console.log(response);
+    try {
+      const res = await loginWithGoogle(response.credential);
+      if (res.error === true) {
+        setLoading(false);
+        context.setAlterBox({
+          open: true,
+          error: true,
+          message: res.message || "Sign in failed",
+        });
+        return;
+      }
+      setLoading(true);
+      localStorage.setItem("token", res.token);
+      context.setAlterBox({
+        open: true,
+        error: false,
+        message: "Sign in successfully",
+      });
+      setTimeout(() => {
+        setLoading(false);
+        window.location.href = "/";
+      }, 2000);
+      console.log("response when login google", res);
+    } catch (error) {
+      context.setAlterBox({
+        open: true,
+        error: true,
+        message: "Sign in failed",
+      });
+      setLoading(false);
+    }
+  };
+  const handleError = (response) => {
+    console.log(response);
   };
 
   return (
@@ -180,13 +253,20 @@ const Login = () => {
                   <span className="line"></span>
                 </div>
 
-                <Button
+                {/* Login with google */}
+                <div style={{ marginLeft: "40px" }}>
+                  <GoogleLogin
+                    onSuccess={handleSuccess}
+                    onError={handleError}
+                  ></GoogleLogin>
+                </div>
+                {/* <Button
                   variant="outlined"
                   className="w-100 btn-lg btn-big loginWithGoogle"
                 >
                   <img src={GoogleIcons} width="20px" alt="" /> Đăng nhập bằng
                   Google
-                </Button>
+                </Button> */}
               </div>
             </form>
           </div>
@@ -205,4 +285,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginScreen;
