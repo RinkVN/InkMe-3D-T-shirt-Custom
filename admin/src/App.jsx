@@ -101,10 +101,14 @@ function App() {
   }
 
   const fetchSubCategory = () => {
-    fetchDataFromApi('/api/subCat').then((res) => {
-      setSubCatData(res);
-      setProgress(100);
-    })
+    try {
+      fetchDataFromApi('/api/subCat').then((res) => {
+        setSubCatData(res);
+        setProgress(100);
+      })
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handleClose = (event, reason) => {
