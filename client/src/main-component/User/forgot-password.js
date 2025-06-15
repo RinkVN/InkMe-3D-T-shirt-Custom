@@ -30,7 +30,7 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      const response = await postData(`${baseUrl}/user/forgot-password`, {
+      const response = await postData(`/api/user/forgot-password`, {
         email,
       });
 
@@ -76,9 +76,8 @@ const ForgotPassword = () => {
           <div className="wrapper mt-3 card border">
             <form onSubmit={handleSubmit}>
               <div
-                className={`form-group position-relative ${
-                  inputIndex === 0 && "focus"
-                }`}
+                className={`form-group position-relative ${inputIndex === 0 && "focus"
+                  }`}
               >
                 <span className="icon">
                   <MdEmail />
