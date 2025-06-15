@@ -89,7 +89,7 @@ const LoginScreen = () => {
 
     setLoading(true);
 
-    postData(`${baseUrl}/user/signin`, formfields).then((res) => {
+    postData(`/api/user/signin`, formfields).then((res) => {
       try {
         if (res.error === true) {
           setLoading(false);
@@ -192,9 +192,8 @@ const LoginScreen = () => {
           <div className="wrapper mt-3 card border">
             <form onSubmit={signIn}>
               <div
-                className={`form-group position-relative ${
-                  inputIndex === 0 && "focus"
-                }`}
+                className={`form-group position-relative ${inputIndex === 0 && "focus"
+                  }`}
               >
                 <span className="icon">
                   <MdEmail />
@@ -212,9 +211,8 @@ const LoginScreen = () => {
               </div>
 
               <div
-                className={`form-group position-relative ${
-                  inputIndex === 1 && "focus"
-                }`}
+                className={`form-group position-relative ${inputIndex === 1 && "focus"
+                  }`}
               >
                 <span className="icon">
                   <RiLockPasswordFill />
