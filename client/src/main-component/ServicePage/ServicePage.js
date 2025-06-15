@@ -14,7 +14,7 @@ const ServicePage = () => {
             <NavbarS2 hclass={'header-section-2 style-two'} />
             <PageTitle pageTitle={'Digital printing Service'} pagesub={'Service page'} />
             <ServiceSection hclass={'service-section section-padding section-bg-2 fix pb-0'} />
-            <FunFact hclass={'counter-section fix section-padding'} />
+            {/* <FunFact hclass={'counter-section fix section-padding'} /> */}
             <ServiceSectionS4 />
             <WorksSection hclass={'about-feature-sections fix section-padding section-bg-2 pb-0'} eclass={'about-feature-wrapper'} />
             <CtaSectionS2 />

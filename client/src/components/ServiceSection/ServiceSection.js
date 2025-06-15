@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Swiper from 'swiper';
 import 'swiper/swiper-bundle.min.css';
 import { Link } from 'react-router-dom'
-import Services from "../../api/Services";
+import { MyContext } from '../../main-component/router';
 
 import Shape from '../../img/service/shape.png'
 import Shape2 from '../../img/line.png'
@@ -13,6 +13,8 @@ const ClickHandler = () => {
 }
 
 const ServiceSection = (props) => {
+    const { categoryData } = useContext(MyContext);
+
     useEffect(() => {
         const serviceSlider = new Swiper('.service-slider', {
             spaceBetween: 30,
@@ -62,30 +64,31 @@ const ServiceSection = (props) => {
             <div className="container">
                 <div className="section-title-area">
                     <div className="section-title">
-                        <h6 className="wow fadeInUp">More service us</h6>
+                        {/* <h6 className="wow fadeInUp">More service us</h6> */}
                         <h2 className="wow fadeInUp" data-wow-delay=".3s">
-                            Create Stunning Print for<br />
-                            <span> Your Business <img src={Shape2} alt="img" /></span>
+                            Bộ Sưu Tập<br />
+                            <span> Bán Chạy Nhất <img src={Shape2} alt="img" /></span>
                         </h2>
                     </div>
-                    <Link onClick={ClickHandler} to="/service" className="theme-btn wow fadeInUp" data-wow-delay=".5s">See all Services</Link>
+                    <Link onClick={ClickHandler} to="/service" className="theme-btn wow fadeInUp" data-wow-delay=".5s">Xem tất cả</Link>
                 </div>
             </div>
             <div className="service-wrapper">
                 <div className="swiper service-slider">
                     <div className="swiper-wrapper">
-                        {Services.slice(0, 6).map((service, sitem) => (
+                        {categoryData.map((category, sitem) => (
                             <div className="swiper-slide" key={sitem}>
                                 <div className="service-card-items">
                                     <div className="service-cotent">
-                                        <h3><Link onClick={ClickHandler} to={`/service-details/${service.slug}`}>{service.title}</Link></h3>
-                                        <p>{service.description}</p>
+                                        <h3><Link onClick={ClickHandler} to={`/service-details/${category.slug}`}>{category.name}</Link></h3>
+                                        <p>{category.description || 'Không có mô tả'}</p>
                                     </div>
                                     <div className="service-image">
-                                        <img src={service.sImg} alt="img" />
+                                        <img src={category.images || 'https://via.placeholder.com/300x200'} alt={category.name}
+                                            style={{ width: '80%', height: '80%', objectFit: 'cover' }} />
                                     </div>
                                     <div className="service-btn">
-                                        <Link onClick={ClickHandler} to={`/service-details/${service.slug}`} className="link-btn">Read Out More <i className="fa-solid fa-arrow-right"></i></Link>
+                                        <Link onClick={ClickHandler} to={`/service-details/${category.slug}`} className="link-btn">Xem thêm <i className="fa-solid fa-arrow-right"></i></Link>
                                     </div>
                                 </div>
                             </div>

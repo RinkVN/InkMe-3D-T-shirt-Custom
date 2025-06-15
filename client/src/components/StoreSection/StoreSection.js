@@ -17,10 +17,9 @@ const StoreSection = () => {
                                     <img src={SS1} alt="img" />
                                 </div>
                                 <div className="content">
-                                    <h3>Local fulfillment</h3>
+                                    <h3>Sản Xuất Nội Địa</h3>
                                     <p>
-                                        Connect your store to Printes, added
-                                        products, and set your own retail
+                                        In áo nhanh, giao hàng sớm, tiết kiệm chi phí vận chuyển.
                                     </p>
                                 </div>
                             </div>
@@ -31,10 +30,9 @@ const StoreSection = () => {
                                     <img src={SS2} alt="img" />
                                 </div>
                                 <div className="content">
-                                    <h3>Reliable quality</h3>
+                                    <h3>Chất Lượng Đảm Bảo</h3>
                                     <p>
-                                        Connect your store to Printes, added
-                                        products, and set your own retail
+                                        Thiết kế 3D mô phỏng sát thực tế, in chuẩn từng chi tiết.
                                     </p>
                                 </div>
                             </div>
@@ -45,10 +43,9 @@ const StoreSection = () => {
                                     <img src={SS3} alt="img" />
                                 </div>
                                 <div className="content">
-                                    <h3>Smooth automation</h3>
+                                    <h3>Tự Động Hoá Toàn Quy Trình</h3>
                                     <p>
-                                        Connect your store to Printes, added
-                                        products, and set your own retail
+                                        Từ thiết kế đến in ấn – thao tác chỉ vài cú nhấp chuột.
                                     </p>
                                 </div>
                             </div>
@@ -59,10 +56,9 @@ const StoreSection = () => {
                                     <img src={SS4} alt="img" />
                                 </div>
                                 <div className="content">
-                                    <h3>No order minimums</h3>
+                                    <h3>Không Yêu Cầu Số Lượng Tối Thiểu</h3>
                                     <p>
-                                        Connect your store to Printes, added
-                                        products, and set your own retail
+                                        Tự do đặt 1 áo lẻ hay 100 áo nhóm – không lo tồn kho.
                                     </p>
                                 </div>
                             </div>

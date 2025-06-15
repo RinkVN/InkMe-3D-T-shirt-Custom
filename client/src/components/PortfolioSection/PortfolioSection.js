@@ -43,28 +43,26 @@ const PortfolioSection = () => {
                         <div className="col-xl-6">
                             <div className="portfolio-content">
                                 <div className="section-title">
-                                    <h6 className="wow fadeInUp">company portfolio</h6>
+                                    <h6 className="wow fadeInUp">Dự án nổi bật</h6>
                                     <h2 className="wow fadeInUp" data-wow-delay=".3s">
-                                        Have A Look Some
-                                        Exciting Projects
-                                        Business
+                                        Khám phá một số dự án mà chúng tôi đã thực hiện cho doanh nghiệp!
                                     </h2>
                                 </div>
                                 <ul className="list-items mt-3 mt-md-0 wow fadeInUp" data-wow-delay=".5s">
                                     <li>
                                         <i className="fa-regular fa-check"></i>
-                                        Large paper & stock selection & Unique Print
+                                        In Ấn Đặc Biệt Theo Yêu Cầu
                                     </li>
                                     <li>
                                         <i className="fa-regular fa-check"></i>
-                                        Printing programs tailored to your company ne
+                                        Giải Pháp In Ấn Doanh Nghiệp
                                     </li>
                                     <li>
                                         <i className="fa-regular fa-check"></i>
-                                        Large paper & stock selection & Unique Print
+                                        Đơn Hàng Tuỳ Chỉnh
                                     </li>
                                 </ul>
-                                <Link to="/shop" className="theme-btn wow fadeInUp" data-wow-delay=".3s">Custom order</Link>
+                                <Link to="/shop" className="theme-btn wow fadeInUp" data-wow-delay=".3s">Liên Hệ Ngay</Link>
                             </div>
                         </div>
                         <div className="col-xl-6">
@@ -79,14 +77,14 @@ const PortfolioSection = () => {
                                             onMouseLeave={handleMouseLeave}
                                         >
                                             <div className="portfolio-image">
-                                                <img src={portfoli.pimg1} alt="img" />
+                                                <img src={portfoli.pimg1} alt="img" style={{ width: '448px', height: '448px', objectFit: 'cover' }} />
                                                 <Link onClick={ClickHandler} to={`/project-details/${portfoli.slug}`} className="icon">
                                                     <i className="fa-solid fa-arrow-right"></i>
                                                 </Link>
-                                                <div className="portfolio-content" style={{ transform: activeImage === index ? `translate(${cursorPos.x}px, ${cursorPos.y}px)` : 'none' }}>
+                                                {/* <div className="portfolio-content" style={{ transform: activeImage === index ? `translate(${cursorPos.x}px, ${cursorPos.y}px)` : 'none' }}>
                                                     <h3><Link onClick={ClickHandler} to={`/project-details/${portfoli.slug}`} >{portfoli.title}</Link></h3>
                                                     <h4>{portfoli.Subtitle}</h4>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     ))}

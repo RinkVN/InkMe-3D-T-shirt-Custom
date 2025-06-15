@@ -12,7 +12,7 @@ const CtaSection = () => {
         window.scrollTo(10, 0);
     }
     return (
-        <section className="cta-section">
+        <section className="cta-section" style={{ padding: '150px 0px 0px 0px' }}>
             <div className="container">
                 <div className="cta-wrapper bg-cover" style={{backgroundImage: `url(${CtBg})`} }>
                     <div className="cta-image">

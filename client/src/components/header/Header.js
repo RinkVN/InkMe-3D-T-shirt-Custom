@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { removeFromCart } from "../../store/actions/action";
 import HeaderTopbar from '../HeaderTopbar/HeaderTopbar';
 // import Logo from '../../img/logo/black-logo.svg';
-import Logo from '../../img/logo/inkme-logo.png';
+import Logo from '../../img/logo/inkme-logo-gradient.png';
 import Home1 from '../../img/header/home-1.jpg';
 import Home2 from '../../img/header/home-2.jpg';
 import Home3 from '../../img/header/home-3.jpg';

@@ -48,11 +48,7 @@ app.use(`/api/homeBanner`, homeBannerRouters);
 app.use(`/api/search`, searchRoutes);
 app.use(`/api/ai`, aiRoutes);
 
-app.use(express.static(path.join(__dirname, "../client/dist")));
-// Chuyển tất cả các yêu cầu không khớp về index.html của React
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
-  });
+
 
 //Database
 mongoose.connect(process.env.CONNECTION_STRING, {
