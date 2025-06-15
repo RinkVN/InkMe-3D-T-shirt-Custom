@@ -68,7 +68,7 @@ const ResetPassword = () => {
     setLoading(true);
     try {
       //   const token = searchParams.get("token");
-      const response = await postData(`${baseUrl}/user/reset-password`, {
+      const response = await postData(`/api/user/reset-password`, {
         token,
         password: formData.password,
       });
@@ -117,9 +117,8 @@ const ResetPassword = () => {
           <div className="wrapper mt-3 card border">
             <form onSubmit={handleSubmit}>
               <div
-                className={`form-group position-relative ${
-                  inputIndex === 0 && "focus"
-                }`}
+                className={`form-group position-relative ${inputIndex === 0 && "focus"
+                  }`}
               >
                 <span className="icon">
                   <RiLockPasswordFill />
@@ -144,9 +143,8 @@ const ResetPassword = () => {
               </div>
 
               <div
-                className={`form-group position-relative ${
-                  inputIndex === 1 && "focus"
-                }`}
+                className={`form-group position-relative ${inputIndex === 1 && "focus"
+                  }`}
               >
                 <span className="icon">
                   <RiLockPasswordFill />

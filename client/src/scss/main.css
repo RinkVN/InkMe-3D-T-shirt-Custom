@@ -8664,7 +8664,7 @@ input.main-search-input::placeholder {
 }
 
 .product-box-items .product-content span {
-  color: var(--theme2);
+  color: #e8492d;
   font-size: 16px;
   font-weight: 700;
   display: inline-block;
@@ -8705,8 +8705,8 @@ input.main-search-input::placeholder {
 
 .product-box-items.style-2 .product-image .product-icon {
   gap: 10px;
-  top: 50%;
-  left: 50%;
+  top: 31%;
+  left: 131%;
   transform: translate(-50%, -50%);
   width: 100%;
 }
@@ -10798,6 +10798,41 @@ input.main-search-input::placeholder {
   max-width: 200px;
   max-height: 200px;
 }
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip kiểu kính mờ */
+.tooltip-glass {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  color: #000000;
+  background: rgba(255, 255, 255, 0.15); /* lớp nền trong suốt */
+  backdrop-filter: blur(10px); /* hiệu ứng kính mờ */
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25); /* viền mờ */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* đổ bóng mềm */
+  white-space: nowrap;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
+
+/* Hiện tooltip khi hover */
+.tooltip-wrapper:hover .tooltip-glass {
+  visibility: visible;
+  opacity: 1;
+}
+
+
 
 .main-cart-wrapper .cart-wrapper .cart-items-wrapper table tbody .cart-item .cart-item-price {
   color: var(--header);

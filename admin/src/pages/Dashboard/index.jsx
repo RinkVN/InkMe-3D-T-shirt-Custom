@@ -260,7 +260,7 @@ const Dashboard = () => {
                           </div>
                         </td>
                         <td>{item?.category?.name}</td>
-                        <td>{item?.subCat.subCat}</td>
+                        {/* <td>{item?.subCat.subCat}</td> */}
                         <td>{item?.brand}</td>
                         <td>
                           <del className='old'>{item?.oldPrice}</del>

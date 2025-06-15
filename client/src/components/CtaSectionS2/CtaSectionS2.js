@@ -5,7 +5,7 @@ import Mq2 from '../../img/cta-bg-2.jpg'
 import Mq3 from '../../img/print-box.png'
 import Mq4 from '../../img/hand-bag.png'
 import Mq5 from '../../img/cta-sticker.png'
-import Mq6 from '../../img/cta-t-shirt.png'
+import Mq6 from '../../img/hero/hero-1.gif'
 
 const ClickHandler = () => {
     window.scrollTo(10, 0);
@@ -49,18 +49,18 @@ const CtaSectionS2 = () => {
                     </div>
                     <div className="cta-content">
                         <div className="section-title">
-                            <h6 className="bg-white wow fadeInUp">printing Service</h6>
+                            <h6 className="bg-white wow fadeInUp">Dịch vụ in ấn</h6>
                             <h2 className="text-white split-text right">
-                                Ready To Create Some <br/>
-                                    Custom Products?
+                                Sẵn sàng tạo ra sản phẩm <br/>
+                                    đặc biệt cho bạn?
                             </h2>
                         </div>
                         <div className="cta-btn mt-3 mt-md-0 wow fadeInUp" data-wow-delay=".5s">
-                            <Link onClick={ClickHandler} to="/about" className="theme-btn">more about us</Link>
+                            <Link onClick={ClickHandler} to="/contact" className="theme-btn">Liên hệ ngay</Link>
                         </div>
                     </div>
                     <div className="cta-image">
-                        <img src={Mq6} alt="img" />
+                        <img src={Mq6} alt="img" style={{ width: '360px', height: '100%', objectFit: 'cover' }} />
                     </div>
                 </div>
             </div>

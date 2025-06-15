@@ -1,6 +1,6 @@
-import { baseUrl, fetchDataFromApi, postData } from "../utils/api";
+import { fetchDataFromApi, postData } from "../utils/api";
 
-const endpoint = `${baseUrl}/user`;
+const endpoint = `/api/user`;
 export const getUsers = () => {
   const response = fetchDataFromApi(endpoint);
   return response;
@@ -12,7 +12,7 @@ export const getUserById = (id) => {
 };
 
 export const Login = async (email, password) => {
-  const response = await postData(`${baseUrl}/user/signin`, {
+  const response = await postData(`/api/user/signin`, {
     email,
     password,
   });
