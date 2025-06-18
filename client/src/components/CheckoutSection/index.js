@@ -13,21 +13,6 @@ const CheckoutSection = () => {
         return user?.name && user?.phone && user?.email && context.selectedAddressId;
     };
 
-    const orderData = {
-        orderCode: Number(String(Date.now()).slice(-6)),
-        amount: 2000,
-        description: "Thanh toan don hang",
-        items: [
-            {
-                name: "Mì tôm Hảo Hảo ly",
-                quantity: 1,
-                price: 2000,
-            },
-        ],
-        returnUrl: `${window.location.origin}/checkout?success=true`,
-        cancelUrl: `${window.location.origin}/checkout?canceled=true`,
-    };
-
     return (
         <section className="checkout-section fix section-padding section-bg-2">
             <div className="container">
