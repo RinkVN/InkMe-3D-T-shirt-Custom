@@ -208,4 +208,13 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+router.post(`/order/create`, async (req, res, formData) => {
+    try {
+        res.status(200).json(formData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 module.exports = router;

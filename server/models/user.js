@@ -13,23 +13,6 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  address: [
-    {
-      city: {
-        type: String,
-        default: "",
-      },
-      details: {
-        type: String,
-        default: "",
-      },
-      moreInfo: {
-        type: String,
-        default: "",
-      },
-    },
-  ],
-
   images: [
     {
       type: String,
@@ -46,7 +29,7 @@ const userSchema = mongoose.Schema({
   status: {
     type: String,
     enum: ["active", "inactive", "locked"],
-    default: "inactive", // hoặc giá trị mặc định tùy ý bạn
+    default: "inactive",
   },
   verificationToken: {
     type: String,
@@ -60,6 +43,8 @@ const userSchema = mongoose.Schema({
     type: String,
     default: null,
   },
+}, {
+  timestamps: true
 });
 
 userSchema.virtual("id").get(function () {

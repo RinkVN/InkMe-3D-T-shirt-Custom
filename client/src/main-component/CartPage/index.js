@@ -28,7 +28,7 @@ const CartPage = () => {
 
   const fetchCartData = () => {
 
-    fetchDataFromApi(`/api/cart`).then((res) => {
+    fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
       setCartData(res);
       // Initialize quantities
       const initialQuantities = {};
@@ -76,8 +76,7 @@ const CartPage = () => {
         quantity: newQuantity,
         subTotal: item.price * newQuantity,
         productId: item.productId,
-        // userId: user.userId,
-        userId: "67f4c2656ae1ae7cd875586e",
+        userId: user.userId,
         classifications: item.classifications?.map(cls => ({
           ...cls,
           quantity: newQuantity,

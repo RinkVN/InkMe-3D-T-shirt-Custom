@@ -1,7 +1,33 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import QRPayment from '../Payment/QRPayment';
+import AddressManage from '../AddressManage/AddressManage';
+import UserInfoManage from '../UserInforCheckout/UserInfoCheckout';
+import { MyContext } from '../../context/MyConext';
 
 const CheckoutSection = () => {
+    const context = useContext(MyContext);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+
+    // Kiểm tra xem có đủ thông tin để thanh toán không
+    const isReadyForPayment = () => {
+        return user?.name && user?.phone && user?.email && context.selectedAddressId;
+    };
+
+    const orderData = {
+        orderCode: Number(String(Date.now()).slice(-6)),
+        amount: 2000,
+        description: "Thanh toan don hang",
+        items: [
+            {
+                name: "Mì tôm Hảo Hảo ly",
+                quantity: 1,
+                price: 2000,
+            },
+        ],
+        returnUrl: `${window.location.origin}/checkout?success=true`,
+        cancelUrl: `${window.location.origin}/checkout?canceled=true`,
+    };
+
     return (
         <section className="checkout-section fix section-padding section-bg-2">
             <div className="container">
@@ -12,131 +38,52 @@ const CheckoutSection = () => {
                                 {/* Payment Method Selection */}
                                 <div className="col-md-5 col-lg-4 col-xl-3">
                                     <div className="checkout-radio">
-                                        <p className="primary-text">Select a Payment Method</p>
+                                        <p className="primary-text">Chọn phương thức thanh toán</p>
                                         <div className="checkout-radio-wrapper">
                                             <div className="checkout-radio-single">
-                                                <input type="radio" className="form-check-input" id="cCard" name="pay-method" value="Credit/Debit Cards" required />
-                                                <label htmlFor="cCard">Credit/Debit Cards</label>
+                                                <input type="radio" className="form-check-input" id="cCard" name="pay-method" value="Credit/Debit Cards" required checked />
+                                                <label htmlFor="cCard">QR Code VietQR</label>
                                             </div>
-                                            <div className="checkout-radio-single">
-                                                <input type="radio" className="form-check-input" id="paypal" name="pay-method" value="PayPal" required />
-                                                <label htmlFor="paypal">PayPal</label>
+                                            <div className="checkout-radio-single" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                                <input type="radio" className="form-check-input" id="cCard2" name="pay-method" value="Credit/Debit Cards" required disabled />
+                                                <label htmlFor="cCard2">Thẻ tín dụng/thẻ ghi nợ</label>
                                             </div>
-                                            <div className="checkout-radio-single">
-                                                <input type="radio" className="form-check-input" id="payoneer" name="pay-method" value="Payoneer" required />
-                                                <label htmlFor="payoneer">Payoneer</label>
-                                            </div>
-                                            <div className="checkout-radio-single">
-                                                <input type="radio" className="form-check-input" id="visa" name="pay-method" value="Visa" required />
-                                                <label htmlFor="visa">Visa</label>
-                                            </div>
-                                            <div className="checkout-radio-single">
-                                                <input type="radio" className="form-check-input" id="mastercard" name="pay-method" value="Mastercard" required />
-                                                <label htmlFor="mastercard">Mastercard</label>
-                                            </div>
-                                            <div className="checkout-radio-single">
-                                                <input type="radio" className="form-check-input" id="fastPay" name="pay-method" value="Fastpay" required />
-                                                <label htmlFor="fastPay">Fastpay</label>
+                                            <div className="checkout-radio-single" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                                <input type="radio" className="form-check-input" id="paypal" name="pay-method" value="PayPal" required disabled />
+                                                <label htmlFor="paypal">PayPal (Chưa hỗ trợ)</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Billing Address Section */}
+                                {/* Address Management Section */}
                                 <div className="col-md-7 col-lg-8 col-xl-9">
                                     <div className="checkout-single-wrapper">
-                                        <div className="checkout-single boxshado-single">
-                                            <h4>Billing Address</h4>
-                                            <div className="checkout-single-form">
-                                                <div className="row g-4">
-                                                    <div className="col-lg-6">
-                                                        <div className="input-single">
-                                                            <input type="text" name="user-first-name" id="userFirstName" required placeholder="First Name" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="input-single">
-                                                            <input type="text" name="user-last-name" id="userLastName" required placeholder="Last Name" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="input-single">
-                                                            <input type="email" name="user-check-email" id="userCheckEmail" required placeholder="Your Email" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="input-single">
-                                                            <select className="country-select" name="user-country" required>
-                                                                <option value="usa">USA</option>
-                                                                <option value="aus">Australia</option>
-                                                                <option value="uk">UK</option>
-                                                                <option value="ned">Netherlands</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="input-single">
-                                                            <textarea name="user-address" id="userAddress" required placeholder="Address"></textarea>
+                                        {/* Thông tin cá nhân */}
+                                        <UserInfoManage />
+
+                                        {/* Quản lý địa chỉ */}
+                                        <AddressManage />
+
+                                        {/* Payment QR - Chỉ hiển thị khi đã chọn địa chỉ */}
+                                        {isReadyForPayment() ? (
+                                            <div className="checkout-single checkout-single-bg">
+                                                <h4 style={{ textAlign: 'center' }}>Mã QR Thanh toán</h4>
+                                                <div className="checkout-single-form">
+                                                    <div className="row g-3">
+                                                        <div className="col-lg-12">
+                                                            <QRPayment />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        {/* Payment Details Section */}
-                                        <div className="checkout-single checkout-single-bg">
-                                            <h4>Payment Details</h4>
-                                            <div className="checkout-single-form">
-                                                <div className="row g-3">
-                                                    <div className="col-lg-12">
-                                                        <div className="input-single">
-                                                            <label htmlFor="userCardNumber">Card Number</label>
-                                                            <input type="text" name="user-card-number" id="userCardNumber" required placeholder="0000 0000 0000 0000" pattern="[0-9]{16}" title="Please enter a valid 16-digit card number" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="input-single">
-                                                            <label htmlFor="userCardDate">Expiry Date</label>
-                                                            <input type="text" id="userCardDate" name="user-card-date" required placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="Please enter a valid expiry date in MM/YY format" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="input-single">
-                                                            <label htmlFor="userCvc">CVC / CVV</label>
-                                                            <input
-                                                                type="text"
-                                                                maxLength="3"
-                                                                name="user-card-cvc"
-                                                                id="userCvc"
-                                                                required
-                                                                placeholder="3 Digits"
-                                                                pattern="\d{3}"
-                                                                title="Please enter a valid 3-digit CVC/CVV"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="input-single">
-                                                            <label htmlFor="userCardName">Name on Card</label>
-                                                            <input type="text" name="user-card-name" id="userCardName" required placeholder="Name on Card" />
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        ) : (
+                                            <div className="checkout-single checkout-single-bg" style={{ opacity: 0.6 }}>
+                                                <h4 style={{ textAlign: 'center', color: '#666' }}>
+                                                    Vui lòng chọn địa chỉ giao hàng để hiển thị mã QR thanh toán
+                                                </h4>
                                             </div>
-
-                                            {/* Save Card Option */}
-                                            <div className="input-single input-check payment-save">
-                                                <input type="checkbox" className="form-check-input" name="save-for-next" id="saveForNext" />
-                                                <label htmlFor="saveForNext">Save for my next payment</label>
-                                            </div>
-
-                                            {/* Submit Button */}
-                                            <div className="mt-4">
-                                                <Link to='/order_received' className="theme-btn">
-                                                    <span> Pay Now</span>
-                                                </Link>
-                                            </div>
-                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -145,8 +92,6 @@ const CheckoutSection = () => {
                 </div>
             </div>
         </section>
-
-
     );
 };
 

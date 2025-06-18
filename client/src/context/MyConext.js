@@ -5,17 +5,22 @@ import { Login } from "../services/UserServices";
 import { googleLogout } from "@react-oauth/google";
 import { fetchDataFromApi } from "../utils/api";
 
-//1. Create Context
 const MyContext = createContext();
 
-//2. Create Provider
 const MyProvider = ({ children }) => {
-  // User related state
   const [userId, setUserId] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
   const [activeCat, setActiveCat] = useState('');
+  const [productData, setProductData] = useState([]);
+  const [cartData, setCartData] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState('');
 
-  // Alert box state
+  const [loading, setLoading] = useState({});
+  const [selectedQuantity, setSelectedQuantity] = useState({});
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const [alterBox, setAlterBox] = useState({
     message: "",
     error: false,
@@ -27,6 +32,22 @@ const MyProvider = ({ children }) => {
     fetchDataFromApi('/api/category').then((res) => {
       setCategoryData(res.categoryList);
     });
+
+    fetchDataFromApi('/api/products').then((res) => {
+      setProductData(res.productList);
+    });
+
+    if (user?.userId) {
+      fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
+        setCartData(Array.isArray(res) ? res : []);
+      }).catch((error) => {
+        console.error("Error fetching cart data:", error);
+        setCartData([]);
+      });
+    } else {
+      setCartData([]);
+    }
+
   }, []);
 
   // Check user token
@@ -74,6 +95,16 @@ const MyProvider = ({ children }) => {
         alterBox,
         setAlterBox,
         handleClose,
+
+        // Cart related
+        cartData,
+        setCartData,
+        loading,
+        setLoading,
+
+        // Address related
+        selectedAddressId,
+        setSelectedAddressId,
       }}
     >
       {children}

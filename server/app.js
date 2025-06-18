@@ -13,7 +13,7 @@ app.options("*", cors());
 //middleware
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 // app.use(authJwt());
 
 //Routes
@@ -31,6 +31,7 @@ const orderRoutes = require("./routes/orders");
 const homeBannerRouters = require("./routes/homeBanner");
 const searchRoutes = require("./routes/search");
 const aiRoutes = require("./routes/ai");
+const addressRoutes = require("./routes/address");
 
 app.use(`/api/user`, userRoutes);
 app.use(`/uploads`, express.static("uploads"));
@@ -42,13 +43,12 @@ app.use(`/api/productSize`, productSizeRoutes);
 app.use(`/api/productRams`, productRamsRoutes);
 app.use(`/api/productReviews`, productReviewsRoutes);
 app.use(`/api/cart`, cart);
-app.use("/payment", paymentRoutes);
+app.use("/api/payment", paymentRoutes);
 app.use(`/api/orders`, orderRoutes);
 app.use(`/api/homeBanner`, homeBannerRouters);
 app.use(`/api/search`, searchRoutes);
 app.use(`/api/ai`, aiRoutes);
-
-
+app.use(`/api/address`, addressRoutes);
 
 //Database
 mongoose.connect(process.env.CONNECTION_STRING, {

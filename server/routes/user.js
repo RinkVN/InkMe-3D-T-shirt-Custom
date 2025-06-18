@@ -497,40 +497,132 @@ router.put(`/:id`, async (req, res) => {
   }
 });
 
-// router.put(`/:id`, async (req, res) => {
-//     try {
-//         const { name, phone, email, password } = req.body;
+router.put(`/:id`, async (req, res) => {
+    try {
+        const { name, phone, email, password } = req.body;
 
-//         const userExist = await User.findById(req.params.id);
-//         let newPassword
-//         if(req.body.password){
-//             newPassword = await bcrypt.hash(password, 10);
-//         }else{
-//             newPassword = userExist.hashPassword;
-//         }
+        const userExist = await User.findById(req.params.id);
+        let newPassword
+        if(req.body.password){
+            newPassword = await bcrypt.hash(password, 10);
+        }else{
+            newPassword = userExist.hashPassword;
+        }
 
-//         const user = await User.findByIdAndUpdate(
-//             req.params.id,
-//             {
-//                 name: name,
-//                 phone: phone,
-//                 email: email,
-//                 images: imagesArray,
-//                 password: newPassword
-//             },
-//             {
-//                 new: true
-//             }
-//         );
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            {
+                name: name,
+                phone: phone,
+                email: email,
+                images: imagesArray,
+                password: newPassword
+            },
+            {
+                new: true
+            }
+        );
 
-//         if (!user) {
-//             return res.status(404).send({ message: "User ID not found" });
-//         }
+        if (!user) {
+            return res.status(404).send({ message: "User ID not found" });
+        }
 
-//         return res.status(200).send(user);
-//     } catch (error) {
-//         res.status(500).json({ success: false });
-//     }
-// });
+        return res.status(200).send(user);
+    } catch (error) {
+        res.status(500).json({ success: false });
+    }
+});
+
+// Routes for address management
+router.post(`/:id/address`, async (req, res) => {
+  try {
+    const { city, details, moreInfo } = req.body;
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: true, message: "User not found" });
+    }
+
+    user.address.push({
+      city,
+      details,
+      moreInfo
+    });
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Address added successfully",
+      user: user
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: "Something went wrong",
+      notify: error.message
+    });
+  }
+});
+
+router.put(`/:id/address/:addressId`, async (req, res) => {
+  try {
+    const { city, details, moreInfo } = req.body;
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: true, message: "User not found" });
+    }
+
+    const address = user.address.id(req.params.addressId);
+    if (!address) {
+      return res.status(404).json({ error: true, message: "Address not found" });
+    }
+
+    address.city = city;
+    address.details = details;
+    address.moreInfo = moreInfo;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Address updated successfully",
+      user: user
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: "Something went wrong",
+      notify: error.message
+    });
+  }
+});
+
+router.delete(`/:id/address/:addressId`, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: true, message: "User not found" });
+    }
+
+    const address = user.address.id(req.params.addressId);
+    if (!address) {
+      return res.status(404).json({ error: true, message: "Address not found" });
+    }
+
+    address.remove();
+    await user.save();
+
+    return res.status(200).json({
+      message: "Address deleted successfully",
+      user: user
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: "Something went wrong",
+      notify: error.message
+    });
+  }
+});
 
 module.exports = router;

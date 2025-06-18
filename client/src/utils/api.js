@@ -1,11 +1,11 @@
 import axios from "axios";
 // require('dotenv/config');
 
-export const baseUrl = process.env.REACT_APP_BASE_URL;
+export const baseUrl = "http://localhost:4000";
 
 export const fetchDataFromApi = async (url) => {
     try {
-        const { data } = await axios.get(process.env.REACT_APP_BASE_URL + url );
+        const { data } = await axios.get(process.env.REACT_APP_BASE_URL + url);
         return data;
     } catch (error) {
         console.log('API fetch error:', error);
@@ -36,23 +36,39 @@ export const postData = async (url, formData) => {
     }
 }
 
+
 export const editData = async (url, updatedData) => {
     try {
-        const { res } = await axios.put(`${process.env.REACT_APP_BASE_URL}${url}`, updatedData);
-        return res
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}${url}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData),
+        });
+        const result = await res.json();
+        if (!res.ok) {
+            return { error: true, ...result };
+        }
+        return result;
     } catch (error) {
-        console.log('API edit error:', error);
-        return error;
+        return { error: true, message: error.message };
     }
-}
+};
 
 export const deleteData = async (url) => {
     try {
-        const { res } = await axios.delete(`${process.env.REACT_APP_BASE_URL}${url}`);
-        return res
+        const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}${url}`);
+        return response.data;
     } catch (error) {
-        console.log('API edit error:', error);
-        return error;
+        console.log('API delete error:', error);
+        if (error.response) {
+            // Server trả về response với status code nằm ngoài range 2xx
+            return error.response.data;
+        }
+        return {
+            error: true,
+            message: "Network error",
+            notify: error.message
+        };
     }
 }
 
@@ -70,4 +86,3 @@ export const deleteImages = async (url, image) => {
     const { res } = await axios.delete(`${process.env.REACT_APP_BASE_URL}${url}`, image);
     return res
 }
-

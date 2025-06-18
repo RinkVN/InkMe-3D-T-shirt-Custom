@@ -142,7 +142,7 @@ button {
 }
 
 input:focus {
-  color: var(--white);
+  /* color: var(--white); */
   outline: none;
 }
 
@@ -11016,6 +11016,7 @@ input.main-search-input::placeholder {
   outline: none;
   border: 1px solid var(--border);
   font-weight: 500;
+  margin-right: 10px;
 }
 
 .checkout-radio .checkout-radio-wrapper .checkout-radio-single label {
@@ -11054,6 +11055,13 @@ input.main-search-input::placeholder {
   background-color: transparent;
 }
 
+.checkout-single-wrapper .checkout-single .checkout-single-form .checkout-input::placeholder {
+  color: #000;
+  font-weight: 500;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
 .checkout-single-wrapper .checkout-single .checkout-single-form .input-single label {
   color: var(--header);
   font-size: 18px;
@@ -11090,7 +11098,7 @@ input.main-search-input::placeholder {
 
 .checkout-single-wrapper .checkout-single .checkout-single-form .input-single .nice-select .list {
   right: 0;
-  background-color: var(--white);
+  /* background-color: var(--white); */
 }
 
 .checkout-single-wrapper .checkout-single .checkout-single-form .input-single .nice-select .option {

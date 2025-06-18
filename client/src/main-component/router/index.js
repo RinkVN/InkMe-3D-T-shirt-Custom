@@ -38,7 +38,7 @@ const AllRoute = () => {
           <Route path="project-details/:slug" element={<ProjectSinglePage />} />
           <Route path="shop" element={<ShopPage />} />
           <Route path="shop-details/:slug" element={<ShopSinglePage />} />
-          <Route path="shop-cart" element={<CartPage />} />
+          <Route path="shop-cart/:userId" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="order_received" element={<OrderRecived />} />
           <Route path="news" element={<BlogPage />} />

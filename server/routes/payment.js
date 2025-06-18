@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 const { Orders } = require("../models/orders");
 const router = express.Router();
 
+// --- VNPAY ---
 // Đọc cấu hình từ JSON
 const configPath = path.join(__dirname, "../config/vnpay.config.json");
 const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
@@ -70,7 +71,7 @@ router.post("/create_payment_url", (req, res) => {
         const paymentUrl = `${config.vnp_Url}?${qs.stringify(vnp_Params, { encode: false })}`;
 
         res.json({ orderId, paymentUrl, createDate });
-        
+
     } catch (error) {
         console.error("Lỗi tạo URL thanh toán:", error);
         res.status(500).json({ message: "Lỗi hệ thống" });
@@ -108,7 +109,5 @@ router.get("/vnpay_return", (req, res) => {
         res.status(500).json({ message: "Lỗi hệ thống" });
     }
 });
-
-
 
 module.exports = router;

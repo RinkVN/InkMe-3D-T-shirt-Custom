@@ -119,7 +119,7 @@ const LoginScreen = () => {
           userId: res.user.id,
         };
 
-        console.log("user after login", user);
+        localStorage.setItem('user', JSON.stringify(user));
 
         context.setAlterBox({
           open: true,
