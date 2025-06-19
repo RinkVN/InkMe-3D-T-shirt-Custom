@@ -11,13 +11,10 @@ const HeaderTopbar = (props) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  console.log("userId", userId);
-
   useEffect(() => {
     const fetchUser = async () => {
       const res = await getUserById(userId);
       if (res) setUser(res);
-      console.log("user response", res);
     };
     if (userId) {
       fetchUser();

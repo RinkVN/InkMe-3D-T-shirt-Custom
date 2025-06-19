@@ -22,6 +22,11 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
   },
+  address: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Address',
+    required: true
+  },
   isAdmin: {
     type: Boolean,
     default: false,

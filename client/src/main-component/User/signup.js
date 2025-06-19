@@ -62,7 +62,6 @@ const Signup = () => {
   // };
 
   const signUp = (e) => {
-    console.log("formfields", formfields);
     e.preventDefault();
     try {
       if (formfields.name === "") {

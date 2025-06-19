@@ -145,7 +145,6 @@ const AddressManage = () => {
     const handleDeleteAddress = async () => {
         try {
             const response = await deleteData(`/api/address/${deletingAddressId}`);
-            console.log('Delete response:', response);
 
             if (response.error) {
                 context.setAlterBox({

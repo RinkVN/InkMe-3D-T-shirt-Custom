@@ -112,7 +112,7 @@ const menus = [
             },
             {
                 id: 64,
-                title: 'Checkout',
+                title: 'Thanh Toán',
                 link: '/checkout'
             }
         ]

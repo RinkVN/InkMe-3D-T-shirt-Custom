@@ -61,7 +61,6 @@ export const deleteData = async (url) => {
     } catch (error) {
         console.log('API delete error:', error);
         if (error.response) {
-            // Server trả về response với status code nằm ngoài range 2xx
             return error.response.data;
         }
         return {

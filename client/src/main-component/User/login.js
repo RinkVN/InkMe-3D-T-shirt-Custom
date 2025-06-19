@@ -57,7 +57,6 @@ const LoginScreen = () => {
     const fetchUser = async () => {
       try {
         const userList = await getUsers(); // Chờ dữ liệu trả về
-        console.log("userList", userList); // In đúng dữ liệu
         //  setUser(userList);
       } catch (error) {
         console.error("Error fetching users", error);
@@ -142,7 +141,6 @@ const LoginScreen = () => {
   };
 
   const handleSuccess = async (response) => {
-    console.log(response);
     try {
       const res = await loginWithGoogle(response.credential);
       if (res.error === true) {
@@ -165,7 +163,6 @@ const LoginScreen = () => {
         setLoading(false);
         window.location.href = "/";
       }, 2000);
-      console.log("response when login google", res);
     } catch (error) {
       context.setAlterBox({
         open: true,

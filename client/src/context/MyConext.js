@@ -14,6 +14,7 @@ const MyProvider = ({ children }) => {
   const [productData, setProductData] = useState([]);
   const [cartData, setCartData] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState('');
+  const [orderData, setOrderData] = useState({});
 
   const [loading, setLoading] = useState({});
   const [selectedQuantity, setSelectedQuantity] = useState({});
@@ -46,6 +47,14 @@ const MyProvider = ({ children }) => {
       });
     } else {
       setCartData([]);
+    }
+
+    if (user?.userId) {
+      fetchDataFromApi(`/api/orders/user/${user.userId}`).then((res) => {
+        setOrderData(res);
+      });
+    } else {
+      setOrderData([]);
     }
 
   }, []);
@@ -105,6 +114,10 @@ const MyProvider = ({ children }) => {
         // Address related
         selectedAddressId,
         setSelectedAddressId,
+
+        // Order related
+        orderData,
+        setOrderData,
       }}
     >
       {children}

@@ -13,37 +13,39 @@ const ordersSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    language: {
-        type: String,
-        required: true,
-    },
+    // language: {
+    //     type: String,
+    //     required: true,
+    // },
     amount: {
         type: Number,
         required: true,
     },
     userId: {
-        type: String,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    fullname: {
-        type: String,
-        required: true,
-    },
-    phoneNumber: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        default: "",
-    },
-    city: {
-        type: String,
-        default: "",
-    },
+    // fullname: {
+    //     type: String,
+    //     required: true,
+    // },
+    // phoneNumber: {
+    //     type: String,
+    //     required: true,
+    // },
+    // email: {
+    //     type: String,
+    //     default: "",
+    // },
+    // city: {
+    //     type: String,
+    //     default: "",
+    // },
     address: {
-        type: String,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Address',
+        required: true
     },
     note: {
         type: String,
@@ -71,13 +73,13 @@ const ordersSchema = mongoose.Schema({
     ],
     status: {
         type: String,
-        default: "Pending",
+        required: true
     },
     dateCreated: {
         type: Date,
         default: Date.now,
     },
-});
+}, { timestamps: true });
 
 ordersSchema.virtual("id").get(function () {
     return this._id.toHexString();

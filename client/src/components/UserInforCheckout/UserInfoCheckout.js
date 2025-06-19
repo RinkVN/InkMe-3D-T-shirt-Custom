@@ -3,14 +3,15 @@ import { MyContext } from '../../context/MyConext';
 import { TextField, Button } from '@mui/material';
 import { editData } from '../../utils/api';
 
-const UserInfoManage = () => {
+const UserInfoCheckout = () => {
 
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
     const [isEditing, setIsEditing] = useState(false);
     const [editedUser, setEditedUser] = useState({
         name: user?.name || '',
         phone: user?.phone || '',
-        email: user?.email || ''
+        email: user?.email || '',
+        note: user?.note || ''
     });
     const [error, setError] = useState('');
 
@@ -21,15 +22,30 @@ const UserInfoManage = () => {
         setEditedUser({
             name: user?.name || '',
             phone: user?.phone || '',
-            email: user?.email || ''
+            email: user?.email || '',
+            note: user?.note || ''
         });
     };
 
-    const handleInputChange = (field) => (event) => {
-        setEditedUser({
-            ...editedUser,
-            [field]: event.target.value
-        });
+    const handleInputChange = (field) => async (event) => {
+        const value = event.target.value;
+        setEditedUser((prev) => ({
+            ...prev,
+            [field]: value
+        }));
+        // Nếu là note thì tự động lưu vào localStorage và gọi API
+        if (field === 'note') {
+            const updatedUser = { ...user, note: value };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            setUser(updatedUser);
+            // Gọi API cập nhật note cho user
+            try {
+                await editData(`/api/user/${user.userId}`, { note: value });
+            } catch (err) {
+                // Không cần báo lỗi, chỉ log
+                console.error('Lỗi khi cập nhật note:', err);
+            }
+        }
     };
 
     const handleEditUser = async () => {
@@ -45,7 +61,7 @@ const UserInfoManage = () => {
                 return;
             }
 
-            if (editedUser.phone === '' || editedUser.phone.length !== 10 ) {
+            if (editedUser.phone === '' || editedUser.phone.length !== 10) {
                 setError('Số điện thoại không được để trống và phải có 10 chữ số');
                 return;
             }
@@ -155,10 +171,20 @@ const UserInfoManage = () => {
                             disabled={!isEditing}
                         />
                     </div>
+                    <div className="col-lg-12">
+                        <TextField
+                            fullWidth
+                            className='checkout-input'
+                            label="Ghi chú"
+                            value={editedUser.note}
+                            variant="outlined"
+                            onChange={handleInputChange('note')}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
     )
 }
 
-export default UserInfoManage
+export default UserInfoCheckout

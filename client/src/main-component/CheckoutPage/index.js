@@ -11,7 +11,7 @@ const CheckoutPage =({cartList}) => {
     return(
         <Fragment>
             <NavbarS2 hclass={'header-section-2 style-two'} />
-            <PageTitle pageTitle={'Digital printing Service'} pagesub={'Checkout'}/> 
+            <PageTitle pageTitle={'InkMe - Cửa hàng in ấn'} pagesub={'Thanh Toán'}/> 
             <CheckoutSection cartList={cartList}/>
             <CtaSectionS2 />
             <FooterS3 />
