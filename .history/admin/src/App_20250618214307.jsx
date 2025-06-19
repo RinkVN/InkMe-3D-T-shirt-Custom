@@ -27,6 +27,7 @@ import AddProductSize from "./pages/Products/addProductSize";
 import Orders from "./pages/Orders";
 import HomeBanner from "./pages/HomeBanner";
 import AddHomeBanner from "./pages/HomeBanner/addHomeBanner";
+import Users from "./pages/Users";
 
 const MyContext = createContext();
 
@@ -188,6 +189,7 @@ function App() {
               <Route path="/login" exact={true} element={<Login />} />
               <Route path="/signup" exact={true} element={<Signup />} />
               <Route path="/products" exact={true} element={<Products />} />
+              <Route path="/users" exact={true} element={<Users />} />
               <Route
                 path="/product/details/:id"
                 exact={true}

@@ -1,7 +1,12 @@
 import Button from "@mui/material/Button";
 import { useContext, useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa";
-import { FaBell, FaCartArrowDown, FaProductHunt } from "react-icons/fa6";
+import {
+  FaBell,
+  FaCartArrowDown,
+  FaProductHunt,
+  FaUsers,
+} from "react-icons/fa6";
 import { IoIosSettings, IoMdLogOut } from "react-icons/io";
 import { MdMessage } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
@@ -50,6 +55,21 @@ const Sidebar = () => {
               </Button>
             </Link>
           </li>
+          {/* Quản lí user */}
+          <li>
+            <Link to="/">
+              <Button
+                className={`w-100 ${activeTab === 0 ? "active" : ""}`}
+                onClick={() => isOpenSubmenu(0)}
+              >
+                <span className="icon">
+                  <RxDashboard />
+                </span>
+                User
+              </Button>
+            </Link>
+          </li>
+
           <li>
             <Button
               className={`w-100 ${
@@ -165,6 +185,22 @@ const Sidebar = () => {
                   <MdMessage />
                 </span>
                 Ảnh Banner
+                <span className="arrow">
+                  <FaAngleRight />
+                </span>
+              </Button>
+            </Link>
+          </li>
+          <li>
+            <Link to="/users">
+              <Button
+                className={`w-100 ${activeTab === 7 ? "active" : ""}`}
+                onClick={() => isOpenSubmenu(7)}
+              >
+                <span className="icon">
+                  <FaUsers />
+                </span>
+                Quản lý người dùng
                 <span className="arrow">
                   <FaAngleRight />
                 </span>

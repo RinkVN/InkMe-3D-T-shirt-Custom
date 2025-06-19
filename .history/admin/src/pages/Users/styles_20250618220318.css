@@ -1,0 +1,91 @@
+.users-container {
+  padding: 24px;
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 70px);
+  margin-top: 70px;
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.users-header h1 {
+  margin: 0;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.status-active {
+  color: #52c41a;
+  font-weight: 500;
+}
+
+.status-inactive {
+  color: #ff4d4f;
+  font-weight: 500;
+}
+
+/* Table styles */
+.MuiTableContainer-root {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.MuiTableHead-root {
+  background-color: #f5f5f5;
+}
+
+.MuiTableHead-root .MuiTableCell-root {
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.MuiTableBody-root .MuiTableRow-root:hover {
+  background-color: #f5f5f5;
+}
+
+/* Dialog styles */
+.MuiDialog-paper {
+  border-radius: 8px;
+}
+
+.MuiDialogTitle-root {
+  background-color: #1976d2;
+  color: white;
+}
+
+.MuiDialogContent-root {
+  padding: 24px !important;
+}
+
+/* Button styles */
+.MuiButton-contained {
+  text-transform: none;
+  font-weight: 500;
+}
+
+.MuiIconButton-root {
+  padding: 8px;
+}
+
+/* Chip styles */
+.MuiChip-root {
+  font-weight: 500;
+}
+
+/* TextField styles */
+.MuiTextField-root {
+  margin-bottom: 16px;
+}
+
+.MuiInputBase-root {
+  border-radius: 4px;
+}

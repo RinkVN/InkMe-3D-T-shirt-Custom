@@ -97,14 +97,14 @@ function App() {
 
   const fetchSubCategory = () => {
     try {
-      fetchDataFromApi("/api/subCat").then((res) => {
+      fetchDataFromApi('/api/subCat').then((res) => {
         setSubCatData(res);
         setProgress(100);
-      });
+      })
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -170,9 +170,8 @@ function App() {
         <div className="main d-flex">
           {isHideSidebarAndHeader !== true && (
             <div
-              className={`sidebarWrapper ${
-                isToggleSidebar === true ? "toggle" : ""
-              }`}
+              className={`sidebarWrapper ${isToggleSidebar === true ? "toggle" : ""
+                }`}
             >
               <Sidebar />
             </div>
