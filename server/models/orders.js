@@ -75,6 +75,10 @@ const ordersSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    paymentTransaction: {
+        type: mongoose.Schema.Types.Mixed,
+        default: null
+    },
     dateCreated: {
         type: Date,
         default: Date.now,

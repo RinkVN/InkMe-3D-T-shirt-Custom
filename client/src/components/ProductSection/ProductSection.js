@@ -22,16 +22,15 @@ const ProductSection = () => {
         setActiveTab(TabName);
     }
 
+    const user = JSON.parse(localStorage.getItem('user'));
+
     const handleAddToCart = async (product) => {
         try {
-            // const userId = localStorage.getItem('userId'); 
 
-            // if (!userId) {
-            //     toast.error('Vui lòng đăng nhập để thêm vào giỏ hàng');
-            //     return;
-            // }
-
-            const userId = "65f1a2b3c4d5e6f7g8h9i0j1";
+            if (!user) {
+                toast.error('Vui lòng đăng nhập để thêm vào giỏ hàng');
+                return;
+            }
 
             // Chuẩn bị dữ liệu cho cart item
             const cartData = {
@@ -42,7 +41,7 @@ const ProductSection = () => {
                 quantity: 1, // Số lượng mặc định
                 subTotal: product.price, // Tổng tiền ban đầu
                 productId: product._id,
-                userId: userId,
+                userId: user.userId,
                 classifications: [{
                     name: "Default",
                     image: product.images[0],
@@ -57,7 +56,7 @@ const ProductSection = () => {
             if (response.status === false) {
                 toast.error(response.message || 'Không thể thêm vào giỏ hàng');
             } else {
-                toast.success(`${product.name} đã được thêm vào giỏ hàng`);
+                toast.success(`Sản phẩm đã được thêm vào giỏ hàng`);
             }
         } catch (error) {
             console.error('Error adding to cart:', error);
@@ -72,7 +71,7 @@ const ProductSection = () => {
                 const businessCards = await fetchDataFromApi('/api/products?catName=Business Cards');
                 const booksPrints = await fetchDataFromApi('/api/products?catName=Books & Prints');
                 const tshirts = await fetchDataFromApi('/api/products?catName=Otaku Vibes (Anime)');
-                const invitations = await fetchDataFromApi('/api/products?catName=Invitation Card');
+                const invitations = await fetchDataFromApi('/api/products?catName=InkMe Signature');
 
                 setProductsByCategory({
                     Tab1: businessCards.products || [],

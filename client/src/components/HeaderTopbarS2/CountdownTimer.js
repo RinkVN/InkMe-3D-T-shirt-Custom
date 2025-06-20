@@ -20,7 +20,7 @@ const CountdownTimer = () => {
         const yyyy = today.getFullYear();
 
         const nextYear = yyyy + 1;
-        const dayMonth = "06/20/";
+        const dayMonth = "08/20/";
         let birthday = dayMonth + yyyy;
 
         const currentDate = mm + "/" + dd + "/" + yyyy;

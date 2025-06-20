@@ -257,6 +257,7 @@ router.put("/:id", async (req, res) => {
                 orderType: req.body.orderType,
                 orderDescription: req.body.orderDescription,
                 status: req.body.status,
+                paymentTransaction: req.body.paymentTransaction,
             },
             { new: true, runValidators: true }
         );
