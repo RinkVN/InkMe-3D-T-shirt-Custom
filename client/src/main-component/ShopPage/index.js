@@ -4,9 +4,9 @@ import PageTitle from '../../components/pagetitle/PageTitle'
 import { addToCart } from "../../store/actions/action";
 import ShopProduct from '../../components/ShopProduct';
 import api from "../../api";
-import NavbarS2 from '../../components/NavbarS2/NavbarS2';
-import CtaSectionS2 from '../../components/CtaSectionS2/CtaSectionS2';
-import FooterS3 from '../../components/footerS3/FooterS3';
+import NavbarS2 from '../../components/NavbarPages/NavbarS2/NavbarS2';
+import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
+import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
 import CursorMaus from '../../components/CursorMaus/CursorMaus';
 import { getProducts } from '../../services/ShopServices';
 
@@ -18,7 +18,7 @@ const ShopPage = ({ addToCart }) => {
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
 
-    
+
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -31,9 +31,9 @@ const ShopPage = ({ addToCart }) => {
         };
         fetchProduct();
     }, []);
-    
 
-   
+
+
     const addToCartProduct = (product, qty = 1) => {
         addToCart(product, qty);
     };
@@ -49,7 +49,7 @@ const ShopPage = ({ addToCart }) => {
                 setSearchTerm={setSearchTerm}
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
-                
+
             />
             <CtaSectionS2 />
             <FooterS3 />

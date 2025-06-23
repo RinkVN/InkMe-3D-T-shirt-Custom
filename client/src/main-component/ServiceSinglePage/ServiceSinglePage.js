@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
-import NavbarS2 from '../../components/NavbarS2/NavbarS2';
+import NavbarS2 from '../../components/NavbarPages/NavbarS2/NavbarS2';
 import PageTitle from '../../components/pagetitle/PageTitle'
 import { useParams } from 'react-router-dom'
 import VideoModal from '../../components/ModalVideo/VideoModal';
 import Services from '../../api/Services';
 import ServiceSidebar from './sidebar'
 import Accordion from '../../components/Accordion/Accordion'
-import CtaSectionS2 from '../../components/CtaSectionS2/CtaSectionS2';
-import FooterS3 from '../../components/footerS3/FooterS3';
+import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
+import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
 import CursorMaus from '../../components/CursorMaus/CursorMaus';
 import Video from '../../img/service/details-2.jpg'
 import simg1 from '../../img/service/details-3.jpg'

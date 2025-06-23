@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
-import NavbarS2 from '../../components/NavbarS2/NavbarS2';
+import NavbarS2 from '../../components/NavbarPages/NavbarS2/NavbarS2';
 import PageTitle from '../../components/pagetitle/PageTitle'
-import ServiceSection from '../../components/ServiceSection/ServiceSection';
+import ServiceSection from '../../components/ServicePages/ServiceSection/ServiceSection';
 import FunFact from '../../components/FunFact/FunFact';
-import ServiceSectionS4 from '../../components/ServiceSectionS4/ServiceSectionS4';
+import ServiceSectionS4 from '../../components/ServicePages/ServiceSectionS4/ServiceSectionS4';
 import WorksSection from '../../components/WorksSection/WorksSection';
-import CtaSectionS2 from '../../components/CtaSectionS2/CtaSectionS2';
-import FooterS3 from '../../components/footerS3/FooterS3';
+import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
+import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
 import CursorMaus from '../../components/CursorMaus/CursorMaus';
 const ServicePage = () => {
     return (

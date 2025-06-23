@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import NavbarS2 from '../../components/NavbarS2/NavbarS2';
+import NavbarS2 from '../../components/NavbarPages/NavbarS2/NavbarS2';
 import PageTitle from '../../components/pagetitle/PageTitle'
-import Contactpage from '../../components/Contactpage/Contactpage'
-import CtaSectionS2 from '../../components/CtaSectionS2/CtaSectionS2';
-import FooterS3 from '../../components/footerS3/FooterS3';
+import Contactpage from '../../components/ContactPages/Contactpage/Contactpage'
+import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
+import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
 import CursorMaus from '../../components/CursorMaus/CursorMaus';
 
 const ContactPage = () => {
