@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const ClickHandler = () => {
     window.scrollTo(10, 0);
 };
-const RangeBarCustom = () => {
+const RangeBarCustom = ({ setMinPrice, setMaxPrice }) => {
     const [minValue, setMinValue] = useState(2500);
     const [maxValue, setMaxValue] = useState(7500);
     const [inputMin, setInputMin] = useState(100);
@@ -37,6 +37,11 @@ const RangeBarCustom = () => {
         const value = Math.max(+e.target.value, inputMin + 100);
         setInputMax(value);
         setMaxValue(value);
+    };
+
+    const handlePriceRangeSelect = (min, max) => {
+        setMinPrice(min);
+        setMaxPrice(max);
     };
 
     return (
@@ -92,8 +97,13 @@ const RangeBarCustom = () => {
                     </div>
                 </div>
             </div>
+            <ul className="price-range-list" style={{ listStyleType: 'none', padding: 0 }}>
+                <li onClick={() => handlePriceRangeSelect(100000, 200000)} className="price-range-item" style={{ cursor: 'pointer', padding: '10px', borderRadius: '5px', backgroundColor: '#f0f0f0', margin: '5px 0', transition: 'background-color 0.3s' }}>100k-200k</li>
+                <li onClick={() => handlePriceRangeSelect(200000, 300000)} className="price-range-item" style={{ cursor: 'pointer', padding: '10px', borderRadius: '5px', backgroundColor: '#f0f0f0', margin: '5px 0', transition: 'background-color 0.3s' }}>200k-300k</li>
+                <li onClick={() => handlePriceRangeSelect(400000, Infinity)} className="price-range-item" style={{ cursor: 'pointer', padding: '10px', borderRadius: '5px', backgroundColor: '#f0f0f0', margin: '5px 0', transition: 'background-color 0.3s' }}>400k+</li>
+            </ul>
         </div>
     );
-};
+}
 
 export default RangeBarCustom;

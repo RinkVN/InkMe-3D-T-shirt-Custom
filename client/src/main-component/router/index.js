@@ -49,7 +49,9 @@ const AllRoute = () => {
           <Route path="signup" element={<Signup />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password/:token" element={<ResetPassword />} />
+          <Route path="shop-details/Calendar-printing-design/:slug" element={<ShopSinglePage />} />
         </Routes>
+
       </BrowserRouter>
     </div>
   );

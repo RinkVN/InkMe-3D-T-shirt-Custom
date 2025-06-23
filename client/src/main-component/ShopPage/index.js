@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import PageTitle from '../../components/pagetitle/PageTitle'
 import { addToCart } from "../../store/actions/action";
@@ -8,16 +8,35 @@ import NavbarS2 from '../../components/NavbarS2/NavbarS2';
 import CtaSectionS2 from '../../components/CtaSectionS2/CtaSectionS2';
 import FooterS3 from '../../components/footerS3/FooterS3';
 import CursorMaus from '../../components/CursorMaus/CursorMaus';
+import { getProducts } from '../../services/ShopServices';
 
 const ShopPage = ({ addToCart }) => {
 
-    const productsArray = api();
+    const [products, setProducts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
 
+    
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await getProducts();
+                setProducts(response);
+            } catch (error) {
+                console.error('Failed to fetch products:', error);
+            }
+        };
+        fetchProduct();
+    }, []);
+    
+
+   
     const addToCartProduct = (product, qty = 1) => {
         addToCart(product, qty);
     };
-
-    const products = productsArray
 
     return (
         <Fragment>
@@ -25,7 +44,13 @@ const ShopPage = ({ addToCart }) => {
             <PageTitle pageTitle={'Digital printing Service'} pagesub={'Shop'} />
             <ShopProduct
                 addToCartProduct={addToCartProduct}
-                products={products} />
+                products={products}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                
+            />
             <CtaSectionS2 />
             <FooterS3 />
             <CursorMaus />

@@ -29,7 +29,7 @@ const FilterSize = () => {
                         />
                         <span className="checkmark d-center"></span>
                     </span>
-                    <span className="text-color">36"x80" (8)</span>
+                    <span className="text-color">S</span>
                 </span>
             </label>
 
@@ -44,7 +44,7 @@ const FilterSize = () => {
                         />
                         <span className="checkmark d-center"></span>
                     </span>
-                    <span className="text-color">36"x96" (60)</span>
+                    <span className="text-color">M</span>
                 </span>
             </label>
 
@@ -59,7 +59,7 @@ const FilterSize = () => {
                         />
                         <span className="checkmark d-center"></span>
                     </span>
-                    <span className="text-color">72"x80" (7)</span>
+                    <span className="text-color">L</span>
                 </span>
             </label>
 
@@ -74,7 +74,7 @@ const FilterSize = () => {
                         />
                         <span className="checkmark d-center"></span>
                     </span>
-                    <span className="text-color">72"x96" (21)</span>
+                    <span className="text-color">XL</span>
                 </span>
             </label>
         </div>

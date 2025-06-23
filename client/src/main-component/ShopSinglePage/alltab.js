@@ -23,21 +23,21 @@ const Alltab = (props) => {
     return (
         <div className="single-tab">
             <ul className="nav mb-4">
-                <li className="nav-item">
+                {/* <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'Tab1' ? 'active' : ''}`} onClick={() => openTab('Tab1')}>
                         Description
                     </button>
-                </li>
+                </li> */}
                 <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'Tab2' ? 'active' : ''}`} onClick={() => openTab('Tab2')}>
-                        Additional Information
+                        Thông tin sản phẩm
                     </button>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'Tab3' ? 'active' : ''}`} onClick={() => openTab('Tab3')}>
                         reviews (4)
                     </button>
-                </li>
+                </li> */}
             </ul>
             <div className="tab-content">
                 <div id="description"  style={{ display: activeTab === 'Tab1' ? 'block' : 'none' }}>
@@ -96,19 +96,51 @@ const Alltab = (props) => {
                 <div id="additional" style={{ display: activeTab === 'Tab2' ? 'block' : 'none' }}>
                     <div className="table-responsive">
                         <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Size</th>
+                                    <th>Độ dài áo</th>
+                                    <th>Ngang áo</th>
+                                    <th>Dài tay</th>
+                                    <th>Chiều cao</th>
+                                    <th>Cân nặng</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr>
-                                    <td>Weight</td>
-                                    <td>240 Ton</td>
+                                    <td>S</td>
+                                    <td>67 cm</td>
+                                    <td>51 cm</td>
+                                    <td>20 cm</td>
+                                    <td>1m50 - 1m60</td>
+                                    <td>50-60kg</td>
                                 </tr>
                                 <tr>
-                                    <td>Dimensions</td>
-                                    <td>20 × 30 × 40 cm</td>
+                                    <td>M</td>
+                                    <td>70 cm</td>
+                                    <td>53 cm</td>
+                                    <td>21 cm</td>
+                                    <td>1m60 - 1m70</td>
+                                    <td>60kg - 70kg</td>
                                 </tr>
                                 <tr>
-                                    <td>Colors</td>
-                                    <td>Black, Blue, Green</td>
+                                    <td>L</td>
+                                    <td>72 cm</td>
+                                    <td>55 cm</td>
+                                    <td>22 cm</td>
+                                    <td>1m70 - 1m75</td>
+                                    <td>70kg - 80kg</td>
                                 </tr>
+                                <tr>
+                                    <td>XL</td>
+                                    <td>74 cm</td>
+                                    <td>57 cm</td>
+                                    <td>23 cm</td>
+                                    <td>1m75 - 1m80</td>
+                                    <td>80kg - 90kg</td>
+                                </tr>
+                              
+                               
                             </tbody>
                         </table>
                     </div>

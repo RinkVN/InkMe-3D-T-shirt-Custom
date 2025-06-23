@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import { useParams } from 'react-router-dom'
 import { connect } from "react-redux";
 import NavbarS2 from '../../components/NavbarS2/NavbarS2';
@@ -8,29 +8,24 @@ import FooterS3 from '../../components/footerS3/FooterS3';
 import CursorMaus from '../../components/CursorMaus/CursorMaus';
 import { addToCart } from "../../store/actions/action";
 import Product from './product'
-import api from "../../api";
 import ProductTabs from './alltab';
+import { getProductById } from '../../services/ShopServices';
 
 
 
 const ProductSinglePage =(props) => {
   
-
     const { slug } = useParams()
+    const [product, setProduct] = useState(null);
 
-    
-    const productsArray = api();
-    const Allproduct = productsArray
-
-    
     const {addToCart} = props;
-    const [product, setProduct] = useState({});
+    const products = async () => {
+        const response = await getProductById(slug);
+        setProduct(response);
+    }
+    products();
+   
     
-    useEffect(() => {
-        setProduct(Allproduct.filter(Allproduct => Allproduct.slug === String(slug)))
-    }, []);
-    
-    const item = product[0];
 
     return(
         <Fragment>
@@ -39,8 +34,8 @@ const ProductSinglePage =(props) => {
             <section className="product-details-section section-padding section-bg-2">
                 <div className="container">
                     <div className="product-details-wrapper">
-                        {item ? <Product
-                            item={item}
+                        {product ? <Product
+                            product={product}
                             addToCart={addToCart}
                         /> : null}
                         <ProductTabs />

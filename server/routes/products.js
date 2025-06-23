@@ -199,6 +199,7 @@ router.post(`/create`, async (req, res) => {
             images_array.push(image);
         })
     })
+    images_Arr();
 
     let product = new Product({
         name: req.body.name,
@@ -362,7 +363,7 @@ router.put(`/:id`, async (req, res) => {
         {
             name: req.body.name,
             description: req.body.description,
-            images: imagesArray,
+            images: req.body.images,
             brand: req.body.brand,
             price: req.body.price,
             oldPrice: req.body.oldPrice,
@@ -397,5 +398,18 @@ router.put(`/:id`, async (req, res) => {
     });
 });
 
+router.get('/category/:categoryId', async (req, res) => {
+    const categoryId = req.params.categoryId;
+    try {
+        const products = await Product.find({ category: categoryId }).populate('category subCat');
+        if (!products || products.length === 0) {
+            return res.status(404).json({ message: 'No products found for this category' });
+        }
+        return res.status(200).json(products);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server Error' });
+    }
+});
 
 module.exports = router
