@@ -8,6 +8,7 @@ import Home1 from '../../img/header/home-1.jpg';
 import Home2 from '../../img/header/home-2.jpg';
 import Home3 from '../../img/header/home-3.jpg';
 import MobileMenu from '../MobileMenu/MobileMenu';
+import { useMyContext } from '../../context/MyConext';
 
 
 const HeaderS2 = (props) => {
@@ -20,8 +21,9 @@ const HeaderS2 = (props) => {
         window.scrollTo(10, 0);
     }
 
-    const { carts } = props;
+    const { cartData } = useMyContext();
 
+    const totalQuantity = cartData.reduce((sum, item) => sum + item.quantity, 0);
 
     const [isSticky, setIsSticky] = useState(false);
 
@@ -117,7 +119,7 @@ const HeaderS2 = (props) => {
                                 <div className="menu-cart">
                                     <Link onClick={ClickHandler} to="/shop-cart" className="cart-icon">
                                         <i className="far fa-shopping-basket"></i>
-                                        <span>{carts.length}</span>
+                                        <span>{totalQuantity}</span>
                                     </Link>
                                 </div>
                                 <div className="content">
