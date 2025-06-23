@@ -10,6 +10,7 @@ import Home2 from '../../img/header/home-2.jpg';
 import Home3 from '../../img/header/home-3.jpg';
 import SearchComponent from './search';
 import MobileMenu from '../MobileMenu/MobileMenu';
+import { useMyContext } from '../../context/MyConext';
 
 
 const Header = (props) => {
@@ -28,6 +29,10 @@ const Header = (props) => {
     const user = JSON.parse(localStorage.getItem('user'));
 
     const [isSticky, setIsSticky] = useState(false);
+
+    const { cartData } = useMyContext();
+
+    const totalQuantity = cartData.reduce((sum, item) => sum + item.quantity, 0);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -168,7 +173,7 @@ const Header = (props) => {
                                                 </Link>
                                                 <ul className="submenu">
                                                     <li><Link onClick={ClickHandler} to="/news">Tin tức</Link></li>
-                                                    <li><Link onClick={ClickHandler} to="/blog-single/How-To-Teach-Kids-Ramadan-Isn’t-About-Food">Chi tiết tin tức</Link></li>
+                                                    <li><Link onClick={ClickHandler} to="/blog-single/How-To-Teach-Kids-Ramadan-Isn't-About-Food">Chi tiết tin tức</Link></li>
                                                 </ul>
                                             </li>
                                             <li>
@@ -180,7 +185,11 @@ const Header = (props) => {
                             </div>
                             <div className="header-right d-flex justify-content-end align-items-center">
                                 <SearchComponent />
-                                <h5 className="cart-title"><Link onClick={ClickHandler} to={`/shop-cart/${user.userId}`}>Giỏ hàng <span className='cart-count'>{carts.length}</span></Link></h5>
+                                <h5 className="cart-title">
+                                    <Link onClick={ClickHandler} to={`/shop-cart/${user.userId}`}>
+                                        Giỏ hàng <span className='cart-count'>{totalQuantity}</span>
+                                    </Link>
+                                </h5>
                                 <div className="header__hamburger d-xl-none my-auto">
                                     <div className="sidebar__toggle">
                                         <MobileMenu />

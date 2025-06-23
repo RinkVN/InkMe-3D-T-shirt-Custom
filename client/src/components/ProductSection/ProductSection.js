@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { fetchDataFromApi, postData } from '../../utils/api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useMyContext } from '../../context/MyConext';
 
 const ProductSection = () => {
     const [activeTab, setActiveTab] = useState('Tab3');
@@ -13,6 +14,7 @@ const ProductSection = () => {
         Tab3: [], // Otaku Vibes (Anime)
         Tab4: []  // Invitation Card
     });
+    const { setCartData } = useMyContext();
 
     const ClickHandler = () => {
         window.scrollTo(10, 0);
@@ -57,6 +59,9 @@ const ProductSection = () => {
                 toast.error(response.message || 'Không thể thêm vào giỏ hàng');
             } else {
                 toast.success(`Sản phẩm đã được thêm vào giỏ hàng`);
+                // Fetch lại cart và cập nhật context
+                const updatedCart = await fetchDataFromApi(`/api/cart?userId=${user.userId}`);
+                setCartData(updatedCart);
             }
         } catch (error) {
             console.error('Error adding to cart:', error);
