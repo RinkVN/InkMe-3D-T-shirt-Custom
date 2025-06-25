@@ -1,6 +1,6 @@
 import { fetchDataFromApi } from '../utils/api';
 
-const CASSO_API_KEY = process.env.REACT_APP_CASSO_API_KEY;
+const CASSO_API_KEY = import.meta.env.VITE_CASSO_API_KEY;
 const CASSO_API_URL = 'https://oauth.casso.vn/v2/transactions';
 
 export const checkPaymentStatus = async (orderId, amount) => {

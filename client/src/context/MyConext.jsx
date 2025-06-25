@@ -20,7 +20,18 @@ const MyProvider = ({ children }) => {
   const [selectedQuantity, setSelectedQuantity] = useState({});
   const [totalAmount, setTotalAmount] = useState(0);
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  // Safely get user from localStorage
+  const getUser = () => {
+    try {
+      const userStr = localStorage.getItem('user');
+      return userStr ? JSON.parse(userStr) : null;
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      return null;
+    }
+  };
+
+  const user = getUser();
 
   const [alterBox, setAlterBox] = useState({
     message: "",
@@ -30,43 +41,52 @@ const MyProvider = ({ children }) => {
 
   // Fetch category data
   useEffect(() => {
-    fetchDataFromApi('/api/category').then((res) => {
-      setCategoryData(res.categoryList);
-    });
+    const fetchData = async () => {
+      try {
+        const categoryRes = await fetchDataFromApi('/api/category');
+        setCategoryData(categoryRes.categoryList || []);
 
-    fetchDataFromApi('/api/products').then((res) => {
-      setProductData(res.productList);
-    });
+        const productRes = await fetchDataFromApi('/api/products');
+        setProductData(productRes.productList || []);
 
-    if (user?.userId) {
-      fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
-        setCartData(Array.isArray(res) ? res : []);
-      }).catch((error) => {
-        console.error("Error fetching cart data:", error);
+        if (user?.userId) {
+          const cartRes = await fetchDataFromApi(`/api/cart?userId=${user.userId}`);
+          setCartData(Array.isArray(cartRes) ? cartRes : []);
+        } else {
+          setCartData([]);
+        }
+
+        if (user?.userId) {
+          const orderRes = await fetchDataFromApi(`/api/orders/user/${user.userId}`);
+          setOrderData(orderRes || {});
+        } else {
+          setOrderData({});
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setCategoryData([]);
+        setProductData([]);
         setCartData([]);
-      });
-    } else {
-      setCartData([]);
-    }
+        setOrderData({});
+      }
+    };
 
-    if (user?.userId) {
-      fetchDataFromApi(`/api/orders/user/${user.userId}`).then((res) => {
-        setOrderData(res);
-      });
-    } else {
-      setOrderData([]);
-    }
-
-  }, []);
+    fetchData();
+  }, [user?.userId]);
 
   // Check user token
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken) {
-        setUserId(decodedToken.id);
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        if (decodedToken) {
+          setUserId(decodedToken.id);
+        }
       }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      setUserId(null);
     }
   }, []);
 
@@ -80,9 +100,14 @@ const MyProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    localStorage.removeItem("token");
-    googleLogout();
-    setUserId(null);
+    try {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      googleLogout();
+      setUserId(null);
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   return (

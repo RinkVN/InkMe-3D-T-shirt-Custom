@@ -28,6 +28,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(true);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token'));
   const context = useContext(MyContext);
 
   const [formfields, setFormfields] = useState({
@@ -43,8 +44,14 @@ const Signup = () => {
   const history = useNavigate();
 
   useEffect(() => {
+    // Check if user is already logged in
+    const currentToken = localStorage.getItem('token');
+    setToken(currentToken);
+    if (currentToken) {
+      history('/');
+    }
     //context.setIsHideSidebarAndHeader(true);
-  }, []);
+  }, [token, history]);
 
   const focusInput = (index) => {
     setInputIndex(index);

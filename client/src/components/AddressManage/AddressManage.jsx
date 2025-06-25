@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Edit, Delete, Add } from '@mui/icons-material';
 import { postData, editData, deleteData, fetchDataFromApi } from '../../utils/api';
 import PayOSPayment from '../Payment/PayOSPayment';
@@ -28,9 +28,9 @@ const AddressManage = () => {
         if (user?.userId) {
             fetchAddresses();
         }
-    }, [user?.userId]);
+    }, [user?.userId, fetchAddresses]);
 
-    const fetchAddresses = async () => {
+    const fetchAddresses = useCallback(async () => {
         try {
             const response = await fetchDataFromApi(`/api/address/user/${user.userId}`);
             setAddresses(response);
@@ -42,9 +42,7 @@ const AddressManage = () => {
         } catch (error) {
             console.error('Error fetching addresses:', error);
         }
-    };
-
-
+    }, [user.userId, context]);
 
     // Xử lý thêm địa chỉ mới
     const handleAddAddress = async () => {

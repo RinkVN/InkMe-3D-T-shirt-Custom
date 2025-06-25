@@ -1,8 +1,12 @@
 {
-  "name": "prinoz",
+  "name": "inkme-react",
   "version": "0.1.0",
-  "homepage": "http://prinoz-react.wpolive.com",
-  "private": true,
+  "homepage": "http://inkme3d.com",
+  "author": "Inkme3D",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -31,7 +35,6 @@
     "react-redux": "^8.1.3",
     "react-responsive-masonry": "^2.1.7",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "^5.0.1",
     "react-scroll": "^1.9.0",
     "react-scroll-parallax": "^3.4.2",
     "react-scroll-trigger": "^0.6.14",
@@ -40,10 +43,9 @@
     "react-toastify": "^9.1.2",
     "react-tooltip": "^5.21.5",
     "reactstrap": "^9.1.9",
-    "redux": "^5.0.1",
+    "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
-    "sass": "^1.62.1",
     "simple-react-validator": "^1.6.2",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.8.1",
@@ -52,16 +54,10 @@
     "yet-another-react-lightbox": "^3.12.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite"
   },
   "browserslist": {
     "production": [
@@ -74,5 +70,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "sass": "^1.89.2",
+    "vite": "^6.0.0"
   }
 }

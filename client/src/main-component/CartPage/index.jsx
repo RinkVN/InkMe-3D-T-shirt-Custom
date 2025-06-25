@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState, useCallback } from "react";
 import NavbarS2 from '../../components/NavbarPages/NavbarS2/NavbarS2';
 import PageTitle from '../../components/pagetitle/PageTitle'
 import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
@@ -25,21 +25,7 @@ const CartPage = () => {
   const context = useContext(MyContext);
   const user = JSON.parse(localStorage.getItem('user'));
 
-  useEffect(() => {
-    fetchCartData();
-    // Kiểm tra referrer để hiển thị nút upload ảnh khi truy cập từ trang web khác
-    const referrer = document.referrer;
-    const currentDomain = window.location.origin;
-
-    // Nếu có referrer và referrer không phải từ cùng domain
-    if (referrer && !referrer.startsWith(currentDomain)) {
-      setShowUploadButton(true);
-      console.log('User came from external website:', referrer);
-    }
-  }, []);
-
-  const fetchCartData = () => {
-
+  const fetchCartData = useCallback(() => {
     fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
       setCartData(res);
       context.setCartData(res);
@@ -53,8 +39,20 @@ const CartPage = () => {
       const total = res.reduce((sum, item) => sum + item.subTotal, 0);
       setTotalAmount(total);
     });
-  }
+  }, [fetchDataFromApi, context, user.userId]);
 
+  useEffect(() => {
+    fetchCartData();
+    // Kiểm tra referrer để hiển thị nút upload ảnh khi truy cập từ trang web khác
+    const referrer = document.referrer;
+    const currentDomain = window.location.origin;
+
+    // Nếu có referrer và referrer không phải từ cùng domain
+    if (referrer && !referrer.startsWith(currentDomain)) {
+      setShowUploadButton(true);
+      console.log('User came from external website:', referrer);
+    }
+  }, [fetchCartData]);
 
   const removeItem = (id) => {
     setLoading(prev => ({ ...prev, [id]: true }));

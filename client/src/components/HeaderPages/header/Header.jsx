@@ -186,7 +186,10 @@ const Header = (props) => {
                             <div className="header-right d-flex justify-content-end align-items-center">
                                 <SearchComponent />
                                 <h5 className="cart-title">
-                                    <Link onClick={ClickHandler} to={`/shop-cart/${user.userId}`}>
+                                    <Link
+                                        onClick={ClickHandler}
+                                        to={user ? `/shop-cart/${user.userId}` : "/login"}
+                                    >
                                         Giỏ hàng <span className='cart-count'>{totalQuantity}</span>
                                     </Link>
                                 </h5>
