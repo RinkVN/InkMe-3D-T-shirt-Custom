@@ -187,3 +187,47 @@
   font-size: 18px;
   font-weight: 500;
 }
+
+.custom-3d-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  z-index: 999 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-3d-popup-content {
+  position: relative;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(40,60,120,0.18);
+  padding: 0;
+  max-width: 95vw;
+  width: 95vw;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-3d-popup-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 2;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(77,151,231,0.08);
+}

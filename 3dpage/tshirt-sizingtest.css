@@ -4,6 +4,7 @@
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
 }
+
 body {
   margin: 0px;
   overflow: hidden;
@@ -64,129 +65,261 @@ body {
   background-image: url('media/fullscreen_close.svg');
 }
 
+/* Popup Remove BG Modern UI */
+.remove-bg-container {
+  position: relative;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(40, 60, 120, 0.18);
+  padding: 32px 28px 28px 28px;
+  max-width: 420px;
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  animation: fadeIn 0.25s cubic-bezier(.4, 1.4, .6, 1);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+  z-index: 10;
+  transition: box-shadow 0.25s, backdrop-filter 0.25s, transform 0.18s;
+}
 
-    /* Add these styles in the head section or your CSS file */
-    .remove-bg-loading {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.9);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-    }
+.remove-bg-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.32) 0%, rgba(77, 151, 231, 0.10) 100%);
+  backdrop-filter: blur(18px) saturate(1.4) brightness(1.12);
+  opacity: 0.92;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+  transition: backdrop-filter 0.25s, opacity 0.25s;
+}
 
-    .loading-dots {
-      display: flex;
-      gap: 8px;
-    }
+.remove-bg-container::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 180%;
+  height: 180%;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(ellipse at 60% 0%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%),
+    linear-gradient(120deg, rgba(77, 151, 231, 0.08) 0%, rgba(255, 255, 255, 0.10) 100%);
+  opacity: 0.55;
+  filter: blur(8px);
+  transition: opacity 0.25s, filter 0.25s, transform 0.25s;
+  transform: translate(-50%, -10%) scale(1.05);
+}
 
-    .loading-dots span {
-      width: 8px;
-      height: 8px;
-      background: #4d97e7;
-      border-radius: 50%;
-      animation: loading 1.4s infinite ease-in-out;
-    }
+.remove-bg-container:hover {
+  box-shadow: 0 12px 48px 0 rgba(77, 151, 231, 0.22), 0 1.5px 8px 0 rgba(255, 255, 255, 0.18);
+  transform: scale(1.025);
+}
 
-    .loading-dots span:nth-child(1) {
-      animation-delay: 0s;
-    }
+.remove-bg-container:hover::before {
+  backdrop-filter: blur(26px) saturate(1.6) brightness(1.18);
+  opacity: 1;
+}
 
-    .loading-dots span:nth-child(2) {
-      animation-delay: 0.2s;
-    }
+.remove-bg-container:hover::after {
+  opacity: 0.72;
+  filter: blur(12px) brightness(1.12);
+  transform: translate(-50%, -4%) scale(1.09);
+  animation: glassHighlightMove 1.6s cubic-bezier(.4, 1.4, .6, 1) infinite alternate;
+}
 
-    .loading-dots span:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    @keyframes loading {
-
-      0%,
-      60%,
-      100% {
-        transform: translateY(0);
-      }
-
-      30% {
-        transform: translateY(-4px);
-      }
-    }
-
-    #remove-bg-button {
-      position: relative;
-    }
-
-    #remove-bg-button.error {
-      background-color: #ff4444;
-    }
-
-    #remove-bg-button.success {
-      background-color: #4caf50;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px) translateX(-50%);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) translateX(-50%);
-      }
-    }
-
-    .remove-bg-container {
-      transition: box-shadow 0.2s;
-    }
-
-    #open-remove-bg:hover {
-      background: #3d7bc8;
-    }
-
-    #remove-bg-popup {
-      transition: box-shadow 0.2s;
-    }
-
-    #close-remove-bg:hover {
-      background: #e0e0e0;
-    }
-  
-
-  
-  @keyframes loading {
-
-    0%,
-    60%,
-    100% {
-      transform: translateY(0);
-    }
-
-    30% {
-      transform: translateY(-4px);
-    }
+@keyframes glassHighlightMove {
+  0% {
+    transform: translate(-50%, -10%) scale(1.05);
+    opacity: 0.55;
   }
 
-  .remove-bg-button:hover {
-    background: #3d7bc8;
+  100% {
+    transform: translate(-50%, -4%) scale(1.09);
+    opacity: 0.72;
+  }
+}
+
+/* Đảm bảo nội dung trên layer 1 */
+.remove-bg-container>* {
+  position: relative;
+  z-index: 3;
+}
+
+.remove-bg-container h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #2a3550;
+  margin-bottom: 0.5em;
+  letter-spacing: 0.01em;
+}
+
+.remove-bg-button {
+  background: linear-gradient(90deg, #4d97e7 0%, #6a7cfb 100%);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(77, 151, 231, 0.08);
+  transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+}
+
+.remove-bg-button:hover {
+  background: linear-gradient(90deg, #3d7bc8 0%, #4d97e7 100%);
+  box-shadow: 0 4px 16px rgba(77, 151, 231, 0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.remove-bg-process {
+  background: linear-gradient(90deg, #4caf50 0%, #6adf7c 100%);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.08);
+  transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+}
+
+.remove-bg-process:hover {
+  background: linear-gradient(90deg, #3d9c3d 0%, #4caf50 100%);
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.remove-bg-add-to-canvas {
+  background: linear-gradient(90deg, #4d97e7 0%, #6a7cfb 100%);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(77, 151, 231, 0.08);
+  transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+}
+
+.remove-bg-add-to-canvas:hover {
+  background: linear-gradient(90deg, #3d7bc8 0%, #4d97e7 100%);
+  box-shadow: 0 4px 16px rgba(77, 151, 231, 0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.remove-bg-preview {
+  width: 100%;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.preview-original,
+.preview-result {
+  flex: 1;
+  min-width: 160px;
+  text-align: center;
+  background: #f7f9fc;
+  border-radius: 10px;
+  padding: 12px 8px 18px 8px;
+  box-shadow: 0 1px 4px rgba(77, 151, 231, 0.06);
+}
+
+.preview-original img,
+.preview-result img {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 6px;
+  margin-top: 4px;
+  box-shadow: 0 2px 8px rgba(77, 151, 231, 0.10);
+}
+
+.preview-original p,
+.preview-result p {
+  color: #6a7cfb;
+  font-weight: 500;
+  margin-bottom: 0.5em;
+}
+
+.remove-bg-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.97);
+  padding: 28px 36px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(77, 151, 231, 0.13);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loading-dots span {
+  width: 12px;
+  height: 12px;
+  background: #4d97e7;
+  border-radius: 50%;
+  animation: loading 1.4s infinite ease-in-out;
+}
+
+#close-remove-bg {
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(77, 151, 231, 0.08);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition: background 0.18s;
+}
+
+#close-remove-bg:hover {
+  background: #e0e0e0;
+}
+
+@media (max-width: 600px) {
+  .remove-bg-container {
+    padding: 18px 4vw 18px 4vw;
+    max-width: 98vw;
   }
 
-  .remove-bg-process:hover {
-    background: #3d9c3d;
+  .remove-bg-loading {
+    padding: 18px 4vw;
   }
 
-  .remove-bg-add-to-canvas:hover {
-    background: #3d7bc8;
+  .preview-original,
+  .preview-result {
+    min-width: 120px;
+    padding: 8px 2vw 12px 2vw;
   }
-
-  .remove-bg-button.error {
-    background: #ff4444;
-  }
-
-  .remove-bg-button.success {
-    background: #4caf50;
-  }
+}

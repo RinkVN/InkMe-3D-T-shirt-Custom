@@ -4053,7 +4053,7 @@ span {
 .hero-1 .hero-thumb {
   margin-bottom: -100px;
   position: relative;
-  z-index: 9;
+  z-index: 1;
   width: 800px;
   margin-left: -165px;
 }

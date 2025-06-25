@@ -16,12 +16,18 @@ import Abimg12 from '../../../img/about/line.png'
 import Abimg13 from '../../../img/icon/02.svg'
 import { Link } from 'react-router-dom';
 import video from '../../../img/about/demo custom.mp4'
+import Custom3D from '../../../main-component/Custom3D/Custom3D'
 
-const about = () => {
+const About = () => {
     const ClickHandler = () => {
         window.scrollTo(10, 0);
     }
-
+    const [showPopup, setShowPopup] = React.useState(false);
+    const handleCustom3D = (e) => {
+        e.preventDefault();
+        setShowPopup(true);
+    }
+    const closePopup = () => setShowPopup(false);
     return (
         <section className="about-section section-padding pt-0">
             <div className="dot-shape">
@@ -111,7 +117,15 @@ const about = () => {
                                     </div>
                                 </div>
                                 <div className="about-author">
-                                    <Link onClick={ClickHandler} to="/about" className="theme-btn wow fadeInUp" data-wow-delay=".3s">Trải nghiệm ngay</Link>
+                                    <button onClick={handleCustom3D} className="theme-btn wow fadeInUp" data-wow-delay=".3s">Trải nghiệm ngay</button>
+                                    {showPopup && (
+                                        <div className='custom-3d-popup' >
+                                            <div className='custom-3d-popup-content'>
+                                                <button onClick={closePopup} className='custom-3d-popup-close'>×</button>
+                                                <Custom3D />
+                                            </div>
+                                        </div>
+                                    )}
                                     <div className="author-image wow fadeInUp" data-wow-delay=".5s">
                                         <img src={Abimg11} alt="img" />
                                         <div className="content">
@@ -128,4 +142,4 @@ const about = () => {
     );
 };
 
-export default about;
+export default About;

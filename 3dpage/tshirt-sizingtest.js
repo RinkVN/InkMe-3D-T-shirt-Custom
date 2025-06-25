@@ -345,6 +345,99 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+document.addEventListener('DOMContentLoaded', function () {
+  var closeRemoveBgBtn = document.getElementById('close-remove-bg');
+  if (closeRemoveBgBtn) {
+    closeRemoveBgBtn.onclick = function () {
+      document.getElementById('remove-bg-popup').style.display = 'none';
+    };
+  }
+});
+
+
+// OpenAI Content Moderation API
+// Hàm kiểm tra nội dung không phù hợp bằng OpenAI GPT-4 Vision
+async function checkInappropriateContent(base64ImageData) {
+  // QUAN TRỌNG: Thay thế 'YOUR_OPENAI_API_KEY' bằng API key của bạn
+  const OPENAI_API_KEY = '';
+  if (!OPENAI_API_KEY || OPENAI_API_KEY === 'YOUR_OPENAI_API_KEY') {
+    console.warn("OpenAI API key chưa được cấu hình. Bỏ qua bước kiểm duyệt nội dung.");
+    // Trả về kết quả an toàn nếu không có API key để không chặn người dùng
+    return {
+      isInappropriate: false,
+      reason: "API key not configured."
+    };
+  }
+
+  const payload = {
+    "model": "gpt-4o",
+    "messages": [{
+      "role": "user",
+      "content": [{
+        "type": "text",
+        "text": "Analyze the following image for inappropriate content. Check for graphic violence, gore, blood, hateful symbols, nudity, or sexually explicit material. Respond with a single JSON object with two keys: 'isInappropriate' (boolean) and 'reason' (a string, providing a brief explanation in Vietnamese if inappropriate, or 'an toàn' if not). Do not include any text outside of the JSON object."
+      }, {
+        "type": "image_url",
+        "image_url": {
+          "url": base64ImageData,
+          "detail": "low" // Dùng "low" để phân tích nhanh và rẻ hơn
+        }
+      }]
+    }],
+    "max_tokens": 300
+  };
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('OpenAI API request failed:', errorData);
+      // Trả về "an toàn" để không chặn người dùng khi API có lỗi
+      return {
+        isInappropriate: false,
+        reason: `API Error: ${response.statusText}`
+      };
+    }
+
+    const result = await response.json();
+    const content = result.choices[0].message.content;
+
+    // Dọn dẹp response để chỉ lấy phần JSON
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.error("Invalid response from OpenAI, couldn't find JSON:", content);
+      return {
+        isInappropriate: false,
+        reason: "Invalid response from AI."
+      };
+    }
+
+    const parsedContent = JSON.parse(jsonMatch[0]);
+
+    return {
+      isInappropriate: parsedContent.isInappropriate,
+      reason: parsedContent.reason
+    };
+
+  } catch (error) {
+    console.error('Lỗi khi kiểm tra nội dung với OpenAI:', error);
+    // Trả về "an toàn" để không chặn người dùng nếu có lỗi
+    return {
+      isInappropriate: false,
+      reason: "An error occurred during check."
+    };
+  }
+}
+
+
 function prepareExternalInterface(app) {
     /**
      * Register functions in the app.ExternalInterface to call them from

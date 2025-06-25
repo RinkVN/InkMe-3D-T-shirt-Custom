@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Bg from '../../../img/hero/hero-bg.jpg'
 import Shape1 from '../../../img/hero/circle-2.png'
 import Shape2 from '../../../img/hero/vector.png'
@@ -10,13 +10,20 @@ import Shape6 from '../../../img/hero/bar.png'
 // import hero1 from '../../img/hero/hero-1.png'
 import hero1 from '../../../img/hero/hero-1.gif'
 import hero2 from '../../../img/hero/information.png'
+import Custom3D from '../../../main-component/Custom3D/Custom3D'
 
 
 
-const hero = () => {
+const Hero = () => {
+    const [showPopup, setShowPopup] = useState(false);
     const ClickHandler = () => {
         window.scrollTo(10, 0);
     }
+    const handleCustom3D = (e) => {
+        e.preventDefault();
+        setShowPopup(true);
+    }
+    const closePopup = () => setShowPopup(false);
 
     return (
         <section className="hero-section hero-1 fix bg-cover" style={{ backgroundImage: `url(${Bg})` }} >
@@ -58,8 +65,15 @@ const hero = () => {
                                     Giá cả hợp lý
                                 </li>
                             </ul>
-                            <a href="https://rinkvn.github.io/3D-T-shirt-Custom/" target="_blank" rel="noopener noreferrer" className="theme-btn wow fadeInUp" data-wow-delay=".9s">Tự tay thiết kế</a >
-                            {/* <Link to="/shop" onClick={ClickHandler} className="theme-btn wow fadeInUp" data-wow-delay=".9s">Tự tay thiết kế</Link> */}
+                            <button onClick={handleCustom3D} className="theme-btn wow fadeInUp" data-wow-delay=".9s">Tự tay thiết kế</button>
+                            {showPopup && (
+                                <div className='custom-3d-popup'>
+                                    <div className='custom-3d-popup-content'>
+                                        <button onClick={closePopup} className='custom-3d-popup-close'>×</button>
+                                        <Custom3D />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="col-lg-6 wow fadeInUp" data-wow-delay=".4s">
@@ -76,4 +90,4 @@ const hero = () => {
     );
 };
 
-export default hero;
+export default Hero;
