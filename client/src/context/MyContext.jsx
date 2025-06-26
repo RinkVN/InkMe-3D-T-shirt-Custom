@@ -15,6 +15,7 @@ const MyProvider = ({ children }) => {
   const [cartData, setCartData] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const [orderData, setOrderData] = useState({});
+  const [showHeader, setShowHeader] = useState(true);
 
   const [loading, setLoading] = useState({});
   const [selectedQuantity, setSelectedQuantity] = useState({});
@@ -143,6 +144,10 @@ const MyProvider = ({ children }) => {
         // Order related
         orderData,
         setOrderData,
+
+        // Header related
+        showHeader,
+        setShowHeader,
       }}
     >
       {children}

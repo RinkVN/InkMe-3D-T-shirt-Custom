@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import AllRoute from "../router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { MyContext, MyProvider } from "../../context/MyConext";
+import { MyContext, MyProvider } from "../../context/MyContext";
 import { Alert, Snackbar } from "@mui/material";
 
 // import CustomCursor from '../../components/CustomCursor/CustomCursor';

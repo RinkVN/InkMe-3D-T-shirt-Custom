@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { fetchDataFromApi, postData } from '../../../utils/api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useMyContext } from '../../../context/MyConext';
+import { useMyContext } from '../../../context/MyContext';
 
 const ProductSection = () => {
     const [activeTab, setActiveTab] = useState('Tab3');

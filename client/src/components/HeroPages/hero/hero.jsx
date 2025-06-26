@@ -11,19 +11,26 @@ import Shape6 from '../../../img/hero/bar.png'
 import hero1 from '../../../img/hero/hero-1.gif'
 import hero2 from '../../../img/hero/information.png'
 import Custom3D from '../../../main-component/Custom3D/Custom3D'
+import { useMyContext } from '../../../context/MyContext';
 
 
 
 const Hero = () => {
     const [showPopup, setShowPopup] = useState(false);
+    const { setShowHeader } = useMyContext();
+
     const ClickHandler = () => {
         window.scrollTo(10, 0);
     }
     const handleCustom3D = (e) => {
         e.preventDefault();
         setShowPopup(true);
+        setShowHeader(false);
     }
-    const closePopup = () => setShowPopup(false);
+    const closePopup = () => {
+        setShowPopup(false);
+        setShowHeader(true);
+    }
 
     return (
         <section className="hero-section hero-1 fix bg-cover" style={{ backgroundImage: `url(${Bg})` }} >
@@ -67,7 +74,7 @@ const Hero = () => {
                             </ul>
                             <button onClick={handleCustom3D} className="theme-btn wow fadeInUp" data-wow-delay=".9s">Tự tay thiết kế</button>
                             {showPopup && (
-                                <div className='custom-3d-popup'>
+                                <div className='custom-3d-popup' >
                                     <div className='custom-3d-popup-content'>
                                         <button onClick={closePopup} className='custom-3d-popup-close'>×</button>
                                         <Custom3D />

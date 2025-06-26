@@ -64,3 +64,22 @@ mongoose.connect(process.env.CONNECTION_STRING, {
     console.log(err);
 })
 
+// Global error handlers to prevent server crashes
+process.on('uncaughtException', (error) => {
+    console.error('❌ Uncaught Exception:', error);
+    // Don't exit the process, just log the error
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+    // Don't exit the process, just log the error
+});
+
+// Express error handler middleware
+app.use((err, req, res, next) => {
+    console.error('❌ Express Error:', err);
+    if (!res.headersSent) {
+        res.status(500).json({ error: 'Internal server error', details: err.message });
+    }
+});
+

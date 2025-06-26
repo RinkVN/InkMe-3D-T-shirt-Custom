@@ -5,7 +5,7 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import Button from "@mui/material/Button";
 import { CircularProgress } from "@mui/material";
 import { baseUrl, postData } from "../../utils/api";
-import { MyContext } from "../../context/MyConext";
+import { MyContext } from "../../context/MyContext";
 import Logo from "../../img/logo.webp";
 import patern from "../../img/pattern.webp";
 import "bootstrap/dist/css/bootstrap.min.css";

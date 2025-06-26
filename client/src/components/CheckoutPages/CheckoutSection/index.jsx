@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import QRPayment from '../../Payment/QRPayment';
 import AddressManage from '../../AddressManage/AddressManage';
 import UserInfoCheckout from '../UserInfoCheckout/UserInfoCheckout';
-import { MyContext } from '../../../context/MyConext';
+import { MyContext } from '../../../context/MyContext';
 import { postData } from '../../../utils/api';
 
 const CheckoutSection = () => {

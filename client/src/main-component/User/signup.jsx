@@ -18,7 +18,7 @@ import { FaPhone } from "react-icons/fa6";
 import { CircularProgress } from "@mui/material";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../App.css";
-import { MyContext } from "../../context/MyConext";
+import { MyContext } from "../../context/MyContext";
 import { baseUrl, postData } from "../../utils/api";
 import hero1 from "../../img/hero/hero-1.gif";
 import logo from "../../img/logo/inkme-logo.png";

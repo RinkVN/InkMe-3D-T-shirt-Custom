@@ -8,7 +8,7 @@ import Home1 from '../../../img/header/home-1.jpg';
 import Home2 from '../../../img/header/home-2.jpg';
 import Home3 from '../../../img/header/home-3.jpg';
 import MobileMenu from '../../MobileMenu/MobileMenu';
-import { useMyContext } from '../../../context/MyConext';
+import { useMyContext } from '../../../context/MyContext';
 
 
 const HeaderS2 = (props) => {

@@ -13,7 +13,7 @@ import { CircularProgress } from "@mui/material";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../App.css";
 import { getUsers, loginWithGoogle } from "../../services/UserServices";
-import { MyContext } from "../../context/MyConext";
+import { MyContext } from "../../context/MyContext";
 import { GoogleLogin } from "@react-oauth/google";
 
 const LoginScreen = () => {

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { MyContext } from '../../../context/MyConext';
+import { MyContext } from '../../../context/MyContext';
 import { startPaymentMonitoring } from '../../../services/PaymentService';
 import { editData } from '../../../utils/api';
 
@@ -108,8 +108,8 @@ const QRPayment = ({ order }) => {
         <div className='qr-payment'
             style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
         >
-           
-            <img src={qrCode} alt="QR Code"  />
+
+            <img src={qrCode} alt="QR Code" />
             <div style={{ marginTop: '15px', textAlign: 'center' }}>
                 <div style={{ fontSize: '20px', color: '#999' }}>
                     ⏳ Đang kiểm tra thanh toán...

@@ -8,7 +8,7 @@ const cartSchema = mongoose.Schema({
     images: [
         {
             type: String,
-            required: true
+            default: ''
         }
     ],
     rating: {
@@ -35,6 +35,38 @@ const cartSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    inkmeFile: {
+        url: {
+            type: String,
+            required: false
+        },
+        sceneName: {
+            type: String,
+            required: false
+        },
+        color: {
+            type: String,
+            required: false
+        },
+        bgColor: {
+            type: String,
+            required: false
+        },
+        acidWash: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        puffPrint: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        timestamp: {
+            type: String,
+            required: false
+        }
+    },
     classifications: [
         {
             name: {
@@ -43,7 +75,7 @@ const cartSchema = mongoose.Schema({
             },
             image: {
                 type: String,
-                required: true
+                default: ''
             },
             price: {
                 type: Number,

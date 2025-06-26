@@ -44,6 +44,26 @@
 </head>
 
 <body>
+  <!-- Cart Button Section -->
+  <div class="cart-section">
+    <button id="cart_button" class="cart-button">
+      <svg class="cart-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+        style="width: 18px; height: 18px; fill: currentColor;">
+        <path
+          d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+      </svg>
+      Thêm vào giỏ hàng
+    </button>
+  </div>
+
+  <!-- Cart loading overlay -->
+  <div class="cart-loading-overlay" id="cartLoadingOverlay">
+    <div class="cart-loading-popup">
+      <div class="cart-loading-spinner"></div>
+      <div class="cart-loading-text">Đang thêm vào giỏ hàng...</div>
+    </div>
+  </div>
+
   <div id="v3d-container">
     <!-- Remove BG Popup Trigger Button -->
     <!-- (Removed floating button and popup from here) -->
@@ -160,14 +180,13 @@
             <div class="cf_button cf_context-menu__button" data-action="remove">
               Xóa
             </div>
-
-
           </div>
         </div>
       </div>
     </div>
     <div id="myClass2"></div>
   </div>
+
 
   <script async src="https://docs.opencv.org/4.x/opencv.js"
     onload="cv['onRuntimeInitialized']=()=>{window.opencvReady = true;}">
@@ -219,6 +238,8 @@
       Tải ảnh đã xóa nền
     </button>
   </div>
+
+
 
 </body>
 

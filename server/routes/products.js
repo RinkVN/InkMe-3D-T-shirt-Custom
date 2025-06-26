@@ -29,7 +29,8 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({
-    storage: storage
+    storage: storage,
+    limits: { fileSize: 10 * 1024 * 1024 } // 10 MB
 });
 
 router.post(`/upload`, upload.array("images"), async (req, res) => {
@@ -65,7 +66,130 @@ router.post(`/upload`, upload.array("images"), async (req, res) => {
 
 });
 
-// ------------ img upload
+// ------------ end img upload
+
+// ------------ upload single
+const uploadSingle = multer({
+    storage: storage,
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+}).single("file"); // field name = file
+
+router.post("/upload-file", (req, res) => {
+
+    try {
+        const bodyData = [];
+
+        req.on('data', chunk => {
+            bodyData.push(chunk);
+        });
+
+        req.on('end', () => {
+
+            try {
+                // Create a simple filename
+                const randomString = Math.random().toString(36).substring(2, 7);
+                const filename = `${Date.now()}_${randomString}_layout.json`;
+                const filePath = `uploads/${filename}`;
+
+                // Save to local file
+                const fs = require('fs');
+                const fullData = Buffer.concat(bodyData);
+
+                // Extract JSON from multipart data (simple approach)
+                const dataStr = fullData.toString();
+                const jsonMatch = dataStr.match(/\r\n\r\n(.*?)\r\n/s);
+
+                if (jsonMatch && jsonMatch[1]) {
+                    const jsonData = jsonMatch[1];
+
+                    // Upload directly to Cloudinary without saving locally
+                    uploadJSONToCloudinary(jsonData, filename)
+                        .then(cloudinaryResult => {
+
+                            return res.status(200).json({
+                                url: cloudinaryResult.secure_url,
+                                public_id: cloudinaryResult.public_id,
+                                filename: filename,
+                                cloudinary: true,
+                                bytes: cloudinaryResult.bytes
+                            });
+                        })
+                        .catch(cloudinaryError => {
+                            console.log("Cloudinary upload failed:", cloudinaryError.message);
+
+                            // Only create local file as emergency fallback
+                            try {
+                                fs.writeFileSync(filePath, jsonData);
+                                const localUrl = `http://localhost:4000/uploads/${filename}`;
+
+                                return res.status(200).json({
+                                    url: localUrl,
+                                    filename: filename,
+                                    cloudinary: false,
+                                    cloudinary_error: cloudinaryError.message
+                                });
+                            } catch (localError) {
+                                return res.status(500).json({
+                                    error: "Upload failed completely",
+                                    cloudinary_error: cloudinaryError.message,
+                                    local_error: localError.message
+                                });
+                            }
+                        });
+                } else {
+                    return res.status(400).json({ error: "Invalid data format" });
+                }
+
+            } catch (parseError) {
+                return res.status(500).json({ error: "Parse error", details: parseError.message });
+            }
+        });
+
+        req.on('error', (error) => {
+            if (!res.headersSent) {
+                res.status(500).json({ error: "Request error", details: error.message });
+            }
+        });
+
+    } catch (globalError) {
+        if (!res.headersSent) {
+            res.status(500).json({ error: "Global error", details: globalError.message });
+        }
+    }
+});
+
+// ------------ end upload single
+
+// Helper function to upload JSON data directly to Cloudinary
+async function uploadJSONToCloudinary(jsonData, filename) {
+    return new Promise((resolve, reject) => {
+        // Set a timeout for the upload
+        const uploadTimeout = setTimeout(() => {
+            reject(new Error('Cloudinary upload timeout after 30 seconds'));
+        }, 30000);
+
+        // Create a buffer from JSON data
+        const buffer = Buffer.from(jsonData, 'utf8');
+
+        // Upload buffer directly to Cloudinary
+        cloudinary.uploader.upload_stream({
+            resource_type: "raw",
+            format: "json",
+            public_id: filename.replace('.json', ''), // Remove .json extension
+            folder: "inkme_layouts",
+            overwrite: true
+        }, (error, result) => {
+            clearTimeout(uploadTimeout);
+
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        }).end(buffer);
+    });
+}
+
 
 
 router.get(`/`, async (req, res) => {

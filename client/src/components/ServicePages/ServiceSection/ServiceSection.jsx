@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import Swiper from 'swiper';
 import 'swiper/swiper-bundle.min.css';
 import { Link } from 'react-router-dom'
-import { MyContext } from '../../../context/MyConext';
+import { MyContext } from '../../../context/MyContext';
 
 import Shape from '../../../img/service/shape.png'
 import Shape2 from '../../../img/line.png'

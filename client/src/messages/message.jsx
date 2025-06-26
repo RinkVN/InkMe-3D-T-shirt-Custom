@@ -1,6 +1,6 @@
 import { Alert, Snackbar } from "@mui/material";
 import React, { useContext } from "react";
-import { useMyContext } from "../context/MyConext";
+import { useMyContext } from "../context/MyContext";
 
 const Message = () => {
   return (

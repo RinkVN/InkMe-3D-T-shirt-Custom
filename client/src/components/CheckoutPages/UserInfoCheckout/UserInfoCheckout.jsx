@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { MyContext } from '../../../context/MyConext';
+import { MyContext } from '../../../context/MyContext';
 import { TextField, Button } from '@mui/material';
 import { editData } from '../../../utils/api';
 

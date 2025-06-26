@@ -478,3 +478,22 @@ document.addEventListener("DOMContentLoaded", function () {
     // Handle overlay click
     overlay.addEventListener('click', hideColorWarning);
 });
+
+window.addEventListener('message', (event) => {
+    if (!event.data || event.data.type !== 'initData') return;
+
+    const { userId, productId } = event.data;
+
+    console.log("📥 Nhận dữ liệu từ parent:", event.data);
+
+    if (userId) {
+        localStorage.setItem('userId', userId || '');
+    } 
+
+    if (productId) {
+        localStorage.setItem('productId', productId);
+    }
+
+    // Bạn có thể khởi động app từ đây nếu cần
+    // init3DEditor(userId, productId);
+});

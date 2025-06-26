@@ -181,15 +181,6 @@
               loading="lazy" class="image-32 icon2" />
           </div>
         </div>
-        <div class="uploaddesign download_design">
-          <button id="cart_button" class="cart-button">
-            <svg class="cart-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
-            </svg>
-            Thêm vào giỏ hàng
-          </button>
-        </div>
       </div>
     </div>
   </div>
@@ -449,28 +440,8 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById('cart_button').addEventListener('click', function (e) {
-      e.preventDefault();
-      // Lấy iframe
-      const iframe = document.getElementById('myIframe');
-      if (iframe && iframe.contentWindow) {
-        try {
-          const exportBtn = iframe.contentWindow.document.getElementById('exportButton');
-          if (exportBtn) {
-            exportBtn.click();
-            setTimeout(function () {
-              window.open('http://localhost:3036/shop-cart/684ef4679da0267146cfedfb', '_blank');
-            }, 1000);
-            return;
-          }
-        } catch (err) {
-          // Có thể do cross-origin, fallback
-        }
-      }
-      window.open('http://localhost:3036/shop-cart/684ef4679da0267146cfedfb', '_blank');
-    });
-  </script>
+
+
 </body>
 
 </html>

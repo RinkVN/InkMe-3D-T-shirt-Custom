@@ -9,7 +9,7 @@ import "./scss/main.css";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store/index";
 import { Provider } from "react-redux";
-import { MyProvider } from "./context/MyConext";
+import { MyProvider } from "./context/MyContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 const clientId =
   "715777490374-ig5f3ufvqdhe4uml8pqmo15n9om6ioej.apps.googleusercontent.com";

@@ -3390,7 +3390,7 @@ figcaption {
   width: 300px;
   max-width: 1200px;
   height: 100%;
-  margin-top: 100px;
+  margin-top: 250px;
   font-size: 12px;
   display: grid;
   position: absolute;
@@ -3537,8 +3537,8 @@ figcaption {
   max-width: 400px;
   height: 100%;
   margin-top: 0%;
-  margin-bottom: 20%;
-  padding: 5px 10px 300px;
+  /* margin-bottom: 20%; */
+  /* padding: 5px 10px 300px; */
   box-shadow: 0 20px 100px #c4cae340;
 }
 
@@ -4327,7 +4327,7 @@ figcaption {
     font-size: 16px;
   }
 
-  .faq, .faq-2, .faq-3 {
+  .faq, .faq-2 {
     padding-bottom: 400px;
   }
 }

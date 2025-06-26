@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CurrentDoler from "./CurrentDoler";
 import { Avatar } from "@mui/material";
-import { useMyContext } from "../../../context/MyConext";
+import { useMyContext } from "../../../context/MyContext";
 import { getUserById } from "../../../services/UserServices";
 import avatarDefault from "../../../img/avatar_defaut.jpg";
 
@@ -38,7 +38,7 @@ const HeaderTopbar = (props) => {
           <Link onClick={ClickHandler} to="del:+41888567890">
             (+84)968338829
           </Link>
-            - 24/7
+          - 24/7
         </p>
         <p> 🔥 Miễn phí vận chuyển với đơn hàng trên 1000.000đ </p>
         <div className="header-top-right">
@@ -75,8 +75,8 @@ const HeaderTopbar = (props) => {
                   alt={user?.name}
                   src={
                     Array.isArray(user.images) &&
-                    user.images.length > 0 &&
-                    user.images[0]
+                      user.images.length > 0 &&
+                      user.images[0]
                       ? user.images[0]
                       : avatarDefault
                   }
