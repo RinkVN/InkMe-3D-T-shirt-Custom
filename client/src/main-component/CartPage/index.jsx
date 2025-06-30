@@ -9,6 +9,7 @@ import { MyContext } from '../../context/MyContext';
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import QuantityBox from "../../components/QuantityBox";
 import InkMeFile from './InkMeFile';
+import './Cart.css';
 
 const CartPage = () => {
   const ClickHandler = () => {
@@ -105,7 +106,7 @@ const CartPage = () => {
       <PageTitle pageTitle={'ImkMe - 3D Printing'} pagesub={'Giỏ hàng'} />
 
       <section className="cart-section section-padding section-bg-2">
-        <div className="container">
+        <div className="container cart-page-container">
           <div className="main-cart-wrapper">
             <div className="row">
               <div className="col-12">
@@ -130,16 +131,7 @@ const CartPage = () => {
                                   <td className="cart-item-info">
                                     <div className="tooltip-wrapper">
                                       {item.inkmeFile ? (
-                                        <div style={{
-                                          width: '100px',
-                                          height: '100px',
-                                          display: 'flex',
-                                          alignItems: 'center',
-                                          justifyContent: 'center',
-                                          backgroundColor: '#f8f9fa',
-                                          border: '2px dashed #dee2e6',
-                                          borderRadius: '8px'
-                                        }}>
+                                        <div className="cart-item-image-wrapper">
                                           <InkMeFile inkmeFile={item.inkmeFile} />
                                         </div>
                                       ) : (
@@ -147,7 +139,7 @@ const CartPage = () => {
                                           src={item.images[0]}
                                           alt={item.productTitle}
                                           className="product-image"
-                                          style={{ width: '100px', height: '100px' }}
+                                          style={{ width: '150px', height: '150px' }}
                                         />
                                       )}
                                       <span className="tooltip-glass">{item.productTitle}</span>

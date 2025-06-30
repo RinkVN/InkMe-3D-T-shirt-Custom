@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
+import VideoGuidePopup from './VideoGuidePopup'
+import './Cart.css'
 
 const InkMeFile = ({ inkmeFile }) => {
+    const [showGuide, setShowGuide] = useState(false);
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleString('vi-VN');
     };
@@ -14,20 +18,27 @@ const InkMeFile = ({ inkmeFile }) => {
     if (!inkmeFile) return null;
 
     return (
-        <button
-            onClick={downloadFile}
-            className="btn btn-outline-primary btn-sm"
-            style={{
-                fontSize: '14px',
-                padding: '4px 8px',
-                marginTop: '5px',
-                borderRadius: '4px',
-                margin: '10px 0px'
-            }}
-            title={`Tải file: ${inkmeFile.sceneName || 'Custom Design'}`}
-        >
-            <i className="fas fa-download"></i> Tải Model 3D
-        </button>
+        <div className="inkme-file-container">
+            <button
+                className="download-button"
+                onClick={downloadFile}
+                onMouseEnter={() => setShowGuide(true)}
+                onMouseLeave={() => setShowGuide(false)}
+                title={`Tải file: ${inkmeFile.sceneName || 'Custom Design'}`}
+            >
+                <span className="button-content">
+                    <i className="fas fa-download button-icon"></i>
+                    Tải Model 3D
+                </span>
+
+                <div className="glass-overlay" />
+            </button>
+
+            <VideoGuidePopup
+                isVisible={showGuide}
+                onClose={() => setShowGuide(false)}
+            />
+        </div>
     )
 }
 

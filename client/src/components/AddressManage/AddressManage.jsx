@@ -23,13 +23,6 @@ const AddressManage = () => {
         moreInfo: ''
     });
 
-    // Fetch addresses when component mounts
-    useEffect(() => {
-        if (user?.userId) {
-            fetchAddresses();
-        }
-    }, [user?.userId, fetchAddresses]);
-
     const fetchAddresses = useCallback(async () => {
         try {
             const response = await fetchDataFromApi(`/api/address/user/${user.userId}`);
@@ -43,6 +36,13 @@ const AddressManage = () => {
             console.error('Error fetching addresses:', error);
         }
     }, [user.userId, context]);
+
+    // Fetch addresses when component mounts
+    useEffect(() => {
+        if (user?.userId) {
+            fetchAddresses();
+        }
+    }, [user?.userId, fetchAddresses]);
 
     // Xử lý thêm địa chỉ mới
     const handleAddAddress = async () => {
