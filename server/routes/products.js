@@ -88,7 +88,7 @@ router.post("/upload-file", (req, res) => {
             try {
                 // Create a simple filename
                 const randomString = Math.random().toString(36).substring(2, 7);
-                const filename = `${Date.now()}_${randomString}_layout.json`;
+                const filename = `${Date.now()}_${randomString}_layout.sav`;
                 const filePath = `uploads/${filename}`;
 
                 // Save to local file
@@ -174,8 +174,8 @@ async function uploadJSONToCloudinary(jsonData, filename) {
         // Upload buffer directly to Cloudinary
         cloudinary.uploader.upload_stream({
             resource_type: "raw",
-            format: "json",
-            public_id: filename.replace('.json', ''), // Remove .json extension
+            format: "sav",
+            public_id: filename,
             folder: "inkme_layouts",
             overwrite: true
         }, (error, result) => {

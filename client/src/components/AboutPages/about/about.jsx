@@ -53,7 +53,7 @@ const About = () => {
 
     const closePopup = () => setShowPopup(false);
     return (
-        <section className="about-section section-padding pt-0">
+        <section className="about-section section-padding pt-0" style={{ marginTop: '60px' }}>
             <div className="dot-shape">
                 <img src={Abimg1} alt="img" />
             </div>

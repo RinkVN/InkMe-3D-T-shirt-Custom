@@ -78,7 +78,7 @@ const loginStyles = `
     background: white;
   }
 
-  .icon {
+  .loginSection .icon {
     position: absolute;
     left: 1rem;
     top: 50%;

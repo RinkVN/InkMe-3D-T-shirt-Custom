@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { MyContext } from '../../context/MyContext';
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import QuantityBox from "../../components/QuantityBox";
+import InkMeFile from './InkMeFile';
 
 const CartPage = () => {
   const ClickHandler = () => {
@@ -81,6 +82,7 @@ const CartPage = () => {
         subTotal: item.price * newQuantity,
         productId: item.productId,
         userId: user.userId,
+        inkmeFile: item.inkmeFile,
         classifications: item.classifications?.map(cls => ({
           ...cls,
           quantity: newQuantity,
@@ -127,12 +129,27 @@ const CartPage = () => {
                                 <tr className="cart-item">
                                   <td className="cart-item-info">
                                     <div className="tooltip-wrapper">
-                                      <img
-                                        src={item.images[0]}
-                                        alt={item.productTitle}
-                                        className="product-image"
-                                        style={{ width: '100px', height: '100px' }}
-                                      />
+                                      {item.inkmeFile ? (
+                                        <div style={{
+                                          width: '100px',
+                                          height: '100px',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          backgroundColor: '#f8f9fa',
+                                          border: '2px dashed #dee2e6',
+                                          borderRadius: '8px'
+                                        }}>
+                                          <InkMeFile inkmeFile={item.inkmeFile} />
+                                        </div>
+                                      ) : (
+                                        <img
+                                          src={item.images[0]}
+                                          alt={item.productTitle}
+                                          className="product-image"
+                                          style={{ width: '100px', height: '100px' }}
+                                        />
+                                      )}
                                       <span className="tooltip-glass">{item.productTitle}</span>
                                     </div>
                                   </td>
@@ -162,14 +179,6 @@ const CartPage = () => {
                                     </button>
                                   </td>
                                 </tr>
-                                {/* Hiển thị thông tin .inkme file nếu có */}
-                                {item.inkmeFile && (
-                                  <tr>
-                                    <td colSpan="5">
-                                      {/* <CartInkmeInfo inkmeFile={item.inkmeFile} /> */}
-                                    </td>
-                                  </tr>
-                                )}
                               </React.Fragment>
                             )
                           })

@@ -183,7 +183,7 @@ const ProductSection = () => {
     };
 
     return (
-        <section className="product-section section-padding pt-0">
+        <section className="product-section section-padding pt-0" style={{ margin: '60px' }}>
             <div className="shape-image">
                 <img src={ProdactShape} alt="img" />
             </div>

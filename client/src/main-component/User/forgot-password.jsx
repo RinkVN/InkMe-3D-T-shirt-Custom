@@ -73,7 +73,7 @@ const forgotPasswordStyles = `
     background: white;
   }
 
-  .icon {
+  .forgotPasswordSection .icon {
     position: absolute;
     left: 1rem;
     top: 50%;

@@ -96,7 +96,7 @@
 .loginSection .loginBox .wrapper .form-group .icon {
   position: absolute;
   left: 10px;
-  /* top: 3px; */
+  top: 3px;
   z-index: 100;
   font-size: 23px;
 }

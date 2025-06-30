@@ -37,15 +37,16 @@ const HomePage = ({ addToCart }) => {
         <Fragment>
             <Navbar hclass={'header-section'} />
             <Hero />
-            <FeatureSection />
+            {/* <FeatureSection /> */}
             <About />
             {/* <MarqueeSection hclass={'marquee-section margin-top-8 mb-80'} /> */}
             <ServiceSection hclass={'service-section section-padding bg-cover '} Bg={ServiceBg} />
-            <StoreSection />
             <ProductSection
                 addToCartProduct={addToCartProduct}
                 products={products}
             />
+            <StoreSection />
+
             <PortfolioSection />
             {/* <FunFact hclass={'counter-section fix section-padding pt-0'} /> */}
             <WorksSection hclass={'about-feature-section fix section-padding pt-0 bg-cover'} eclass={'about-feature-wrapper'} Ws6={Ws6} />

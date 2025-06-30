@@ -74,7 +74,7 @@ const resetPasswordStyles = `
     background: white;
   }
 
-  .icon {
+  .resetPasswordSection .icon {
     position: absolute;
     left: 1rem;
     top: 50%;
