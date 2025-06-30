@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { MyContext } from '../../context/MyContext';
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import QuantityBox from "../../components/QuantityBox";
-import CartInkmeInfo from "../../components/CartInkmeInfo/CartInkmeInfo";
 
 const CartPage = () => {
   const ClickHandler = () => {
@@ -167,7 +166,7 @@ const CartPage = () => {
                                 {item.inkmeFile && (
                                   <tr>
                                     <td colSpan="5">
-                                      <CartInkmeInfo inkmeFile={item.inkmeFile} />
+                                      {/* <CartInkmeInfo inkmeFile={item.inkmeFile} /> */}
                                     </td>
                                   </tr>
                                 )}

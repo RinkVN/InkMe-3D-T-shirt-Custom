@@ -1,6 +1,5 @@
 import React from 'react';
 
-import BG from '../../../img/cta-video.jpg'
 import BG1 from '../../../img/brand/bg.jpg'
 import Logo1 from '../../../img/brand/brand-logo-11.png'
 import Logo2 from '../../../img/brand/brand-logo-12.png'
@@ -39,7 +38,7 @@ const CtaVideoSection = () => {
                 </div>
             </div>
             <div className="container-fluid">
-                <div className="cta-video-wrapper bg-cover" style={{ backgroundImage: `url(${BG})` }}>
+                <div className="cta-video-wrapper bg-cover" style={{ backgroundImage: `url("https://prinoz-react.wpocean.com/static/media/cta-video.b253db58685dddc0a7c1.jpg")` }}>
                     <div >
                         <VideoModal />
                     </div>
@@ -47,7 +46,7 @@ const CtaVideoSection = () => {
             </div>
             <div className="brand-wrapper-4 bg-cover" style={{ backgroundImage: `url(${BG1})` }}>
                 <div className="container">
-                    <h4 className="text-center">We are blessed to work with leading brands <span>brands</span></h4>
+                    <h4 className="text-center">Chúng tôi được phục vụ bởi các  <span>thương hiệu lớn</span></h4>
                     <div className="brand-items">
                         <div className="brand-logo">
                             <img src={Logo1} alt="img" />

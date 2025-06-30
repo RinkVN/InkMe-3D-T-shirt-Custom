@@ -17,16 +17,37 @@ import { useMyContext } from '../../../context/MyContext';
 
 const Hero = () => {
     const [showPopup, setShowPopup] = useState(false);
-    const { setShowHeader } = useMyContext();
+    const { setShowHeader, userId, setAlterBox } = useMyContext();
+    const navigate = useNavigate();
 
     const ClickHandler = () => {
         window.scrollTo(10, 0);
     }
+
     const handleCustom3D = (e) => {
         e.preventDefault();
+
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+
+        if (!token || !user || !userId) {
+            setAlterBox({
+                open: true,
+                error: true,
+                message: "Bạn cần đăng nhập để sử dụng tính năng thiết kế 3D"
+            });
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 1500);
+
+            return;
+        }
+
         setShowPopup(true);
         setShowHeader(false);
     }
+
     const closePopup = () => {
         setShowPopup(false);
         setShowHeader(true);

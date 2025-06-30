@@ -9,10 +9,10 @@ const ProcessSectionS2 = () => {
         <section className="work-process-section section-padding fix">
             <div className="container">
                 <div className="section-title text-center">
-                    <h6 className="bg-2 wow fadeInUp">Digital printing Service</h6>
+                    {/* <h6 className="bg-2 wow fadeInUp">Digital printing Service</h6> */}
                     <h2 className="wow fadeInUp" data-wow-delay=".3s">
-                        How We Works & Process <br/>
-                            It For Customers
+                        Cách chúng tôi hoạt động và xử lý <br />
+                        cho khách hàng
                     </h2>
                 </div>
                 <div className="work-process-wrapper">
@@ -23,10 +23,9 @@ const ProcessSectionS2 = () => {
                                     <img src={Wp1} alt="img" />
                                 </div>
                                 <div className="content">
-                                    <h3>Pick a Product</h3>
+                                    <h3>Chọn sản phẩm</h3>
                                     <p>
-                                        full administration printing backgrou
-                                        or your online business Beautiful
+                                        Chọn sản phẩm phù hợp với nhu cầu của khách hàng
                                     </p>
                                 </div>
                                 <div className="number">
@@ -40,10 +39,9 @@ const ProcessSectionS2 = () => {
                                     <img src={Wp2} alt="img" />
                                 </div>
                                 <div className="content">
-                                    <h3>Custom artwork &review</h3>
+                                    <h3>Thiết kế & review</h3>
                                     <p>
-                                        full administration printing backgrou
-                                        or your online business Beautiful
+                                        Thiết kế sản phẩm theo yêu cầu của khách hàng và review để đảm bảo chất lượng
                                     </p>
                                 </div>
                                 <div className="number">
@@ -57,10 +55,9 @@ const ProcessSectionS2 = () => {
                                     <img src={Wp3} alt="img" />
                                 </div>
                                 <div className="content">
-                                    <h3>Set up shipping</h3>
+                                    <h3>Giao hàng</h3>
                                     <p>
-                                        full administration printing backgrou
-                                        or your online business Beautiful
+                                        Giao hàng sản phẩm đến khách hàng theo đúng thời gian và địa chỉ
                                     </p>
                                 </div>
                                 <div className="number">

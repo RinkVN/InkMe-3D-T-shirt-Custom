@@ -14,19 +14,43 @@ import Abimg10 from '../../../img/icon/01.svg'
 import Abimg11 from '../../../img/about/author.png'
 import Abimg12 from '../../../img/about/line.png'
 import Abimg13 from '../../../img/icon/02.svg'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import video from '../../../img/about/demo custom.mp4'
 import Custom3D from '../../../main-component/Custom3D/Custom3D'
+import { useMyContext } from '../../../context/MyContext';
 
 const About = () => {
+    const [showPopup, setShowPopup] = React.useState(false);
+    const { userId, setAlterBox } = useMyContext();
+    const navigate = useNavigate();
+
     const ClickHandler = () => {
         window.scrollTo(10, 0);
     }
-    const [showPopup, setShowPopup] = React.useState(false);
+
     const handleCustom3D = (e) => {
         e.preventDefault();
+
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+
+        if (!token || !user || !userId) {
+            setAlterBox({
+                open: true,
+                error: true,
+                message: "Bạn cần đăng nhập để sử dụng tính năng thiết kế 3D"
+            });
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 1500);
+
+            return;
+        }
+
         setShowPopup(true);
     }
+
     const closePopup = () => setShowPopup(false);
     return (
         <section className="about-section section-padding pt-0">

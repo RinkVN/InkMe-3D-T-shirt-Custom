@@ -17,7 +17,7 @@ const AboutPage = () => {
     return (
         <Fragment>
             <NavbarS2 hclass={'header-section-2 style-two'} />
-            <PageTitle pageTitle={'Digital printing Service'} pagesub={'About Company'} />
+            <PageTitle pageTitle={'Dịch vụ in ấn 3D'} pagesub={'InkMe'} />
             <About2 hclass={'about-section section-padding'} />
             <MarqueeSection hclass={'marquee-section'} />
             <ServiceSection hclass={'service-section bg-cover section-padding'} Bg={ServiceBg} />
@@ -25,7 +25,7 @@ const AboutPage = () => {
             <WorksSection hclass={'about-feature-section fix section-padding pt-0 bg-cover'} eclass={'about-feature-wrapper style-2'} />
             <CtaVideoSection />
             <ProcessSectionS2 />
-            <TestimonialSectionS3 />
+            {/* <TestimonialSectionS3 /> */}
             <CtaSectionS2 />
             <FooterS3 />
             <CursorMaus />

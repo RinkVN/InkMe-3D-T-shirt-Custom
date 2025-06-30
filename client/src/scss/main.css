@@ -618,7 +618,7 @@ span {
   height: 525px;
   border-radius: 50%;
   opacity: 0.2;
-  background: linear-gradient(180deg, #6F32F0 0%, #FF47EE 100%);
+  /* background: linear-gradient(180deg, #6F32F0 0%, #FF47EE 100%); */
 }
 
 @media (max-width: 1199px) {

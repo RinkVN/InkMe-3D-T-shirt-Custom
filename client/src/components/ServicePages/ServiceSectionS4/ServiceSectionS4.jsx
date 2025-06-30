@@ -56,13 +56,13 @@ const ServiceSectionS4 = (props) => {
             <div className="container">
                 <div className="section-title-area">
                     <div className="section-title">
-                        <h6 className="wow fadeInUp">More service us</h6>
+                        <h6 className="wow fadeInUp">Dịch vụ của chúng tôi</h6>
                         <h2 className="wow fadeInUp" data-wow-delay=".3s">
-                            Create Stunning Print For<br />
-                            <span> Your Business <img src={Shape2} alt="img" /></span>
+                            Tạo thiết kế in ấn ấn tượng<br />
+                            <span> cho doanh nghiệp của bạn <img src={Shape2} alt="img" /></span>
                         </h2>
                     </div>
-                    <Link onClick={ClickHandler} to="/service" className="theme-btn" >See all Services</Link>
+                    <Link onClick={ClickHandler} to="/service" className="theme-btn" >Xem tất cả dịch vụ</Link>
                 </div>
             </div>
             <div className="services-wrapper-3">

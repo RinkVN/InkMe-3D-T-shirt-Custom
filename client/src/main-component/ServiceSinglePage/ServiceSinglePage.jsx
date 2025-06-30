@@ -41,91 +41,88 @@ const ServiceSinglePage = (props) => {
                                 <div className="service-details-content">
                                     <h3>{serviceDetails.title}</h3>
                                     <p className="mt-3">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat qui ducimus illum modi?  perspiciatis
-                                        accusamus soluta perferendis, ad illum, nesciunt, reiciendis iusto et cupidit Repudiandae provident to
-                                        consectetur, sapiente, libero iure necessitatibus corporis nulla voluptate, quisquam aut perspiciatis?
-                                        Fugiat labore aspernatur eius, perspiciatis ut molestiae, delectus rem.
+                                        InkMe mang đến giải pháp thiết kế áo 3D hiện đại, cho phép người dùng cá nhân hóa sản phẩm theo phong cách riêng.
+                                        Với công nghệ mô hình hóa và giao diện đơn giản, việc tạo ra một thiết kế mang dấu ấn cá nhân chưa bao giờ dễ dàng đến thế.
                                     </p>
-                                    <h3 className="mt-5 split-text right">Sed Ut Perspiciatis Unde Omnis Iste Natus Et</h3>
+
+                                    <h3 className="mt-5 split-text right">Vì sao thiết kế cá nhân hóa lại quan trọng?</h3>
                                     <p className="mt-3">
-                                        Need something changed or is there something not quite working the way you envisaged? Is your van a
-                                        little old and tired and need refreshing? Lorem Ipsum is simply dummy text of the printing and typesetting
-                                        industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an
-                                        unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not
-                                        only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                                        Trong thời đại mà ai cũng muốn thể hiện cái tôi riêng biệt, việc sở hữu một chiếc áo mang dấu ấn cá nhân giúp tạo ấn tượng mạnh mẽ, từ đó tăng sự tự tin và kết nối cộng đồng.
+                                        InkMe cho phép bạn "mặc" ý tưởng của chính mình – từ cá nhân, đội nhóm cho đến doanh nghiệp.
                                     </p>
+
                                     <div className="service-details-video">
                                         <div className="row g-4 align-items-center">
                                             <div className="col-lg-6">
                                                 <div className="video-image">
-                                                    <img src={Video} alt="img" />
+                                                    <img src={Video} alt="video demo" />
                                                     <div className="video-box">
-                                                        <VideoModal/>
+                                                        <VideoModal />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="col-lg-6">
                                                 <div className="details-video-content">
-                                                    <h3 className="mb-3 split-text right">Why Marketing Important ?</h3>
+                                                    <h3 className="mb-3 split-text right">Tại sao nên dùng InkMe?</h3>
                                                     <p>
-                                                        Lorem ipsum dolor sit amet, consectetur adipisici
-                                                        sed do eiusmod tempor incididunt ut labore et
+                                                        InkMe không chỉ là một công cụ thiết kế – mà còn là nền tảng sáng tạo mở, hỗ trợ mọi người hiện thực hóa ý tưởng một cách trực quan nhất.
                                                     </p>
                                                     <ul>
                                                         <li>
                                                             <i className="fa-solid fa-circle-check"></i>
-                                                            Research beyond the business plan
+                                                            Xem trước sản phẩm 3D như thật trước khi in
                                                         </li>
                                                         <li>
                                                             <i className="fa-solid fa-circle-check"></i>
-                                                            Marketing options and rates
+                                                            Cá nhân hóa toàn bộ thiết kế – màu sắc, hình ảnh, văn bản
                                                         </li>
                                                         <li>
                                                             <i className="fa-solid fa-circle-check"></i>
-                                                            The ability to turnaround consulting
+                                                            Hỗ trợ xuất file thiết kế để chia sẻ hoặc in ấn
                                                         </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                     <p>
-                                        There are many variations of passages of lorem ipsum is simply free text available in the market, but the
-                                        majority time you put aside to be in our office. Lorem ipsum dolor sit amet, consectetLorem ipsum dolor sit
-                                        amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                                        dolore magna aliqua.
+                                        Với InkMe, bạn không cần biết về thiết kế chuyên nghiệp, không cần dùng phần mềm phức tạp – chỉ cần vài cú nhấp chuột là bạn đã có thể tạo nên sản phẩm in ấn chất lượng cao.
+                                        Dù là tạo áo nhóm, áo đồng phục, hay đơn giản là một chiếc áo thể hiện cá tính – mọi thứ đều có thể làm được trên InkMe.
                                     </p>
+
                                     <div className="highlight-text">
                                         <h5>
-                                            Business is the activity of making one's living or making money by produ The NDIS <br />
-                                            Cing or buying and selling products akes a lifetime</h5>
+                                            “Phong cách là vĩnh cửu – và giờ đây, bạn có thể tạo phong cách của chính mình chỉ trong vài phút.”
+                                        </h5>
                                     </div>
+
                                     <div className="service-image-item">
                                         <div className="row g-4">
-                                            <h3>Eligibility Checklist :</h3>
+                                            <h3>Hình ảnh thực tế:</h3>
                                             <div className="col-lg-7">
                                                 <div className="service-box-image">
-                                                    <img src={simg1} alt="img" />
+                                                    <img src={simg1} alt="ảnh thiết kế 1" />
                                                 </div>
                                             </div>
                                             <div className="col-lg-5">
                                                 <div className="service-box-image">
-                                                    <img src={simg2} alt="img" />
+                                                    <img src={simg2} alt="ảnh thiết kế 2" />
                                                 </div>
                                             </div>
                                             <div className="col-lg-5">
                                                 <div className="service-box-image">
-                                                    <img src={simg3} alt="img" />
+                                                    <img src={simg3} alt="ảnh thiết kế 3" />
                                                 </div>
                                             </div>
                                             <div className="col-lg-7">
                                                 <div className="service-box-image">
-                                                    <img src={simg4} alt="img" />
+                                                    <img src={simg4} alt="ảnh thiết kế 4" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div className="faq-wrapper style-2">
                                         <div className="faq-content">
                                             <div className="faq-accordion">
@@ -134,6 +131,7 @@ const ServiceSinglePage = (props) => {
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

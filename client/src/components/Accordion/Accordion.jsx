@@ -10,20 +10,24 @@ const Accordion = () => {
 
     const accordionData = [
         {
-            title: 'How to learn digital marketing?',
-            content: 'Ne summo dictas pertinacia nam. Illum cetero vocent ei vim, case regione signiferumque vim te. Ex mea quem munere lobortis. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.'
+            title: 'Làm thế nào để thiết kế áo bằng InkMe?',
+            content:
+                'Bạn chỉ cần truy cập trình thiết kế 3D, chọn mẫu áo yêu thích và bắt đầu thêm hình ảnh, văn bản hoặc màu sắc theo ý muốn. Giao diện đơn giản, dễ dùng cho cả người mới bắt đầu.',
         },
         {
-            title: 'Can I use the demos made by Ewebot?',
-            content: 'Ne summo dictas pertinacia nam. Illum cetero vocent ei vim, case regione signiferumque vim te. Ex mea quem munere lobortis. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.'
+            title: 'Tôi có thể sử dụng lại thiết kế đã tạo không?',
+            content:
+                'Hoàn toàn có thể. Bạn có thể lưu file thiết kế (.inkme) để mở lại, chỉnh sửa hoặc thêm vào giỏ hàng bất kỳ lúc nào.',
         },
         {
-            title: 'Why didn’t you showcase my submission?',
-            content: 'Ne summo dictas pertinacia nam. Illum cetero vocent ei vim, case regione signiferumque vim te. Ex mea quem munere lobortis. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.'
+            title: 'Tại sao thiết kế của tôi không hiển thị rõ trên áo?',
+            content:
+                'Có thể hình ảnh bạn sử dụng có độ phân giải thấp. InkMe sử dụng AI để kiểm tra chất lượng hình ảnh – nếu mờ, hệ thống sẽ cảnh báo để bạn thay thế trước khi in.',
         },
         {
-            title: 'What everybody ought to know about digital marketing?',
-            content: 'Ne summo dictas pertinacia nam. Illum cetero vocent ei vim, case regione signiferumque vim te. Ex mea quem munere lobortis. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.'
+            title: 'File .inkme là gì và có công dụng ra sao?',
+            content:
+                'File .inkme là định dạng chứa toàn bộ bố cục thiết kế 3D của bạn (ảnh, văn bản, vị trí...). File này có thể tải về, chia sẻ, hoặc dùng lại sau này để tiếp tục chỉnh sửa và in.',
         }
     ];
 

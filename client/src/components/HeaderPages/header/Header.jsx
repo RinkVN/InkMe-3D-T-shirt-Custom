@@ -32,7 +32,7 @@ const Header = (props) => {
 
     const { cartData, showHeader } = useMyContext();
 
-    const totalQuantity = cartData.reduce((sum, item) => sum + item.quantity, 0);
+    const totalQuantity = cartData.length;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -140,6 +140,9 @@ const Header = (props) => {
                                                         <Link onClick={ClickHandler} to="/about">Về chúng tôi</Link>
                                                     </li>
                                                     <li>
+                                                        <Link onClick={ClickHandler} to="/service-details/Sticker-printing">Dịch vụ</Link>
+                                                    </li>
+                                                    {/* <li>
                                                         <Link onClick={ClickHandler} to="#">
                                                             Dịch vụ
                                                         </Link>
@@ -147,7 +150,7 @@ const Header = (props) => {
                                                             <li><Link onClick={ClickHandler} to="/service">Dịch vụ</Link></li>
                                                             <li><Link onClick={ClickHandler} to="/service-details/Sticker-printing">Chi tiết dịch vụ</Link></li>
                                                         </ul>
-                                                    </li>
+                                                    </li> */}
                                                     <li className="has-dropdown">
                                                         <Link onClick={ClickHandler} to="#">
                                                             Dự án
@@ -158,7 +161,7 @@ const Header = (props) => {
                                                             <li><Link onClick={ClickHandler} to="/404">404 Page</Link></li>
                                                         </ul>
                                                     </li>
-                                                    <li>
+                                                    {/* <li>
                                                         <Link onClick={ClickHandler} to="#">
                                                             Cửa hàng
                                                         </Link>
@@ -168,7 +171,7 @@ const Header = (props) => {
                                                             <li><Link onClick={ClickHandler} to="/shop-cart">Giỏ hàng</Link></li>
                                                             <li><Link onClick={ClickHandler} to="/checkout">Thanh toán</Link></li>
                                                         </ul>
-                                                    </li>
+                                                    </li> */}
                                                     <li>
                                                         <Link onClick={ClickHandler} to="#">
                                                             Tin tức

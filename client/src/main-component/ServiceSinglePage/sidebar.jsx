@@ -24,7 +24,7 @@ const ServiceSidebar = (props) => {
                     }
                 </ul>
             </div>
-            <div className="contact-bg text-center bg-cover" style={{ backgroundImage: `url(${Bg})`}}>
+            <div className="contact-bg text-center bg-cover" style={{ backgroundImage: `url("https://prinoz-react.wpocean.com/static/media/cta-video.b253db58685dddc0a7c1.jpg")` }}>
                 <div className="icon">
                     <i className="fa-light fa-phone-volume"></i>
                 </div>

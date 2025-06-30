@@ -23,7 +23,7 @@ const HeaderS2 = (props) => {
 
     const { cartData } = useMyContext();
 
-    const totalQuantity = cartData.reduce((sum, item) => sum + item.quantity, 0);
+    const totalQuantity = cartData.length;
 
     const [isSticky, setIsSticky] = useState(false);
 
@@ -72,6 +72,9 @@ const HeaderS2 = (props) => {
                                                 <Link onClick={ClickHandler} to="/about">Về chúng tôi</Link>
                                             </li>
                                             <li>
+                                                <Link onClick={ClickHandler} to="/service-details/Sticker-printing">Dịch vụ</Link>
+                                            </li>
+                                            {/* <li>
                                                 <Link onClick={ClickHandler} to="#">
                                                     Dịch vụ
                                                 </Link>
@@ -79,8 +82,13 @@ const HeaderS2 = (props) => {
                                                     <li><Link onClick={ClickHandler} to="/service">Services</Link></li>
                                                     <li><Link onClick={ClickHandler} to="/service-details/Sticker-printing">Service Details</Link></li>
                                                 </ul>
+                                            </li> */}
+                                            <li>
+                                                <Link onClick={ClickHandler} to="/shop">
+                                                    Sản phẩm
+                                                </Link>
                                             </li>
-                                            <li className="has-dropdown">
+                                            {/* <li className="has-dropdown">
                                                 <Link onClick={ClickHandler} to="#">
                                                     Sản phẩm
                                                 </Link>
@@ -89,8 +97,8 @@ const HeaderS2 = (props) => {
                                                     <li><Link onClick={ClickHandler} to="/project-details/3d-Genareted-Cate">Project Details</Link></li>
                                                     <li><Link onClick={ClickHandler} to="/404">404 Page</Link></li>
                                                 </ul>
-                                            </li>
-                                            <li>
+                                            </li> */}
+                                            {/* <li>
                                                 <Link onClick={ClickHandler} to="#">
                                                     Cửa hàng
                                                 </Link>
@@ -100,7 +108,7 @@ const HeaderS2 = (props) => {
                                                     <li><Link onClick={ClickHandler} to="/shop-cart">Shop Cart</Link></li>
                                                     <li><Link onClick={ClickHandler} to="/checkout">Checkout</Link></li>
                                                 </ul>
-                                            </li>
+                                            </li> */}
                                             <li>
                                                 <Link onClick={ClickHandler} to="#">
                                                     Tin tức

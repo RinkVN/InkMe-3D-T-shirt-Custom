@@ -32,7 +32,7 @@ const AllRoute = () => {
           <Route path="home-2" element={<HomePage2 />} />
           <Route path="home-3" element={<HomePage3 />} />
           <Route path="about" element={<AboutPage />} />
-          <Route path="service" element={<ServicePage />} />
+          {/* <Route path="service" element={<ServiceSinglePage />} /> */}
           <Route path="service-details/:slug" element={<ServiceSinglePage />} />
           <Route path="project" element={<ProjectPage />} />
           <Route path="project-details/:slug" element={<ProjectSinglePage />} />

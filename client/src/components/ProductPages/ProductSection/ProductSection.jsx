@@ -7,24 +7,39 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useMyContext } from '../../../context/MyContext';
 
 const ProductSection = () => {
-    const [activeTab, setActiveTab] = useState('Tab3');
-    const [productsByCategory, setProductsByCategory] = useState({
-        Tab1: [], // Business Cards
-        Tab2: [], // Books & Prints
-        Tab3: [], // Otaku Vibes (Anime)
-        Tab4: []  // Invitation Card
-    });
+    const [activeTab, setActiveTab] = useState(0);
+    const [categories, setCategories] = useState([]);
+    const [productsByCategory, setProductsByCategory] = useState({});
     const { setCartData } = useMyContext();
 
     const ClickHandler = () => {
         window.scrollTo(10, 0);
     }
 
-    const openTab = (TabName) => {
-        setActiveTab(TabName);
+    const openTab = (tabIndex) => {
+        setActiveTab(tabIndex);
+
+        // Fetch products for this category if not already loaded
+        if (categories[tabIndex] && (!productsByCategory[tabIndex] || productsByCategory[tabIndex].length === 0)) {
+            fetchProductsByCategory(categories[tabIndex]._id, tabIndex);
+        }
     }
 
     const user = JSON.parse(localStorage.getItem('user'));
+
+    const fetchProductsByCategory = async (categoryId, categoryIndex) => {
+        try {
+            const response = await fetchDataFromApi(`/api/products?category=${categoryId}`);
+            const products = response.products || [];
+
+            setProductsByCategory(prev => ({
+                ...prev,
+                [categoryIndex]: products
+            }));
+        } catch (error) {
+            console.error('Error fetching products for category:', error);
+        }
+    };
 
     const handleAddToCart = async (product) => {
         try {
@@ -70,27 +85,44 @@ const ProductSection = () => {
     };
 
     useEffect(() => {
-        const fetchProductsByCategory = async () => {
+        const fetchCategoriesAndProducts = async () => {
             try {
-                // Fetch products for each category
-                const businessCards = await fetchDataFromApi('/api/products?catName=Business Cards');
-                const booksPrints = await fetchDataFromApi('/api/products?catName=Books & Prints');
-                const tshirts = await fetchDataFromApi('/api/products?catName=Otaku Vibes (Anime)');
-                const invitations = await fetchDataFromApi('/api/products?catName=InkMe Signature');
+                // Fetch categories - lấy 5 categories đầu tiên
+                const categoriesResponse = await fetchDataFromApi('/api/category?page=1');
+                const categoriesList = categoriesResponse.categoryList || [];
+                const limitedCategories = categoriesList.slice(0, 4); // Giới hạn 5 categories
 
-                setProductsByCategory({
-                    Tab1: businessCards.products || [],
-                    Tab2: booksPrints.products || [],
-                    Tab3: tshirts.products || [],
-                    Tab4: invitations.products || []
+                setCategories(limitedCategories);
+
+                // Initialize empty products for each category
+                const initialProducts = {};
+                limitedCategories.forEach((category, index) => {
+                    initialProducts[index] = [];
                 });
+                setProductsByCategory(initialProducts);
+
+                // Set first tab as active if categories exist
+                if (limitedCategories.length > 0) {
+                    setActiveTab(0);
+                    // Fetch products for the first category
+                    fetchProductsByCategory(limitedCategories[0]._id, 0);
+                }
+
             } catch (error) {
-                console.error('Error fetching products:', error);
+                console.error('Error fetching categories:', error);
+                // Fallback to default categories if API fails
+                const defaultCategories = [
+                    { _id: '1', name: 'Business Cards', color: '#FF6B6B' },
+                    { _id: '2', name: 'Books & Prints', color: '#4ECDC4' },
+                    { _id: '3', name: 'Otaku Vibes (Anime)', color: '#45B7D1' },
+                    { _id: '4', name: 'Invitation Card', color: '#96CEB4' }
+                ];
+                setCategories(defaultCategories);
+                setActiveTab(0);
             }
         };
 
-        fetchProductsByCategory();
-        openTab('Tab3');
+        fetchCategoriesAndProducts();
     }, []);
 
     const renderProductGrid = (products) => {
@@ -108,18 +140,18 @@ const ProductSection = () => {
                                         new
                                     </div>
                                     <ul className="product-icon d-grid align-items-center">
-                                        <li>
+                                        {/* <li>
                                             <button
                                                 onClick={() => handleAddToCart(product)}><i className="fa-sharp fa-regular fa-eye"></i></button>
-                                        </li>
-                                        <li>
+                                        </li> */}
+                                        {/* <li>
                                             <a href="#">
                                                 <i className="fa-regular fa-star"></i>
                                             </a>
                                         </li>
                                         <li>
                                             <Link to={`/shop-details/${product._id}`}><i className="fa-regular fa-arrow-up-arrow-down"></i></Link>
-                                        </li>
+                                        </li> */}
                                     </ul>
                                     <div className="shop-btn">
                                         <button
@@ -162,41 +194,24 @@ const ProductSection = () => {
                 </div>
                 <div className="product-header mt-4 mt-md-0">
                     <ul className="nav">
-                        <li className="nav-item" >
-                            <button className={`nav-link ${activeTab === 'Tab1' ? 'active' : ''}`} onClick={() => openTab('Tab1')}>
-                                Business Cards
-                            </button>
-                        </li>
-                        <li className="nav-item" >
-                            <button className={`nav-link ${activeTab === 'Tab2' ? 'active' : ''}`} onClick={() => openTab('Tab2')}>
-                                Books & Prints
-                            </button>
-                        </li>
-                        <li className="nav-item" >
-                            <button className={`nav-link ${activeTab === 'Tab3' ? 'active' : ''}`} onClick={() => openTab('Tab3')}>
-                                Otaku Vibes (Anime)
-                            </button>
-                        </li>
-                        <li className="nav-item" >
-                            <button className={`nav-link ${activeTab === 'Tab4' ? 'active' : ''}`} onClick={() => openTab('Tab4')}>
-                                Invitation Card
-                            </button>
-                        </li>
+                        {categories.map((category, index) => (
+                            <li key={category._id} className="nav-item">
+                                <button
+                                    className={`nav-link ${activeTab === index ? 'active' : ''}`}
+                                    onClick={() => openTab(index)}
+                                >
+                                    {category.name}
+                                </button>
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div className="tab-content">
-                    <div id="Tab1" style={{ display: activeTab === 'Tab1' ? 'block' : 'none' }}>
-                        {renderProductGrid(productsByCategory.Tab1)}
-                    </div>
-                    <div id="Tab2" style={{ display: activeTab === 'Tab2' ? 'block' : 'none' }}>
-                        {renderProductGrid(productsByCategory.Tab2)}
-                    </div>
-                    <div id="Tab3" style={{ display: activeTab === 'Tab3' ? 'block' : 'none' }}>
-                        {renderProductGrid(productsByCategory.Tab3)}
-                    </div>
-                    <div id="Tab4" style={{ display: activeTab === 'Tab4' ? 'block' : 'none' }}>
-                        {renderProductGrid(productsByCategory.Tab4)}
-                    </div>
+                    {categories.map((category, index) => (
+                        <div key={category._id} style={{ display: activeTab === index ? 'block' : 'none' }}>
+                            {renderProductGrid(productsByCategory[index] || [])}
+                        </div>
+                    ))}
                 </div>
                 <div className="shop-button text-center mt-5 " >
                     <Link to="/shop" className="theme-btn">Xem tất cả sản phẩm</Link>

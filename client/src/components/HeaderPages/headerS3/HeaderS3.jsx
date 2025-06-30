@@ -137,7 +137,12 @@ const HeaderS3 = (props) => {
                                                     <li><Link onClick={ClickHandler} to="/service-details/Sticker-printing">Service Details</Link></li>
                                                 </ul>
                                             </li>
-                                            <li className="has-dropdown">
+                                            <li>
+                                                <Link onClick={ClickHandler} to="/shop">
+                                                    Sản phẩm
+                                                </Link>
+                                            </li>
+                                            {/* <li className="has-dropdown">
                                                 <Link onClick={ClickHandler} to="#">
                                                     Pages
                                                 </Link>
@@ -146,7 +151,7 @@ const HeaderS3 = (props) => {
                                                     <li><Link onClick={ClickHandler} to="/project-details/3d-Genareted-Cate">Project Details</Link></li>
                                                     <li><Link onClick={ClickHandler} to="/404">404 Page</Link></li>
                                                 </ul>
-                                            </li>
+                                            </li> */}
                                             <li>
                                                 <Link onClick={ClickHandler} to="#">
                                                     Shop
