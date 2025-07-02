@@ -5,6 +5,78 @@ const { OpenAI } = require("openai");
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+// Endpoint for content moderation
+router.post("/moderate-content", async (req, res) => {
+  try {
+    const { imageData } = req.body;
+
+    if (!imageData) {
+      return res.status(400).json({ error: "Image data is required" });
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      console.warn("OpenAI API key not configured. Skipping content moderation.");
+      return res.json({
+        isInappropriate: false,
+        reason: "API key not configured."
+      });
+    }
+
+    const payload = {
+      "model": "gpt-4o",
+      "messages": [{
+        "role": "user",
+        "content": [{
+          "type": "text",
+          "text": "Analyze the following image for inappropriate content. Check for graphic violence, gore, blood, hateful symbols, nudity, or sexually explicit material. Respond with a single JSON object with two keys: 'isInappropriate' (boolean) and 'reason' (a string, providing a brief explanation in Vietnamese if inappropriate, or 'an toàn' if not). Do not include any text outside of the JSON object."
+        }, {
+          "type": "image_url",
+          "image_url": {
+            "url": imageData,
+            "detail": "low"
+          }
+        }]
+      }],
+      "max_tokens": 300
+    };
+
+    const response = await openai.chat.completions.create(payload);
+
+    if (!response.choices || !response.choices[0]) {
+      return res.json({
+        isInappropriate: false,
+        reason: "Invalid response from AI."
+      });
+    }
+
+    const content = response.choices[0].message.content;
+
+    // Parse JSON from response
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.error("Invalid response from OpenAI, couldn't find JSON:", content);
+      return res.json({
+        isInappropriate: false,
+        reason: "Invalid response from AI."
+      });
+    }
+
+    const parsedContent = JSON.parse(jsonMatch[0]);
+
+    res.json({
+      isInappropriate: parsedContent.isInappropriate,
+      reason: parsedContent.reason
+    });
+
+  } catch (error) {
+    console.error('Error in content moderation:', error);
+    res.json({
+      isInappropriate: false,
+      reason: "An error occurred during check."
+    });
+  }
+});
+
 router.post("/chat", async (req, res) => {
   const { thread_id, message, images = [] } = req.body;
 
