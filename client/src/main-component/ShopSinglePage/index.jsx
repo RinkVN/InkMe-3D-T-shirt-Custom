@@ -1,24 +1,20 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
-import { connect } from "react-redux";
+import { useParams } from 'react-router-dom';
 import NavbarS2 from '../../components/NavbarPages/NavbarS2/NavbarS2';
 import PageTitle from '../../components/pagetitle/PageTitle'
 import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
 import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
 
-import { addToCart } from "../../store/actions/action";
 import Product from './product'
 import ProductTabs from './alltab';
 import { getProductById } from '../../services/ShopServices';
 
-const ProductSinglePage = (props) => {
+const ProductSinglePage = () => {
 
     const { slug } = useParams()
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const { addToCart } = props;
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -114,7 +110,6 @@ const ProductSinglePage = (props) => {
                         {product && (
                             <Product
                                 product={product}
-                                addToCart={addToCart}
                             />
                         )}
                         <ProductTabs />
@@ -127,13 +122,7 @@ const ProductSinglePage = (props) => {
     )
 };
 
-const mapStateToProps = state => {
-    return {
-        products: state.data.products,
-    }
-};
-
-export default connect(mapStateToProps, { addToCart })(ProductSinglePage);
+export default ProductSinglePage;
 
 
 

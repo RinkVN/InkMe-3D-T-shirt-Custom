@@ -3,7 +3,7 @@ import { createContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Login } from "../services/UserServices";
 import { googleLogout } from "@react-oauth/google";
-import { fetchDataFromApi } from "../utils/api";
+import { fetchDataFromApi, postData } from "../utils/api";
 
 const MyContext = createContext();
 
@@ -20,19 +20,20 @@ const MyProvider = ({ children }) => {
   const [loading, setLoading] = useState({});
   const [selectedQuantity, setSelectedQuantity] = useState({});
   const [totalAmount, setTotalAmount] = useState(0);
+  const [addingInCart, setAddingInCart] = useState(false);
 
   // Safely get user from localStorage
-  const getUser = () => {
+  const getUserLocalStorage = () => {
     try {
-      const userStr = localStorage.getItem('user');
-      return userStr ? JSON.parse(userStr) : null;
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user;
     } catch (error) {
       console.error('Error parsing user from localStorage:', error);
       return null;
     }
   };
 
-  const user = getUser();
+  const user = getUserLocalStorage();
 
   const [alterBox, setAlterBox] = useState({
     message: "",
@@ -111,10 +112,90 @@ const MyProvider = ({ children }) => {
     }
   };
 
+  // Add to cart function
+  const addToCart = async (cartItem) => {
+    if (!user?.userId) {
+      setAlterBox({
+        message: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng",
+        error: true,
+        open: true,
+      });
+      return;
+    }
+
+    setAddingInCart(true);
+
+    try {
+      // Prepare cart data
+      const cartData = {
+        productTitle: cartItem.name || cartItem.productTitle,
+        images: cartItem.images || [cartItem.image],
+        rating: cartItem.rating || 0,
+        price: cartItem.price,
+        quantity: cartItem.quantity || 1,
+        subTotal: cartItem.price * (cartItem.quantity || 1),
+        productId: cartItem.id || cartItem.productId,
+        userId: user.userId,
+        productColor: cartItem.selectedColor || '',
+        productSize: cartItem.selectedSize || '',
+        classifications: [{
+          name: `${cartItem.selectedSize || ''} - ${cartItem.selectedColor || ''}`.trim().replace(/^-\s*|-\s*$/g, ''),
+          image: Array.isArray(cartItem.images) ? cartItem.images[0] : cartItem.images || '',
+          price: cartItem.price,
+          quantity: cartItem.quantity || 1,
+          subTotal: cartItem.price * (cartItem.quantity || 1)
+        }]
+      };
+
+      const response = await postData('/api/cart/add', cartData);
+
+      if (response && !response.error) {
+        // Refresh cart data
+        const updatedCart = await fetchDataFromApi(`/api/cart?userId=${user.userId}`);
+        setCartData(Array.isArray(updatedCart) ? updatedCart : []);
+
+        setAlterBox({
+          message: "Sản phẩm đã được thêm vào giỏ hàng",
+          error: false,
+          open: true,
+        });
+      } else {
+        setAlterBox({
+          message: response.message || "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng",
+          error: true,
+          open: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      setAlterBox({
+        message: "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng",
+        error: true,
+        open: true,
+      });
+    } finally {
+      setAddingInCart(false);
+    }
+  };
+
+  // Get cart data
+  const getCartData = async () => {
+    if (user?.userId) {
+      try {
+        const cartRes = await fetchDataFromApi(`/api/cart?userId=${user.userId}`);
+        setCartData(Array.isArray(cartRes) ? cartRes : []);
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+        setCartData([]);
+      }
+    }
+  };
+
   return (
     <MyContext.Provider
       value={{
         // User related
+        user,
         userId,
         setUserId,
         Login,
@@ -134,6 +215,10 @@ const MyProvider = ({ children }) => {
         // Cart related
         cartData,
         setCartData,
+        addToCart,
+        getCartData,
+        addingInCart,
+        setAddingInCart,
         loading,
         setLoading,
 

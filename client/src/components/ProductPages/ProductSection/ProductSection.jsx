@@ -153,10 +153,11 @@ const ProductSection = () => {
                                             <Link to={`/shop-details/${product._id}`}><i className="fa-regular fa-arrow-up-arrow-down"></i></Link>
                                         </li> */}
                                     </ul>
-                                    <div className="shop-btn">
+                                    {/* <div className="shop-btn">
                                         <button
-                                            onClick={() => handleAddToCart(product)} className="theme-btn">Thêm vào giỏ hàng</button>
-                                    </div>
+                                            onClick={() => handleAddToCart(product)} className="theme-btn">Thêm vào giỏ hàng
+                                        </button>
+                                    </div> */}
                                 </div>
                                 <div className="product-content">
                                     <h6><Link to={`/shop-details/${product._id}`}>{product.name}</Link></h6>

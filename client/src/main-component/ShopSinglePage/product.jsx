@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import { Link } from 'react-router-dom';
+import { MyContext } from '../../context/MyContext';
+import { BsCartFill } from 'react-icons/bs';
 
-const Product = ({ product, addToCart }) => {
+const Product = ({ product }) => {
+  const context = useContext(MyContext);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [tabError, setTabError] = useState(false);
+  const [activeSize, setActiveSize] = useState(null);
+  const [activeColor, setActiveColor] = useState(null);
 
   // Color mapping for display
   const colorMap = {
@@ -37,30 +43,50 @@ const Product = ({ product, addToCart }) => {
     'Cyan': '#06b6d4'
   };
 
-  const ClickHandler = () => {
+  useEffect(() => {
     window.scrollTo(10, 0);
-  }
+  }, []);
 
   const handleAddToCart = () => {
+    setTabError(false);
+
+    if ((product.color && product.color.length > 0 && !selectedColor) ||
+      (product.productSize && product.productSize.length > 0 && !selectedSize)) {
+      setTabError(true);
+      return;
+    }
+
     const productToAdd = {
       ...product,
       selectedSize,
       selectedColor,
       quantity
     };
-    addToCart(productToAdd);
+
+    context.addToCart(productToAdd);
+
+    // Reset selections after adding to cart
+    setActiveSize(null);
+    setActiveColor(null);
+    setSelectedSize('');
+    setSelectedColor('');
+    setQuantity(1);
   };
 
   const selectImage = (index) => {
     setSelectedImage(index);
   };
 
-  const selectSize = (size) => {
+  const selectSize = (size, index) => {
     setSelectedSize(size);
+    setActiveSize(index);
+    setTabError(false);
   };
 
-  const selectColor = (color) => {
+  const selectColor = (color, index) => {
     setSelectedColor(color);
+    setActiveColor(index);
+    setTabError(false);
   };
 
   const increaseQuantity = () => {
@@ -272,21 +298,21 @@ const Product = ({ product, addToCart }) => {
               {selectedColor && (
                 <span className="ms-2 text-muted">({selectedColor})</span>
               )}
-              <div className="color-options mt-2 d-flex gap-2 align-items-center">
+              <div className={`color-options mt-2 d-flex gap-2 align-items-center ${tabError && !selectedColor ? 'error' : ''}`}>
                 {product.color.map((color, index) => {
                   const colorHex = colorMap[color] || '#cccccc';
-                  const isSelected = selectedColor === color;
+                  const isSelected = activeColor === index;
 
                   return (
                     <div
                       key={index}
-                      onClick={() => selectColor(color)}
+                      onClick={() => selectColor(color, index)}
                       style={{
                         width: '32px',
                         height: '32px',
                         borderRadius: '50%',
                         backgroundColor: colorHex,
-                        border: isSelected ? '3px solid #007bff' : '2px solid #e5e7eb',
+                        border: isSelected ? '3px solid #007bff' : tabError && !selectedColor ? '2px solid #dc3545' : '2px solid #e5e7eb',
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         boxShadow: isSelected ? '0 0 0 2px rgba(0, 123, 255, 0.2)' : '0 1px 3px rgba(0, 0, 0, 0.1)',
@@ -310,6 +336,9 @@ const Product = ({ product, addToCart }) => {
                   );
                 })}
               </div>
+              {tabError && !selectedColor && (
+                <small className="text-danger">Vui lòng chọn màu sắc</small>
+              )}
             </div>
           )}
 
@@ -317,21 +346,20 @@ const Product = ({ product, addToCart }) => {
           {product.productSize && product.productSize.length > 0 && (
             <div className="size-selection mb-3">
               <span className="fw-bold">Kích thước:</span>
-              <div className="size-options mt-2">
+              <div className={`size-options mt-2 ${tabError && !selectedSize ? 'error' : ''}`}>
                 {product.productSize.map((size, index) => (
                   <button
                     key={index}
-                    className={`btn btn-outline-secondary me-2 mb-2 ${selectedSize === size ? 'active' : ''}`}
-                    onClick={() => selectSize(size)}
-                    style={{
-                      backgroundColor: selectedSize === size ? '#007bff' : 'transparent',
-                      color: selectedSize === size ? 'white' : '#000'
-                    }}
+                    className={`btn me-2 mb-2 ${activeSize === index ? 'btn-primary' : 'btn-outline-secondary'} ${tabError && !selectedSize ? 'border-danger' : ''}`}
+                    onClick={() => selectSize(size, index)}
                   >
                     {size}
                   </button>
                 ))}
               </div>
+              {tabError && !selectedSize && (
+                <small className="text-danger">Vui lòng chọn kích thước</small>
+              )}
             </div>
           )}
 
@@ -359,25 +387,26 @@ const Product = ({ product, addToCart }) => {
           <div className="cart-wrp">
             <div className="shop-button d-flex align-items-center">
               <button
-                className="theme-btn me-3"
+                className="theme-btn me-3 btn-lg"
                 onClick={handleAddToCart}
-                disabled={
-                  (product.color && product.color.length > 0 && !selectedColor) ||
-                  (product.productSize && product.productSize.length > 0 && !selectedSize)
-                }
+                disabled={context.addingInCart}
+                style={{
+                  opacity: context.addingInCart ? 0.7 : 1,
+                  cursor: context.addingInCart ? 'not-allowed' : 'pointer'
+                }}
               >
-                <i className="fa-regular fa-basket-shopping"></i> Thêm vào giỏ hàng
+                <BsCartFill className="me-2" />
+                {context.addingInCart ? "Đang thêm..." : "Thêm vào giỏ hàng"}
               </button>
               <Link to="#" className="star-icon">
                 <i className="fal fa-star"></i>
               </Link>
             </div>
-            {((product.color && product.color.length > 0 && !selectedColor) ||
-              (product.productSize && product.productSize.length > 0 && !selectedSize)) && (
-                <small className="text-danger mt-2 d-block">
-                  Vui lòng chọn đầy đủ thông tin sản phẩm
-                </small>
-              )}
+            {tabError && (
+              <small className="text-danger mt-2 d-block">
+                Vui lòng chọn đầy đủ thông tin sản phẩm
+              </small>
+            )}
           </div>
 
         </div>

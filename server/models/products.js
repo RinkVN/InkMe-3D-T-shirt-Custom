@@ -93,9 +93,15 @@ const productSchema = mongoose.Schema({
             default: null
         }
     ],
+    productColor: [
+        {
+            type: String,
+            default: null
+        }
+    ],
     productWeight: {
         type: Number,
-        required: true
+        default: 0
     },
     dateCreated: {
         type: Date,

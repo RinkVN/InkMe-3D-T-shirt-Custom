@@ -9,6 +9,7 @@ import { MyContext } from '../../context/MyContext';
 import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 import QuantityBox from "../../components/QuantityBox";
 import InkMeFile from './InkMeFile';
+import ColorSizeSelector from './ColorSizeSelector';
 import './Cart.css';
 
 const CartPage = () => {
@@ -100,6 +101,57 @@ const CartPage = () => {
     }
   };
 
+  const updateColorSize = async (item, options) => {
+    setLoading(prev => ({ ...prev, [item._id]: true }));
+
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user?.userId) return;
+
+      // Create new classification name from size and color
+      const newName = `${options.size || ''} - ${options.color || ''}`.trim().replace(/^-\s*|-\s*$/g, '') || 'Không xác định';
+
+      const cartFields = {
+        productTitle: item.productTitle,
+        images: item.images,
+        rating: item.rating,
+        price: item.price,
+        quantity: item.quantity,
+        subTotal: item.subTotal,
+        productId: item.productId,
+        userId: user.userId,
+        productColor: options.color || item.productColor,
+        productSize: options.size || item.productSize,
+        inkmeFile: item.inkmeFile,
+        classifications: [{
+          name: newName,
+          image: item.classifications?.[0]?.image || item.images[0] || '',
+          price: item.price,
+          quantity: item.quantity,
+          subTotal: item.subTotal
+        }]
+      };
+
+      await editData(`/api/cart/${item._id}`, cartFields);
+      updateCartData();
+
+      context.setAlterBox({
+        open: true,
+        error: false,
+        message: "Cập nhật thành công"
+      });
+    } catch (error) {
+      console.error('Error updating color/size:', error);
+      context.setAlterBox({
+        open: true,
+        error: true,
+        message: "Có lỗi xảy ra khi cập nhật"
+      });
+    } finally {
+      setLoading(prev => ({ ...prev, [item._id]: false }));
+    }
+  };
+
   return (
     <Fragment>
       <NavbarS2 hclass={'header-section-2 style-two'} />
@@ -116,6 +168,8 @@ const CartPage = () => {
                       <thead>
                         <tr>
                           <th>Sản phẩm</th>
+                          <th>Màu sắc</th>
+                          <th>Kích thước</th>
                           <th>Giá</th>
                           <th>Số lượng</th>
                           <th>Tổng cộng</th>
@@ -139,16 +193,38 @@ const CartPage = () => {
                                           src={item.images[0]}
                                           alt={item.productTitle}
                                           className="product-image"
-                                          style={{ width: '150px', height: '150px' }}
+                                          style={{ width: '100px', height: '100px' }}
                                         />
                                       )}
-                                      <span className="tooltip-glass">{item.productTitle}</span>
+                                      <div className="product-info">
+                                        <h6 className="product-title">{item.productTitle}</h6>
+                                        <small className="text-muted">ID: {item.productId}</small>
+                                      </div>
                                     </div>
+                                  </td>
+
+                                  <td className="cart-item-color">
+                                    <ColorSizeSelector
+                                      item={item}
+                                      onUpdate={updateColorSize}
+                                      loading={loading[item._id]}
+                                      type="color"
+                                    />
+                                  </td>
+
+                                  <td className="cart-item-size">
+                                    <ColorSizeSelector
+                                      item={item}
+                                      onUpdate={updateColorSize}
+                                      loading={loading[item._id]}
+                                      type="size"
+                                    />
                                   </td>
 
                                   <td className="cart-item-price">
                                     <span className="base-price">{formatCurrency(item.price)}</span>
                                   </td>
+
                                   <td>
                                     <div className="cart-item-quantity">
                                       <QuantityBox
@@ -159,13 +235,16 @@ const CartPage = () => {
                                       />
                                     </div>
                                   </td>
+
                                   <td className="cart-item-price">
                                     <span className="total-price">{formatCurrency(item.subTotal)}</span>
                                   </td>
+
                                   <td className="cart-item-remove">
                                     <button
                                       onClick={() => removeItem(item._id)}
                                       disabled={loading[item._id]}
+                                      className="remove-btn"
                                     >
                                       <i className="fas fa-times"></i>
                                     </button>
@@ -176,7 +255,13 @@ const CartPage = () => {
                           })
                         ) : (
                           <tr>
-                            <td colSpan="5" className="text-center">Giỏ hàng trống</td>
+                            <td colSpan="7" className="text-center py-4">
+                              <div className="empty-cart">
+                                <i className="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                <h5>Giỏ hàng trống</h5>
+                                <p className="text-muted">Hãy thêm sản phẩm vào giỏ hàng để bắt đầu mua sắm</p>
+                              </div>
+                            </td>
                           </tr>
                         )}
                       </tbody>

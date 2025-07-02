@@ -8,7 +8,7 @@ import Home1 from '../../../img/header/home-1.jpg';
 import Home2 from '../../../img/header/home-2.jpg';
 import Home3 from '../../../img/header/home-3.jpg';
 import MobileMenu from '../../MobileMenu/MobileMenu';
-
+import { useMyContext } from '../../../context/MyContext';
 
 const HeaderS3 = (props) => {
 
@@ -20,8 +20,7 @@ const HeaderS3 = (props) => {
         window.scrollTo(10, 0);
     }
 
-    const { carts } = props;
-
+    const { carts, user } = useMyContext();
 
     const [isSticky, setIsSticky] = useState(false);
 
@@ -181,7 +180,7 @@ const HeaderS3 = (props) => {
                             </div>
                             <div className="header-right d-flex justify-content-end align-items-center">
                                 <div className="menu-cart">
-                                    <Link onClick={ClickHandler} to="/shop-cart" className="cart-icon">
+                                    <Link onClick={ClickHandler} to={`/shop-cart/${user.userId}`} className="cart-icon">
                                         <i className="far fa-shopping-basket"></i>
                                         <span>{carts.length}</span>
                                     </Link>

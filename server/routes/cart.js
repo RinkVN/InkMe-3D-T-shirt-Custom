@@ -44,7 +44,13 @@ router.get('/:id', requireAuth, checkUserStatus, async (req, res) => {
 
 router.post('/add', requireAuth, checkUserStatus, async (req, res) => {
     try {
-        const cartItem = await Cart.find({ productId: req.body.productId, userId: req.body.userId });
+        // Check if item with same product, color and size already exists
+        const cartItem = await Cart.find({
+            productId: req.body.productId,
+            userId: req.body.userId,
+            productColor: req.body.productColor,
+            productSize: req.body.productSize
+        });
 
         if (cartItem.length === 0) {
             // Calculate total quantity and subtotal from classifications
@@ -61,6 +67,8 @@ router.post('/add', requireAuth, checkUserStatus, async (req, res) => {
                 subTotal: subTotal,
                 productId: req.body.productId,
                 userId: req.body.userId,
+                productColor: req.body.productColor,
+                productSize: req.body.productSize,
                 inkmeFile: req.body.inkmeFile || null,
                 classifications: classifications
             });
@@ -69,7 +77,7 @@ router.post('/add', requireAuth, checkUserStatus, async (req, res) => {
             res.status(201).json(cartList);
         } else {
             return res.status(401).json({
-                message: "Sản phẩm đã có trong giỏ hàng",
+                message: "Sản phẩm với màu sắc và kích thước này đã có trong giỏ hàng",
                 status: false
             });
         }
@@ -83,7 +91,13 @@ router.post('/add', requireAuth, checkUserStatus, async (req, res) => {
 
 router.post('/', requireAuth, checkUserStatus, async (req, res) => {
     try {
-        const cartItem = await Cart.find({ productId: req.body.productId, userId: req.body.userId });
+        // Check if item with same product, color and size already exists
+        const cartItem = await Cart.find({
+            productId: req.body.productId,
+            userId: req.body.userId,
+            productColor: req.body.productColor,
+            productSize: req.body.productSize
+        });
 
         if (cartItem.length === 0) {
             // Calculate total quantity and subtotal from classifications
@@ -100,6 +114,8 @@ router.post('/', requireAuth, checkUserStatus, async (req, res) => {
                 subTotal: subTotal,
                 productId: req.body.productId,
                 userId: req.body.userId,
+                productColor: req.body.productColor,
+                productSize: req.body.productSize,
                 inkmeFile: req.body.inkmeFile || null,
                 classifications: classifications
             });
@@ -108,7 +124,7 @@ router.post('/', requireAuth, checkUserStatus, async (req, res) => {
             res.status(201).json(cartList);
         } else {
             return res.status(401).json({
-                message: "Sản phẩm đã có trong giỏ hàng",
+                message: "Sản phẩm với màu sắc và kích thước này đã có trong giỏ hàng",
                 status: false
             });
         }
@@ -194,6 +210,8 @@ router.put("/:id", requireAuth, checkUserStatus, async (req, res) => {
                 subTotal: subTotal,
                 productId: req.body.productId,
                 userId: req.body.userId,
+                productColor: req.body.productColor,
+                productSize: req.body.productSize,
                 inkmeFile: req.body.inkmeFile || null,
                 classifications: classifications
             },
