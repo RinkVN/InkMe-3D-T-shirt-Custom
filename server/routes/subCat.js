@@ -1,12 +1,13 @@
 const { subCategory } = require("../models/subCat");
 const express = require("express");
 const router = express.Router();
+const { checkUserStatus, requireAuth, requireAdmin } = require("../helper/authorization");
 
 router.get(`/`, async (req, res) => {
     try {
 
         const page = parseInt(req.query.page) || 1;
-        const perPage =  parseInt(req.query.perPage) || 10;
+        const perPage = parseInt(req.query.perPage) || 10;
         const totalPosts = await subCategory.countDocuments();
         const totalPages = Math.ceil(totalPosts / perPage);
 
@@ -18,9 +19,9 @@ router.get(`/`, async (req, res) => {
 
         if (req.query.page !== undefined && req.query.perPage !== undefined) {
             subCategoryList = await subCategory.find().populate("category")
-            .skip((page - 1) * perPage)
-            .limit(perPage)
-            .exec();
+                .skip((page - 1) * perPage)
+                .limit(perPage)
+                .exec();
         } else {
             subCategoryList = await subCategory.find().populate("category");
         }
@@ -49,7 +50,8 @@ router.get(`/:id`, async (req, res) => {
     return res.status(201).send(subCat);
 });
 
-router.post('/create', async (req, res) => {
+// Chỉ admin mới được tạo sub category
+router.post('/create', requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     let subCat = new subCategory({
         category: req.body.category,
@@ -69,7 +71,8 @@ router.post('/create', async (req, res) => {
 
 });
 
-router.delete(`/:id`, async (req, res) => {
+// Chỉ admin mới được xóa sub category
+router.delete(`/:id`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const deletedSubCategory = await subCategory.findByIdAndDelete(req.params.id);
     if (!deletedSubCategory) {
@@ -84,7 +87,8 @@ router.delete(`/:id`, async (req, res) => {
     });
 });
 
-router.put('/:id', async (req, res) => {
+// Chỉ admin mới được cập nhật sub category
+router.put('/:id', requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const subCat = await subCategory.findByIdAndUpdate(
         req.params.id,

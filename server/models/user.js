@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
   address: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Address',
-    required: true
+    required: false
   },
   isAdmin: {
     type: Boolean,

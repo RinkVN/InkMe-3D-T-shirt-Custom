@@ -16,7 +16,7 @@ import Testimonial from '../../components/TestimonialPages/Testimonial/Testimoni
 import BlogSection from '../../components/BlogPages/BlogSection/BlogSection';
 import CtaSection from '../../components/CtaPages/CtaSection/CtaSection';
 import Footer from '../../components/FooterPages/footer/Footer';
-import CursorMaus from '../../components/CursorMaus/CursorMaus';
+
 import ServiceBg from '../../img/service/service-bg.jpg'
 import { connect } from "react-redux";
 import { addToCart } from "../../store/actions/action";
@@ -56,7 +56,7 @@ const HomePage = ({ addToCart }) => {
             {/* <BlogSection hclass="blog-section section-padding pt-0 bg-cover" SubClass="blog-wrapper" /> */}
             <CtaSection />
             <Footer />
-            <CursorMaus />
+
         </Fragment>
     )
 };

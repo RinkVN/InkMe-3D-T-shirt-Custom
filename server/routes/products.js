@@ -6,6 +6,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
+const { checkUserStatus, requireAuth, requireAdmin } = require("../helper/authorization");
 
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
@@ -33,7 +34,8 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // 10 MB
 });
 
-router.post(`/upload`, upload.array("images"), async (req, res) => {
+// Chỉ admin mới được upload images cho sản phẩm
+router.post(`/upload`, requireAuth, checkUserStatus, requireAdmin, upload.array("images"), async (req, res) => {
 
     imagesArray = [];
 
@@ -74,6 +76,7 @@ const uploadSingle = multer({
     limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
 }).single("file"); // field name = file
 
+// Chỉ admin mới được upload file layout
 router.post("/upload-file", (req, res) => {
 
     try {
@@ -120,7 +123,7 @@ router.post("/upload-file", (req, res) => {
                             // Only create local file as emergency fallback
                             try {
                                 fs.writeFileSync(filePath, jsonData);
-                                const localUrl = `http://localhost:4000/uploads/${filename}`;
+                                const localUrl = `${process.env.VITE_APP_BASE_URL}/uploads/${filename}`;
 
                                 return res.status(200).json({
                                     url: localUrl,
@@ -308,7 +311,8 @@ router.get(`/featured`, async (req, res) => {
 
 
 
-router.post(`/create`, async (req, res) => {
+// Chỉ admin mới được tạo sản phẩm mới
+router.post(`/create`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const category = await Category.findById(req.body.category);
     if (!category) {
@@ -370,7 +374,8 @@ router.get(`/recentlyProducts`, async (req, res) => {
     return res.status(200).json(productList);
 });
 
-router.post(`/recentlyProducts`, async (req, res) => {
+// User đã login có thể thêm sản phẩm vào recently viewed
+router.post(`/recentlyProducts`, requireAuth, checkUserStatus, async (req, res) => {
     try {
         let findProduct = await RecentlyProducts.findOne({ prodId: req.body.id });
 
@@ -428,7 +433,8 @@ router.get(`/:id`, async (req, res) => {
 });
 
 
-router.delete(`/deleteImage`, async (req, res) => {
+// Chỉ admin mới được xóa image
+router.delete(`/deleteImage`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const imgUrl = req.query.img;
     const urlArr = imgUrl.split("/");
@@ -446,7 +452,8 @@ router.delete(`/deleteImage`, async (req, res) => {
 
 });
 
-router.delete(`/:id`, async (req, res) => {
+// Chỉ admin mới được xóa sản phẩm
+router.delete(`/:id`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const product = await Product.findById(req.params.id);
     const images = product.images;
@@ -480,7 +487,8 @@ router.delete(`/:id`, async (req, res) => {
 });
 
 
-router.put(`/:id`, async (req, res) => {
+// Chỉ admin mới được cập nhật sản phẩm
+router.put(`/:id`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const product = await Product.findByIdAndUpdate(
         req.params.id,

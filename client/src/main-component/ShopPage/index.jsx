@@ -7,7 +7,7 @@ import api from "../../api";
 import NavbarS2 from '../../components/NavbarPages/NavbarS2/NavbarS2';
 import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
 import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
-import CursorMaus from '../../components/CursorMaus/CursorMaus';
+
 import { getProducts } from '../../services/ShopServices';
 
 const ShopPage = ({ addToCart }) => {
@@ -53,7 +53,7 @@ const ShopPage = ({ addToCart }) => {
             />
             <CtaSectionS2 />
             <FooterS3 />
-            <CursorMaus />
+
         </Fragment>
     )
 };

@@ -16,10 +16,6 @@ const Alltab = (props) => {
         openTab('Tab2');
     }, []);
 
-
-
-
-
     return (
         <div className="single-tab">
             <ul className="nav mb-4">
@@ -40,7 +36,7 @@ const Alltab = (props) => {
                 </li> */}
             </ul>
             <div className="tab-content">
-                <div id="description"  style={{ display: activeTab === 'Tab1' ? 'block' : 'none' }}>
+                <div id="description" style={{ display: activeTab === 'Tab1' ? 'block' : 'none' }}>
                     <div className="description-items">
                         <div className="row">
                             <div className="col-lg-12">
@@ -139,8 +135,8 @@ const Alltab = (props) => {
                                     <td>1m75 - 1m80</td>
                                     <td>80kg - 90kg</td>
                                 </tr>
-                              
-                               
+
+
                             </tbody>
                         </table>
                     </div>
@@ -241,7 +237,7 @@ const Alltab = (props) => {
                             </div>
                         </div>
                         <div className="review-form">
-                          <ContactForm />
+                            <ContactForm />
                         </div>
                     </div>
                 </div>

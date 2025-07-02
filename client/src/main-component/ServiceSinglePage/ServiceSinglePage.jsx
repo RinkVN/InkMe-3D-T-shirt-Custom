@@ -8,7 +8,7 @@ import ServiceSidebar from './sidebar'
 import Accordion from '../../components/Accordion/Accordion'
 import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
 import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
-import CursorMaus from '../../components/CursorMaus/CursorMaus';
+
 import Video from '../../img/service/details-2.jpg'
 import simg1 from '../../img/service/details-3.jpg'
 import simg2 from '../../img/service/details-4.jpg'
@@ -139,7 +139,7 @@ const ServiceSinglePage = (props) => {
             </section>
             <CtaSectionS2 />
             <FooterS3 />
-            <CursorMaus />
+
         </Fragment>
     )
 };

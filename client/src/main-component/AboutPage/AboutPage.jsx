@@ -11,7 +11,7 @@ import ProcessSectionS2 from '../../components/ProcessPages/ProcessSectionS2/Pro
 import TestimonialSectionS3 from '../../components/TestimonialPages/TestimonialSectionS3/TestimonialSectionS3';
 import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
 import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
-import CursorMaus from '../../components/CursorMaus/CursorMaus';
+
 import ServiceBg from '../../img/service/service-bg.jpg'
 const AboutPage = () => {
     return (
@@ -28,7 +28,7 @@ const AboutPage = () => {
             {/* <TestimonialSectionS3 /> */}
             <CtaSectionS2 />
             <FooterS3 />
-            <CursorMaus />
+
         </Fragment>
     )
 };

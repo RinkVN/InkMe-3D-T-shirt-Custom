@@ -1,6 +1,7 @@
 const { ProductSize } = require("../models/productSize");
 const express = require("express");
 const router = express.Router();
+const { checkUserStatus, requireAuth, requireAdmin } = require("../helper/authorization");
 
 router.get(`/`, async (req, res) => {
     try {
@@ -29,14 +30,15 @@ router.get(`/:id`, async (req, res) => {
     res.status(200).send(item);
 });
 
-router.post('/create', async (req, res) => {
+// Chỉ admin mới được tạo product size
+router.post('/create', requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     let productSize = new ProductSize({
         productSize: req.body.productSize
     });
 
     if (!productSize) {
-        return res.status(500).json({ 
+        return res.status(500).json({
             success: false,
             error: "Product Weight could not be created"
         });
@@ -48,7 +50,8 @@ router.post('/create', async (req, res) => {
 
 });
 
-router.delete(`/:id`, async (req, res) => {
+// Chỉ admin mới được xóa product size
+router.delete(`/:id`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const deletedItem = await ProductSize.findByIdAndDelete(req.params.id);
 
@@ -64,7 +67,8 @@ router.delete(`/:id`, async (req, res) => {
     });
 });
 
-router.put(`/:id`, async (req, res) => {
+// Chỉ admin mới được cập nhật product size
+router.put(`/:id`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const item = await ProductSize.findByIdAndUpdate(
         req.params.id,

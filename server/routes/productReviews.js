@@ -1,6 +1,7 @@
 const { ProductReviews } = require("../models/productReviews")
 const express = require("express");
 const router = express.Router();
+const { checkUserStatus, requireAuth, requireAdmin } = require("../helper/authorization");
 
 router.get(`/`, async (req, res) => {
 
@@ -36,7 +37,8 @@ router.get(`/:id`, async (req, res) => {
     res.status(200).send(review);
 });
 
-router.post(`/add`, async (req, res) => {
+// User đã login có thể thêm review
+router.post(`/add`, requireAuth, checkUserStatus, async (req, res) => {
 
     let review = new ProductReviews({
         productId: req.body.productId,

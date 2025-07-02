@@ -3,8 +3,10 @@ const { User } = require("../models/user");
 const express = require("express");
 const mongoose = require('mongoose');
 const router = express.Router();
+const { checkUserStatus, requireAuth, requireAdmin, requireAdminOrOwner } = require("../helper/authorization");
 
-router.get(`/`, async (req, res) => {
+// Chỉ admin có thể xem tất cả orders
+router.get(`/`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const perPage = 10;
@@ -27,7 +29,7 @@ router.get(`/`, async (req, res) => {
     }
 });
 
-router.post(`/create`, async (req, res) => {
+router.post(`/create`, requireAuth, checkUserStatus, async (req, res) => {
     try {
         const {
             address,
@@ -174,12 +176,22 @@ router.post(`/create`, async (req, res) => {
     }
 });
 
-router.get(`/:id`, async (req, res) => {
+// Admin hoặc owner có thể xem order chi tiết
+router.get(`/:id`, requireAuth, checkUserStatus, async (req, res) => {
     try {
         const order = await Orders.findById(req.params.id);
         if (!order) {
             return res.status(404).json({ success: false, message: "Order ID not found" });
         }
+
+        // Admin có thể xem tất cả orders, user chỉ xem order của mình
+        if (!req.user.isAdmin && order.userId.toString() !== req.auth.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied. You can only view your own orders"
+            });
+        }
+
         return res.status(200).json(order);
     } catch (error) {
         console.error(error);
@@ -187,11 +199,21 @@ router.get(`/:id`, async (req, res) => {
     }
 });
 
-router.get(`/user/:userId`, async (req, res) => {
+// Admin hoặc chính user đó có thể xem orders của user
+router.get(`/user/:userId`, requireAuth, checkUserStatus, async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.userId)) {
             return res.status(400).json({ success: false, message: "Invalid userId" });
         }
+
+        // Admin có thể xem orders của bất kỳ user nào, user chỉ xem orders của mình
+        if (!req.user.isAdmin && req.params.userId !== req.auth.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied. You can only view your own orders"
+            });
+        }
+
         const orders = await Orders.find({ userId: req.params.userId })
             .populate('userId', 'name email phone')
             .populate('address', 'details moreInfo city')

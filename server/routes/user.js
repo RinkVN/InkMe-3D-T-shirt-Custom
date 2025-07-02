@@ -11,6 +11,7 @@ const {
   sendEmailVerification,
   sendEmailResetPassword,
 } = require("../config/EmailServices");
+const { checkUserStatus, requireAuth, requireAdmin, requireAdminOrOwner } = require("../helper/authorization");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client();
 async function verify(token) {
@@ -49,7 +50,8 @@ const upload = multer({
   storage: storage,
 });
 
-router.post(`/upload`, upload.array("images"), async (req, res) => {
+// Chỉ admin hoặc user đã login mới được upload avatar
+router.post(`/upload`, requireAuth, checkUserStatus, upload.array("images"), async (req, res) => {
   imagesArray = [];
 
   try {
@@ -359,11 +361,20 @@ router.post("/reset-password", async (req, res) => {
   }
 });
 
-router.put(`/changePassword/:id`, async (req, res) => {
+// Chỉ admin hoặc chính user đó mới được đổi password
+router.put(`/changePassword/:id`, requireAuth, checkUserStatus, async (req, res) => {
   try {
+    // Kiểm tra quyền truy cập
+    if (!req.user.isAdmin && req.params.id !== req.auth.id) {
+      return res.status(403).json({
+        error: true,
+        message: "Access denied. You can only change your own password"
+      });
+    }
+
     const { password, newPass } = req.body;
 
-    const existingUser = await User.findOne({ email: email });
+    const existingUser = await User.findById(req.params.id);
 
     if (!existingUser) {
       return res.status(404).json({ error: true, message: "User not found" });
@@ -405,7 +416,8 @@ router.put(`/changePassword/:id`, async (req, res) => {
   }
 });
 
-router.get(`/`, async (req, res) => {
+// Chỉ admin mới được xem tất cả users
+router.get(`/`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
   try {
     const userList = await User.find();
 
@@ -419,12 +431,22 @@ router.get(`/`, async (req, res) => {
   }
 });
 
-router.get(`/:id`, async (req, res) => {
+// Admin hoặc chính user đó mới được xem thông tin
+router.get(`/:id`, requireAuth, checkUserStatus, async (req, res) => {
   try {
+    // Kiểm tra quyền truy cập
+    if (!req.user.isAdmin && req.params.id !== req.auth.id) {
+      return res.status(403).json({
+        error: true,
+        message: "Access denied. You can only view your own profile"
+      });
+    }
+
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      res.status(500).json({
+      return res.status(404).json({
+        error: true,
         message: "User ID not found",
       });
     }
@@ -434,32 +456,30 @@ router.get(`/:id`, async (req, res) => {
   }
 });
 
-router.delete(`/:id`, async (req, res) => {
+// Chỉ admin mới được xóa user
+router.delete(`/:id`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
   try {
-    User.findByIdAndDelete(req.params.id).then((user) => {
-      if (!user) {
-        res.status(404).json({
-          message: "User ID not found",
-          success: false,
-        });
-      }
-      res.status(200).json({
-        message: "User deleted successfully",
-        success: true,
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        error: true,
+        message: "User ID not found",
+        success: false,
       });
+    }
+    return res.status(200).json({
+      message: "User deleted successfully",
+      success: true,
     });
   } catch (error) {
     res.status(500).json({ success: false });
   }
 });
 
-router.get(`/get/count`, async (req, res) => {
+// Chỉ admin mới được xem thống kê user
+router.get(`/get/count`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
   try {
-    const userCount = await User.countDocuments((count) => count);
-
-    if (!userCount) {
-      res.status(500).json({ success: false });
-    }
+    const userCount = await User.countDocuments();
 
     return res.status(200).send({ userCount: userCount });
   } catch (error) {
@@ -467,75 +487,71 @@ router.get(`/get/count`, async (req, res) => {
   }
 });
 
-router.put(`/:id`, async (req, res) => {
+// Admin hoặc chính user đó mới được cập nhật thông tin
+router.put(`/:id`, requireAuth, checkUserStatus, async (req, res) => {
   try {
-    const { name, phone, email, address } = req.body;
+    // Kiểm tra quyền truy cập
+    if (!req.user.isAdmin && req.params.id !== req.auth.id) {
+      return res.status(403).json({
+        error: true,
+        message: "Access denied. You can only update your own profile"
+      });
+    }
+
+    const { name, phone, email, password, address } = req.body;
 
     const userExist = await User.findById(req.params.id);
+    if (!userExist) {
+      return res.status(404).json({
+        error: true,
+        message: "User ID not found"
+      });
+    }
+
+    let updateData = {
+      name: name,
+      phone: phone,
+      email: email,
+      images: imagesArray.length > 0 ? imagesArray : userExist.images,
+    };
+
+    // Nếu có address thì cập nhật
+    if (address) {
+      updateData.address = address;
+    }
+
+    // Nếu có password thì hash và cập nhật
+    if (password) {
+      updateData.password = await bcrypt.hash(password, 10);
+    }
 
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      {
-        name: name,
-        phone: phone,
-        email: email,
-        images: imagesArray,
-        address,
-      },
-      {
-        new: true,
-      }
+      updateData,
+      { new: true }
     );
-
-    if (!user) {
-      return res.status(404).send({ message: "User ID not found" });
-    }
 
     return res.status(200).send(user);
   } catch (error) {
-    res.status(500).json({ success: false });
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
   }
 });
 
-router.put(`/:id`, async (req, res) => {
-    try {
-        const { name, phone, email, password } = req.body;
-
-        const userExist = await User.findById(req.params.id);
-        let newPassword
-        if(req.body.password){
-            newPassword = await bcrypt.hash(password, 10);
-        }else{
-            newPassword = userExist.hashPassword;
-        }
-
-        const user = await User.findByIdAndUpdate(
-            req.params.id,
-            {
-                name: name,
-                phone: phone,
-                email: email,
-                images: imagesArray,
-                password: newPassword
-            },
-            {
-                new: true
-            }
-        );
-
-        if (!user) {
-            return res.status(404).send({ message: "User ID not found" });
-        }
-
-        return res.status(200).send(user);
-    } catch (error) {
-        res.status(500).json({ success: false });
-    }
-});
-
 // Routes for address management
-router.post(`/:id/address`, async (req, res) => {
+// Admin hoặc chính user đó mới được thêm address
+router.post(`/:id/address`, requireAuth, checkUserStatus, async (req, res) => {
   try {
+    // Kiểm tra quyền truy cập
+    if (!req.user.isAdmin && req.params.id !== req.auth.id) {
+      return res.status(403).json({
+        error: true,
+        message: "Access denied. You can only manage your own addresses"
+      });
+    }
+
     const { city, details, moreInfo } = req.body;
 
     const user = await User.findById(req.params.id);
@@ -564,8 +580,17 @@ router.post(`/:id/address`, async (req, res) => {
   }
 });
 
-router.put(`/:id/address/:addressId`, async (req, res) => {
+// Admin hoặc chính user đó mới được cập nhật address
+router.put(`/:id/address/:addressId`, requireAuth, checkUserStatus, async (req, res) => {
   try {
+    // Kiểm tra quyền truy cập
+    if (!req.user.isAdmin && req.params.id !== req.auth.id) {
+      return res.status(403).json({
+        error: true,
+        message: "Access denied. You can only manage your own addresses"
+      });
+    }
+
     const { city, details, moreInfo } = req.body;
 
     const user = await User.findById(req.params.id);
@@ -597,8 +622,17 @@ router.put(`/:id/address/:addressId`, async (req, res) => {
   }
 });
 
-router.delete(`/:id/address/:addressId`, async (req, res) => {
+// Admin hoặc chính user đó mới được xóa address
+router.delete(`/:id/address/:addressId`, requireAuth, checkUserStatus, async (req, res) => {
   try {
+    // Kiểm tra quyền truy cập
+    if (!req.user.isAdmin && req.params.id !== req.auth.id) {
+      return res.status(403).json({
+        error: true,
+        message: "Access denied. You can only manage your own addresses"
+      });
+    }
+
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: true, message: "User not found" });

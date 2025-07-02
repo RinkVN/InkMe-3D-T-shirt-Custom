@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
+const { checkUserStatus, requireAuth, requireAdmin } = require("../helper/authorization");
 
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
@@ -30,7 +31,8 @@ const upload = multer({
     storage: storage
 })
 
-router.post(`/upload`, upload.array("images"), async (req, res) => {
+// Chỉ admin mới được upload images cho home banner
+router.post(`/upload`, requireAuth, checkUserStatus, requireAdmin, upload.array("images"), async (req, res) => {
 
     imagesArray = [];
 
@@ -100,7 +102,8 @@ router.get(`/`, async (req, res) => {
 
 
 
-router.post('/create', async (req, res) => {
+// Chỉ admin mới được tạo home banner
+router.post('/create', requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     // const images_array = [];
     // const uploadedImages = await ImageUpload.find();
@@ -130,7 +133,8 @@ router.post('/create', async (req, res) => {
 
 });
 
-router.delete(`/deleteImage`, async (req, res) => {
+// Chỉ admin mới được xóa image
+router.delete(`/deleteImage`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const imgUrl = req.query.img;
     const urlArr = imgUrl.split("/");
@@ -148,7 +152,8 @@ router.delete(`/deleteImage`, async (req, res) => {
 
 });
 
-router.delete(`/:id`, async (req, res) => {
+// Chỉ admin mới được xóa home banner
+router.delete(`/:id`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const homeBanner = await HomeBanner.findById(req.params.id);
     const images = homeBanner.images;
@@ -179,7 +184,8 @@ router.delete(`/:id`, async (req, res) => {
     });
 });
 
-router.put("/:id", async (req, res) => {
+// Chỉ admin mới được cập nhật home banner
+router.put("/:id", requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const homeBanner = await HomeBanner.findByIdAndUpdate(
         req.params.id,

@@ -5,7 +5,7 @@ import NavbarS2 from '../../components/NavbarPages/NavbarS2/NavbarS2';
 import PageTitle from '../../components/pagetitle/PageTitle'
 import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
 import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
-import CursorMaus from '../../components/CursorMaus/CursorMaus';
+
 
 import P1 from '../../img/project/details.jpg'
 import P2 from '../../img/project/details-2.jpg'
@@ -17,7 +17,7 @@ const ProjectSinglePage = () => {
         window.scrollTo(10, 0);
     };
 
-    const{slug} = useParams();
+    const { slug } = useParams();
 
     const ProjactDetailPage = Projact.find(item => item.slug === slug)
     return (
@@ -129,8 +129,8 @@ const ProjectSinglePage = () => {
                                 <div className="col-lg-4">
                                     <div className="title-content">
                                         <h2>
-                                            The Results of <br/>
-                                                Our Project
+                                            The Results of <br />
+                                            Our Project
                                         </h2>
                                     </div>
                                 </div>
@@ -196,7 +196,7 @@ const ProjectSinglePage = () => {
             </section>
             <CtaSectionS2 />
             <FooterS3 />
-            <CursorMaus />
+
         </Fragment>
     );
 };

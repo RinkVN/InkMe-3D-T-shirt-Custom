@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import { addToCart } from "../../store/actions/action";
 import api from "../../api";
 import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
-import CursorMaus from '../../components/CursorMaus/CursorMaus';
+
 
 const HomePage3 = ({ addToCart }) => {
     const productsArray = api();
@@ -50,7 +50,7 @@ const HomePage3 = ({ addToCart }) => {
             <BlogSectionS3 hclass={'blog-section-3 section-padding'} SubClass="blog-wrapper" />
             <CtaSectionS2 />
             <FooterS3 />
-            <CursorMaus />
+
         </Fragment>
     )
 };

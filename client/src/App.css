@@ -247,3 +247,9 @@
 .custom-3d-popup-close:hover {
   background: #e0e0e0;
 }
+
+body {
+  transform: scale(0.85);
+  transform-origin: top left;
+  width: 118%; /* 100% / 0.85 để bù lại độ co */
+}

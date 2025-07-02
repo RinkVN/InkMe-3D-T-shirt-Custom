@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
+const { checkUserStatus, requireAuth, requireAdmin } = require("../helper/authorization");
 
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
@@ -30,7 +31,8 @@ const upload = multer({
     storage: storage
 })
 
-router.post(`/upload`, upload.array("images"), async (req, res) => {
+// Chỉ admin mới được upload images cho category
+router.post(`/upload`, requireAuth, checkUserStatus, requireAdmin, upload.array("images"), async (req, res) => {
 
     imagesArray = [];
     console.log("Received files:", req.files); // Kiểm tra req.files
@@ -113,7 +115,8 @@ router.get(`/:id`, async (req, res) => {
 });
 
 
-router.post('/create', async (req, res) => {
+// Chỉ admin mới được tạo category mới
+router.post('/create', requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const images_array = [];
     const uploadedImages = await ImageUpload.find();
@@ -145,7 +148,8 @@ router.post('/create', async (req, res) => {
 
 });
 
-router.delete(`/deleteImage`, async (req, res) => {
+// Chỉ admin mới được xóa image category
+router.delete(`/deleteImage`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const imgUrl = req.query.img;
     const urlArr = imgUrl.split("/");
@@ -163,7 +167,8 @@ router.delete(`/deleteImage`, async (req, res) => {
 
 });
 
-router.delete(`/:id`, async (req, res) => {
+// Chỉ admin mới được xóa category
+router.delete(`/:id`, requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const category = await Category.findById(req.params.id);
     const images = category.images;
@@ -195,7 +200,8 @@ router.delete(`/:id`, async (req, res) => {
     });
 });
 
-router.put("/:id", async (req, res) => {
+// Chỉ admin mới được cập nhật category
+router.put("/:id", requireAuth, checkUserStatus, requireAdmin, async (req, res) => {
 
     const category = await Category.findByIdAndUpdate(
         req.params.id,

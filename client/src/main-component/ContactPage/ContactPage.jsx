@@ -4,7 +4,7 @@ import PageTitle from '../../components/pagetitle/PageTitle'
 import Contactpage from '../../components/ContactPages/Contactpage/Contactpage'
 import CtaSectionS2 from '../../components/CtaPages/CtaSectionS2/CtaSectionS2';
 import FooterS3 from '../../components/FooterPages/footerS3/FooterS3';
-import CursorMaus from '../../components/CursorMaus/CursorMaus';
+
 
 const ContactPage = () => {
     return (
@@ -14,7 +14,7 @@ const ContactPage = () => {
             <Contactpage />
             <CtaSectionS2 />
             <FooterS3 />
-            <CursorMaus />
+
         </Fragment>
     )
 };

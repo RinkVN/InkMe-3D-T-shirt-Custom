@@ -1,119 +1,383 @@
-import { Slider } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import { Link } from 'react-router-dom';
 
 const Product = ({ product, addToCart }) => {
-  const productSliderBig = React.useRef();
-  const productSliderSml = React.useRef();
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [quantity, setQuantity] = useState(1);
+
+  // Color mapping for display
+  const colorMap = {
+    'Xám': '#9ca3af',
+    'Xanh dương': '#3b82f6',
+    'Xanh lá': '#22c55e',
+    'Vàng': '#fbbf24',
+    'Tím': '#a855f7',
+    'Đỏ': '#ef4444',
+    'Đen': '#1f2937',
+    'Trắng': '#f9fafb',
+    'Hồng': '#ec4899',
+    'Cam': '#f97316',
+    'Nâu': '#a3a3a3',
+    'Xanh lam': '#06b6d4',
+    'Gray': '#9ca3af',
+    'Blue': '#3b82f6',
+    'Green': '#22c55e',
+    'Yellow': '#fbbf24',
+    'Purple': '#a855f7',
+    'Red': '#ef4444',
+    'Black': '#1f2937',
+    'White': '#f9fafb',
+    'Pink': '#ec4899',
+    'Orange': '#f97316',
+    'Brown': '#a3a3a3',
+    'Cyan': '#06b6d4'
+  };
+
   const ClickHandler = () => {
     window.scrollTo(10, 0);
   }
-  console.log(product.productSize);
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1
+
+  const handleAddToCart = () => {
+    const productToAdd = {
+      ...product,
+      selectedSize,
+      selectedColor,
+      quantity
+    };
+    addToCart(productToAdd);
   };
 
-  const ProductSliderSmlOptions = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    arrows: false
-};
+  const selectImage = (index) => {
+    setSelectedImage(index);
+  };
 
-const ProductSliderOptions = {
-  dots: false,
-  infinite: false,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  arrows: false
-};
-const goToSlide = (index) => {
-  productSliderBig.current.slickGoTo(index);
-  productSliderSml.current.slickGoTo(index);
-}
+  const selectSize = (size) => {
+    setSelectedSize(size);
+  };
+
+  const selectColor = (color) => {
+    setSelectedColor(color);
+  };
+
+  const increaseQuantity = () => {
+    setQuantity(prev => prev + 1);
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1);
+    }
+  };
+
+  // Navigation functions
+  const goToPrevious = () => {
+    if (selectedImage > 0) {
+      setSelectedImage(selectedImage - 1);
+    }
+  };
+
+  const goToNext = () => {
+    if (selectedImage < product.images.length - 1) {
+      setSelectedImage(selectedImage + 1);
+    }
+  };
 
   return (
     <div className="row g-5">
-        <div className="col-md-5">
-          <div className="sliderWrapper pt-3 pb-3 ps-4 pe-4">
-            <h6 className="mb-3">Ảnh sản phẩm</h6>
-            <Slider {...ProductSliderOptions} ref={productSliderBig}
-              className="sliderBig mb-2">
-              {
-                product?.images?.map((item, index) => {
-                  return (
-                    <div className="item" key={index}>
-                      <img src={item} alt=""
-                        className="w-100" />
+      <div className="col-md-6">
+        <div className="sliderWrapper pt-3 pb-3 ps-4 pe-4">
+
+          {/* Main Image Display */}
+          <div className="main-image mb-3" style={{ position: 'relative' }}>
+            {product?.images && product.images.length > 0 ? (
+              <>
+                <Zoom>
+                  <img
+                    src={product.images[selectedImage]}
+                    alt={product.name}
+                    className="w-100"
+                    style={{
+                      width: '600px',
+                      height: '600px',
+                      objectFit: 'cover',
+                      borderRadius: '8px'
+                    }}
+                  />
+                </Zoom>
+
+                {/* Navigation Buttons */}
+                {product.images.length > 1 && (
+                  <>
+                    {/* Previous Button */}
+                    <button
+                      onClick={goToPrevious}
+                      disabled={selectedImage === 0}
+                      style={{
+                        position: 'absolute',
+                        left: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '40px',
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: selectedImage === 0 ? 'not-allowed' : 'pointer',
+                        opacity: selectedImage === 0 ? 0.3 : 1,
+                        transition: 'all 0.3s ease',
+                        zIndex: 10
+                      }}
+                      onMouseEnter={(e) => {
+                        if (selectedImage !== 0) {
+                          e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+                      }}
+                    >
+                      <i className="fas fa-chevron-left"></i>
+                    </button>
+
+                    {/* Next Button */}
+                    <button
+                      onClick={goToNext}
+                      disabled={selectedImage === product.images.length - 1}
+                      style={{
+                        position: 'absolute',
+                        right: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '40px',
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: selectedImage === product.images.length - 1 ? 'not-allowed' : 'pointer',
+                        opacity: selectedImage === product.images.length - 1 ? 0.3 : 1,
+                        transition: 'all 0.3s ease',
+                        zIndex: 10
+                      }}
+                      onMouseEnter={(e) => {
+                        if (selectedImage !== product.images.length - 1) {
+                          e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+                      }}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                    </button>
+
+                    {/* Image Counter */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '10px',
+                      right: '10px',
+                      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                      color: 'white',
+                      padding: '4px 8px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      fontWeight: 'bold'
+                    }}>
+                      {selectedImage + 1} / {product.images.length}
                     </div>
-                  )
-                })
-              }
-            </Slider>
-            <Slider {...ProductSliderSmlOptions} ref={productSliderSml}
-              className="sliderSml">
-              {
-                product?.images?.map((item, index) => {
-                  return (
-                    <div className="item" key={index} onClick={() => goToSlide(index)}>
-                      <img src={item} alt=""
-                        className="w-100" />
-                    </div>
-                  )
-                })
-              }
-            </Slider>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="no-image d-flex align-items-center justify-content-center"
+                style={{
+                  width: '600px',
+                  height: '600px',
+                  backgroundColor: '#f8f9fa',
+                  borderRadius: '8px'
+                }}>
+                <span>Không có ảnh</span>
+              </div>
+            )}
           </div>
+
+          {/* Thumbnail Images */}
+          {product?.images && product.images.length > 1 && (
+            <div className="thumbnail-images d-flex gap-2 justify-content-center">
+              {product.images.map((image, index) => (
+                <div
+                  key={index}
+                  className={`thumbnail ${selectedImage === index ? 'active' : ''}`}
+                  onClick={() => selectImage(index)}
+                  style={{
+                    cursor: 'pointer',
+                    border: selectedImage === index ? '2px solid #007bff' : '1px solid #ddd',
+                    borderRadius: '4px',
+                    overflow: 'hidden',
+                    transition: 'all 0.2s ease',
+                    transform: selectedImage === index ? 'scale(1.05)' : 'scale(1)'
+                  }}
+                >
+                  <img
+                    src={image}
+                    alt={`${product.name} ${index + 1}`}
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      objectFit: 'cover'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      <div className="col-lg-7">
+      </div>
+      <div className="col-lg-6">
         <div className="product-details-content">
           <div className="star pb-4">
-            <span>{product.discount}%</span>
-            <span>{product.rating} <i className="fa-solid fa-star"></i></span>
+            {product.discount && <span className="badge bg-danger me-2">{product.discount}%</span>}
+            <span>{product.rating} <i className="fa-solid fa-star text-warning"></i></span>
           </div>
           <h3 className="pb-4 split-text right">{product.name}</h3>
           <p className="mb-4">
             {product.description}
           </p>
-          <div className="price-list d-flex align-items-center">
-            <span>{product.price} VND</span>
-            <del>{product.oldPrice} VND</del>
+          <div className="price-list d-flex align-items-center mb-4">
+            <span className="fw-bold fs-4 text-primary me-3">
+              {product.price?.toLocaleString('vi-VN')} VND
+            </span>
+            {product.oldPrice && (
+              <del className="text-muted">
+                {product.oldPrice?.toLocaleString('vi-VN')} VND
+              </del>
+            )}
           </div>
-          <div className="color-list">
-            <span>Color :</span>
-            <ul className="size-list">
-              {product.color.map((color, index) => (
-                <li key={index}>{color}</li>
-              ))}
 
-            </ul>
+          {/* Color Selection */}
+          {product.color && product.color.length > 0 && (
+            <div className="color-selection mb-3">
+              <span className="fw-bold">Màu sắc:</span>
+              {selectedColor && (
+                <span className="ms-2 text-muted">({selectedColor})</span>
+              )}
+              <div className="color-options mt-2 d-flex gap-2 align-items-center">
+                {product.color.map((color, index) => {
+                  const colorHex = colorMap[color] || '#cccccc';
+                  const isSelected = selectedColor === color;
+
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => selectColor(color)}
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        backgroundColor: colorHex,
+                        border: isSelected ? '3px solid #007bff' : '2px solid #e5e7eb',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: isSelected ? '0 0 0 2px rgba(0, 123, 255, 0.2)' : '0 1px 3px rgba(0, 0, 0, 0.1)',
+                        transform: isSelected ? 'scale(1.1)' : 'scale(1)',
+                        position: 'relative'
+                      }}
+                      title={color}
+                    >
+                      {/* White border for light colors */}
+                      {(color === 'Trắng' || color === 'White' || color === 'Vàng' || color === 'Yellow') && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: '2px',
+                            borderRadius: '50%',
+                            border: '1px solid #d1d5db'
+                          }}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Size Selection */}
+          {product.productSize && product.productSize.length > 0 && (
+            <div className="size-selection mb-3">
+              <span className="fw-bold">Kích thước:</span>
+              <div className="size-options mt-2">
+                {product.productSize.map((size, index) => (
+                  <button
+                    key={index}
+                    className={`btn btn-outline-secondary me-2 mb-2 ${selectedSize === size ? 'active' : ''}`}
+                    onClick={() => selectSize(size)}
+                    style={{
+                      backgroundColor: selectedSize === size ? '#007bff' : 'transparent',
+                      color: selectedSize === size ? 'white' : '#000'
+                    }}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quantity Selection */}
+          <div className="quantity-selection mb-4">
+            <span className="fw-bold">Số lượng:</span>
+            <div className="quantity-controls d-flex align-items-center mt-2">
+              <button
+                className="btn btn-outline-secondary"
+                onClick={decreaseQuantity}
+                disabled={quantity <= 1}
+              >
+                -
+              </button>
+              <span className="mx-3 fw-bold">{quantity}</span>
+              <button
+                className="btn btn-outline-secondary"
+                onClick={increaseQuantity}
+              >
+                +
+              </button>
+            </div>
           </div>
-          <div className="color-list">
-            <span>Size :</span>
-            <ul className="size-list">
-              {product.productSize.map((size, index) => (
-                <li key={index}>{size}</li>
-              ))}
-            </ul>
-          </div>
+
           <div className="cart-wrp">
             <div className="shop-button d-flex align-items-center">
-              <button className="theme-btn" onClick={() => addToCart(product)}>
-                <i className="fa-regular fa-basket-shopping"></i> Add To Cart
+              <button
+                className="theme-btn me-3"
+                onClick={handleAddToCart}
+                disabled={
+                  (product.color && product.color.length > 0 && !selectedColor) ||
+                  (product.productSize && product.productSize.length > 0 && !selectedSize)
+                }
+              >
+                <i className="fa-regular fa-basket-shopping"></i> Thêm vào giỏ hàng
               </button>
               <Link to="#" className="star-icon">
                 <i className="fal fa-star"></i>
               </Link>
             </div>
+            {((product.color && product.color.length > 0 && !selectedColor) ||
+              (product.productSize && product.productSize.length > 0 && !selectedSize)) && (
+                <small className="text-danger mt-2 d-block">
+                  Vui lòng chọn đầy đủ thông tin sản phẩm
+                </small>
+              )}
           </div>
 
         </div>

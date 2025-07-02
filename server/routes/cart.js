@@ -2,6 +2,7 @@ const { Cart } = require("../models/cart");
 const express = require("express");
 const router = express.Router();
 const cloudinary = require("cloudinary").v2;
+const { checkUserStatus, requireAuth, requireAdminOrOwner } = require("../helper/authorization");
 
 cloudinary.config({
     cloud_name: process.env.cloudinary_Config_Cloud_Name,
@@ -10,9 +11,17 @@ cloudinary.config({
     secure: true
 });
 
-router.get(`/`, async (req, res) => {
+// Admin có thể xem tất cả cart, user chỉ xem cart của mình
+router.get(`/`, requireAuth, checkUserStatus, async (req, res) => {
     try {
-        const cartList = await Cart.find(req.query);
+        let query = req.query;
+
+        // Nếu không phải admin, chỉ cho phép xem cart của chính mình
+        if (!req.user.isAdmin) {
+            query = { ...req.query, userId: req.auth.id };
+        }
+
+        const cartList = await Cart.find(query);
 
         if (!cartList) {
             return res.status(500).json({ success: false });
@@ -24,7 +33,16 @@ router.get(`/`, async (req, res) => {
     }
 });
 
-router.post('/add', async (req, res) => {
+router.get('/:id', requireAuth, checkUserStatus, async (req, res) => {
+    try {
+        const cartList = await Cart.find({ userId: req.params.id });
+        res.status(200).json(cartList);
+    } catch (error) {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/add', requireAuth, checkUserStatus, async (req, res) => {
     try {
         const cartItem = await Cart.find({ productId: req.body.productId, userId: req.body.userId });
 
@@ -63,7 +81,7 @@ router.post('/add', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', requireAuth, checkUserStatus, async (req, res) => {
     try {
         const cartItem = await Cart.find({ productId: req.body.productId, userId: req.body.userId });
 
@@ -102,15 +120,26 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.delete(`/:id`, async (req, res) => {
+router.delete(`/:id`, requireAuth, checkUserStatus, async (req, res) => {
     try {
-        const deletedItem = await Cart.findByIdAndDelete(req.params.id);
-        if (!deletedItem) {
+        // Kiểm tra ownership - chỉ cho phép xóa cart của chính mình
+        const cartItem = await Cart.findById(req.params.id);
+        if (!cartItem) {
             return res.status(404).json({
                 message: "Cart item not found",
                 success: false
             });
         }
+
+        // Admin có thể xóa bất kỳ cart nào, user chỉ xóa cart của mình
+        if (!req.user.isAdmin && cartItem.userId !== req.auth.id) {
+            return res.status(403).json({
+                message: "Access denied. You can only delete your own cart items",
+                success: false
+            });
+        }
+
+        const deletedItem = await Cart.findByIdAndDelete(req.params.id);
         res.status(200).json({
             message: "Cart deleted successfully",
             success: true
@@ -120,19 +149,30 @@ router.delete(`/:id`, async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireAuth, checkUserStatus, async (req, res) => {
     try {
+        // Kiểm tra ownership trước khi cập nhật
+        const existingCart = await Cart.findById(req.params.id);
+        if (!existingCart) {
+            return res.status(404).json({
+                message: "Cart item not found",
+                success: false
+            });
+        }
+
+        // Admin có thể cập nhật bất kỳ cart nào, user chỉ cập nhật cart của mình
+        if (!req.user.isAdmin && existingCart.userId !== req.auth.id) {
+            return res.status(403).json({
+                message: "Access denied. You can only update your own cart items",
+                success: false
+            });
+        }
+
         const classifications = req.body.classifications || [];
 
         // If no classifications remain, delete the cart item
         if (classifications.length === 0) {
             const deletedItem = await Cart.findByIdAndDelete(req.params.id);
-            if (!deletedItem) {
-                return res.status(404).json({
-                    message: "Cart item not found",
-                    success: false
-                });
-            }
             return res.status(200).json({
                 message: "Cart item deleted as no classifications remain",
                 success: true
@@ -159,13 +199,6 @@ router.put("/:id", async (req, res) => {
             },
             { new: true }
         );
-
-        if (!cartList) {
-            return res.status(404).json({
-                message: "Cart item not found",
-                success: false
-            });
-        }
 
         return res.status(200).send(cartList);
     } catch (error) {

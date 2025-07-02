@@ -14,7 +14,7 @@ app.options("*", cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false, limit: '50mb' }));
-// app.use(authJwt());
+app.use(authJwt());
 
 //Routes
 const userRoutes = require("./routes/user");
