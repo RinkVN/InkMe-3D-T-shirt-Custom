@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import Logo from "../../img/logo.webp";
+import Logo from "../../img/logo/inkme-logo-gradient.png";
 import { useEffect } from "react";
 import patern from "../../img/pattern.webp";
 import { MdEmail } from "react-icons/md";
@@ -20,13 +20,31 @@ import { GoogleLogin } from "@react-oauth/google";
 const loginStyles = `
   .loginSection {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
     position: relative;
     overflow: hidden;
+    min-height: 120vh;
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+    overflow-x: hidden;
+  }
+
+  .loginSection::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 200, 255, 0.2) 0%, transparent 50%);
+    z-index: 1;
   }
 
   .loginPattern {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -36,114 +54,237 @@ const loginStyles = `
   }
 
   .modern-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(30px);
+    border-radius: 24px;
     padding: 3rem 2.5rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
     z-index: 10;
+    max-width: 100%;
+    width: 100%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+    animation: slideInUp 0.6s ease-out;
+  }
+
+  .modern-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+      0 35px 70px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
   }
 
   .login-title {
     font-size: 2rem;
-    font-weight: 700;
-    color: #2d3748;
+    font-weight: 800;
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
   }
 
   .login-subtitle {
-    color: #718096;
+    color:rgb(255, 255, 255);
     font-size: 1rem;
     margin-bottom: 0;
+    font-weight: 500;
   }
 
   .form-group {
     margin-bottom: 1.5rem;
+    position: relative;
   }
 
   .form-control {
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 2px solid rgba(226, 232, 240, 0.6);
+    border-radius: 16px;
+    padding: 1rem 1.25rem 1rem 3.5rem;
     font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    color: #2d3748;
+    width: 100%;
+  }
+
+  .form-control::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
     transition: all 0.3s ease;
-    background: #f7fafc;
   }
 
   .form-control:focus {
     border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    background: white;
+    box-shadow: 
+      0 0 0 4px rgba(102, 126, 234, 0.15),
+      0 10px 20px rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-2px);
+    outline: none;
+  }
+
+  .form-control:focus::placeholder {
+    color: #cbd5e1;
+    transform: translateY(-2px);
   }
 
   .loginSection .icon {
     position: absolute;
-    left: 1rem;
+    left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #a0aec0;
-    z-index: 1;
+    color: #94a3b8;
+    z-index: 2;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-group.focus .icon,
+  .form-control:focus + .icon {
+    color: #667eea;
+    transform: translateY(-50%) scale(1.1);
   }
 
   .btn-blue {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
-    border-radius: 12px;
-    padding: 0.875rem 2rem;
-    font-weight: 600;
+    border-radius: 16px;
+    padding: 1rem 2rem;
+    font-weight: 700;
     text-transform: none;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    letter-spacing: 0.02em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+      0 10px 20px rgba(102, 126, 234, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-blue::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .btn-blue:hover::before {
+    left: 100%;
   }
 
   .btn-blue:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 
+      0 20px 40px rgba(102, 126, 234, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+
+  .btn-blue:active {
+    transform: translateY(-1px);
+  }
+
+  .btn-blue:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
   }
 
   .toggleShowPassword {
     position: absolute;
-    right: 1rem;
+    right: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    color: #a0aec0;
-    transition: color 0.3s ease;
+    color: #94a3b8;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    border-radius: 8px;
   }
 
   .toggleShowPassword:hover {
     color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(-50%) scale(1.1);
   }
 
   .link {
-    color: #667eea;
+    color:rgb(0, 196, 255);
     text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
+  }
+
+  .link:hover::after {
+    width: 100%;
   }
 
   .link:hover {
     color: #764ba2;
-    text-decoration: underline;
+    text-decoration: none;
   }
 
   .signup-text {
-    color: #718096;
+    color:rgb(255, 255, 255);
     font-size: 0.95rem;
+    font-weight: 500;
   }
 
   .signup-link {
-    color: #667eea;
+    color: rgb(0, 196, 255);
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .signup-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
+  }
+
+  .signup-link:hover::after {
+    width: 100%;
   }
 
   .signup-link:hover {
     color: #764ba2;
-    text-decoration: underline;
+    text-decoration: none;
   }
 
   .or {
@@ -152,24 +293,316 @@ const loginStyles = `
 
   .line {
     height: 1px;
-    background: #e2e8f0;
+    background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.4), transparent);
     flex: 1;
   }
 
   .txt {
     padding: 0 1rem;
-    color: #a0aec0;
+    color: #94a3b8;
     font-size: 0.875rem;
+    font-weight: 500;
   }
 
+  /* Google login button responsive */
+  .loginSection [role="button"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .loginSection .google-login-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-left: 0 !important;
+  }
+
+  /* Loading animation */
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
+  .btn-blue .MuiCircularProgress-root {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Animation entrance */
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Focus states */
+  .form-group.focus {
+    transform: translateY(-2px);
+  }
+
+  .form-group.focus .form-control {
+    border-color: #667eea;
+    box-shadow: 
+      0 0 0 4px rgba(102, 126, 234, 0.15),
+      0 10px 20px rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  /* Responsive fixes */
+  .loginSection .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .loginSection .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .loginSection [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1200px) {
+    .modern-card {
+      padding: 2.5rem 2rem;
+    }
+  }
+
+  /* Small tablets and large phones */
   @media (max-width: 768px) {
+    .loginSection {
+      padding: 1rem 0;
+      min-height: 120vh
+      align-items: center;
+    }
+    
     .modern-card {
       margin: 1rem;
       padding: 2rem 1.5rem;
+      border-radius: 20px;
+    }
+    
+    .login-title {
+      font-size: 1.75rem;
+    }
+
+    .login-subtitle {
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      padding: 0.875rem 1rem 0.875rem 3.25rem;
+      font-size: 0.95rem;
+      border-radius: 14px;
+    }
+
+    .loginSection .icon {
+      left: 1rem;
+      font-size: 1rem;
+    }
+
+    .toggleShowPassword {
+      right: 1rem;
+      font-size: 1rem;
+    }
+
+    .btn-blue {
+      padding: 0.875rem 1.5rem;
+      font-size: 0.95rem;
+      border-radius: 14px;
+    }
+
+    .signup-text {
+      font-size: 0.9rem;
+    }
+
+    .loginSection .container {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+  }
+
+  /* Mobile landscape */
+  @media (max-width: 640px) and (orientation: landscape) {
+    .loginSection {
+      min-height: 120vh
+      padding: 0.5rem 0;
+    }
+    
+    .modern-card {
+      margin: 0.5rem;
+      padding: 1.5rem 1rem;
+    }
+
+    .login-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  /* Standard mobile phones */
+  @media (max-width: 480px) {
+    .loginSection {
+      padding: 0.5rem 0;
+      min-height: 120vh
+    }
+    
+    .modern-card {
+      margin: 0.75rem;
+      padding: 1.5rem 1.25rem;
+      border-radius: 18px;
     }
     
     .login-title {
       font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .login-subtitle {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-control {
+      padding: 0.8rem 0.875rem 0.8rem 2.75rem;
+      font-size: 0.9rem;
+      border-radius: 12px;
+    }
+
+    .loginSection .icon {
+      left: 0.875rem;
+      font-size: 0.9rem;
+    }
+
+    .toggleShowPassword {
+      right: 0.875rem;
+      font-size: 1rem;
+    }
+
+    .btn-blue {
+      padding: 0.8rem 1.25rem;
+      font-size: 0.9rem;
+      border-radius: 12px;
+    }
+
+    .or {
+      margin: 1.25rem 0;
+    }
+
+    .txt {
+      padding: 0 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .signup-text {
+      font-size: 0.85rem;
+    }
+
+    .loginSection .google-login-container {
+      margin-left: 0 !important;
+    }
+
+    .loginSection .container {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
+
+  /* Small mobile phones */
+  @media (max-width: 375px) {
+    .loginSection {
+      padding: 0.25rem 0;
+    }
+    
+    .modern-card {
+      margin: 0.5rem;
+      padding: 1.25rem 1rem;
+      border-radius: 16px;
+    }
+    
+    .login-title {
+      font-size: 1.375rem;
+    }
+
+    .login-subtitle {
+      font-size: 0.8rem;
+    }
+
+    .form-control {
+      padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+      font-size: 0.875rem;
+      border-radius: 10px;
+    }
+
+    .loginSection .icon {
+      left: 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .toggleShowPassword {
+      right: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-blue {
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      border-radius: 10px;
+    }
+
+    .loginSection .container {
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
+    }
+  }
+
+  /* Very small screens */
+  @media (max-width: 320px) {
+    .modern-card {
+      margin: 0.25rem;
+      padding: 1rem 0.75rem;
+    }
+    
+    .login-title {
+      font-size: 1.25rem;
+    }
+
+    .login-subtitle {
+      font-size: 0.75rem;
+    }
+
+    .form-control {
+      padding: 0.7rem 0.7rem 0.7rem 2.25rem;
+      font-size: 0.85rem;
+    }
+
+    .loginSection .icon {
+      left: 0.7rem;
+      font-size: 0.85rem;
+    }
+
+    .toggleShowPassword {
+      right: 0.7rem;
+    }
+
+    .btn-blue {
+      padding: 0.7rem 0.875rem;
+      font-size: 0.85rem;
+    }
+
+    .signup-text {
+      font-size: 0.8rem;
     }
   }
 `;
@@ -343,16 +776,17 @@ const LoginScreen = () => {
 
   return (
     <>
-      <img src={patern} alt="pattern" className="loginPattern" />
       <section className="loginSection">
-        <div className="container">
-          <div className="row justify-content-center align-items-center min-vh-100">
-            <div className="col-lg-5 col-md-7">
+        <div className="container h-100">
+          <div className="row justify-content-center align-items-center h-100">
+            <div className="col-12">
               <div className="loginBox modern-card">
                 <div className="logo text-center mb-4">
-                  <img src={Logo} alt="logo" width="80px" />
+                  <Link to={"/"} className="d-inline-block mb-3">
+                    <img src={Logo} alt="logo" style={{ maxWidth: "140px", height: "auto" }} />
+                  </Link>
                   <h2 className="login-title">Chào mừng trở lại</h2>
-                  <p className="login-subtitle">Đăng nhập để tiếp tục</p>
+                  <p className="login-subtitle">Đăng nhập để khám phá thế giới in 3D</p>
                 </div>
 
                 <div className="wrapper">
@@ -361,9 +795,6 @@ const LoginScreen = () => {
                       className={`form-group position-relative ${inputIndex === 0 && "focus"
                         }`}
                     >
-                      <span className="icon">
-                        <MdEmail />
-                      </span>
                       <input
                         type="text"
                         className="form-control"
@@ -374,15 +805,15 @@ const LoginScreen = () => {
                         name="email"
                         onChange={onChangeInput}
                       />
+                      <span className="icon">
+                        <MdEmail />
+                      </span>
                     </div>
 
                     <div
                       className={`form-group position-relative ${inputIndex === 1 && "focus"
                         }`}
                     >
-                      <span className="icon">
-                        <RiLockPasswordFill />
-                      </span>
                       <input
                         type={`${isShowPassword === true ? "text" : "password"}`}
                         className="form-control"
@@ -392,7 +823,9 @@ const LoginScreen = () => {
                         name="password"
                         onChange={onChangeInput}
                       />
-
+                      <span className="icon">
+                        <RiLockPasswordFill />
+                      </span>
                       <span
                         className="toggleShowPassword"
                         onClick={() => setIsShowPassword(!isShowPassword)}
@@ -402,8 +835,15 @@ const LoginScreen = () => {
                     </div>
 
                     <div className="form-group">
-                      <Button type="submit" className="btn-blue btn-big w-100" style={{ color: "white" }}>
-                        {loading === true ? <CircularProgress /> : "Đăng Nhập"}
+                      <Button type="submit" className="btn-blue btn-big w-100" disabled={loading}>
+                        {loading ? (
+                          <>
+                            <CircularProgress size={20} color="inherit" className="me-2" />
+                            Đang đăng nhập...
+                          </>
+                        ) : (
+                          "Đăng nhập"
+                        )}
                       </Button>
                     </div>
 
@@ -418,7 +858,7 @@ const LoginScreen = () => {
                       </div>
 
                       {/* Login with google */}
-                      <div style={{ marginLeft: "40px" }}>
+                      <div className="google-login-container">
                         <GoogleLogin
                           onSuccess={handleSuccess}
                           onError={handleError}

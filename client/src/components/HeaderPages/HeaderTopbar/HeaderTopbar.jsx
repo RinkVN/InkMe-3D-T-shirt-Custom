@@ -1,34 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import CurrentDoler from "./CurrentDoler";
-import { Avatar } from "@mui/material";
-import { useMyContext } from "../../../context/MyContext";
-import { getUserById } from "../../../services/UserServices";
-import avatarDefault from "../../../img/avatar_defaut.jpg";
 
 const HeaderTopbar = (props) => {
-  const { userId, logout } = useMyContext();
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const res = await getUserById(userId);
-      if (res) setUser(res);
-    };
-    if (userId) {
-      fetchUser();
-    }
-  }, [userId]);
-
   const ClickHandler = () => {
     window.scrollTo(10, 0);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    logout();
-    navigate("/");
   };
 
   return (
@@ -56,41 +32,7 @@ const HeaderTopbar = (props) => {
               <i className="fab fa-pinterest-p"></i>
             </Link>
           </div>
-          <CurrentDoler />
-          {/* <div>
-            <h3>Login</h3>
-            <h3>SignUp</h3>
-          </div> */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
-            }}
-          >
-            {user ? (
-              <>
-                <Avatar
-                  alt={user?.name}
-                  src={
-                    Array.isArray(user.images) &&
-                      user.images.length > 0 &&
-                      user.images[0]
-                      ? user.images[0]
-                      : avatarDefault
-                  }
-                  sx={{ width: 35, height: 35 }}
-                />
-                <p>{user?.name}</p>
-              </>
-            ) : (
-              <>
-                <p onClick={() => navigate("/login")}>Login</p>
-              </>
-            )}
-            {user && <p onClick={() => handleLogout()}>|| Logout</p>}
-          </div>
+          {/* <CurrentDoler /> */}
         </div>
       </div>
     </div>
