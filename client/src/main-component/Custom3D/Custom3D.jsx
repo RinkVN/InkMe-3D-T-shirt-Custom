@@ -36,8 +36,8 @@ const Custom3D = () => {
 
     return (
         <div style={{
-            width: '95vw',
-            height: '95vh',
+            width: '110vw',
+            height: '110vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

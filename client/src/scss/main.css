@@ -2629,8 +2629,8 @@ span {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 120vw;
+  height: 120vh;
   background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
@@ -2644,9 +2644,9 @@ span {
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(40, 60, 120, 0.18);
   padding: 0;
-  max-width: 95vw;
-  width: 95vw;
-  height: 95vh;
+  max-width: 110vw;
+  width: 110vw;
+  height: 110vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;

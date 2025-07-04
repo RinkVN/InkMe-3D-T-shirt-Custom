@@ -290,7 +290,7 @@ body {
 .cart-section {
   padding: 25px 39px 25px 25px;
   position: fixed;
-  bottom: 444px;
+  /* bottom: 444px; */
   z-index: 1000;
   transform-style: preserve-3d;
   background-color: #fffffff2;
