@@ -3327,7 +3327,7 @@ span {
 
 .header-1 .mega-menu-wrapper::before {
   position: absolute;
-  right: 145px;
+  right: 165px;
   content: "";
   top: 0;
   bottom: 0;

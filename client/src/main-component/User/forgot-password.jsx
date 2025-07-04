@@ -14,7 +14,7 @@ import "../../App.css";
 const forgotPasswordStyles = `
   .forgotPasswordSection {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    min-height: 120vh;
     position: relative;
     overflow: hidden;
   }
@@ -101,7 +101,7 @@ const forgotPasswordStyles = `
   }
 
   .back-link {
-    color: #667eea;
+    color: #764ba2;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
@@ -111,7 +111,7 @@ const forgotPasswordStyles = `
   }
 
   .back-link:hover {
-    color: #764ba2;
+    color:rgb(26, 8, 45);
     text-decoration: none;
     transform: translateX(-2px);
   }

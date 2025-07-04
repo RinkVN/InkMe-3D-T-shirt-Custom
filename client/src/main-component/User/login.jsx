@@ -835,7 +835,7 @@ const LoginScreen = () => {
                     </div>
 
                     <div className="form-group">
-                      <Button type="submit" className="btn-blue btn-big w-100" disabled={loading}>
+                      <Button type="submit" className="btn-blue btn-big w-100" disabled={loading} style={{ color: "white" }}>
                         {loading ? (
                           <>
                             <CircularProgress size={20} color="inherit" className="me-2" />

@@ -72,7 +72,7 @@ const Custom3D = () => {
             )}
             <iframe
                 ref={iframeRef}
-                src={`http://127.0.0.1:3000/3dpage/index.html`}
+                src={`https://inkme-3d-page-custom-production.up.railway.app/index.html`}
                 width="100%"
                 height="100%"
                 style={{

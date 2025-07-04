@@ -875,6 +875,7 @@ const Signup = () => {
                       <Button
                         type="submit"
                         className="btn-blue btn-big w-100"
+                        style={{  color: "white" }}
                         disabled={loading}
                       >
                         {loading ? (
