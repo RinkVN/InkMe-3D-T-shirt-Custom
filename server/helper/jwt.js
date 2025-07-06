@@ -10,7 +10,9 @@ function authJwt() {
         if (req.path === '/api/user/signin' ||
             req.path === '/api/user/signup' ||
             req.path === '/api/user/forgotpassword' ||
-            req.path === '/api/user/resetpassword') {
+            req.path === '/api/user/resetpassword' ||
+            req.path === '/api/cart/add' ||
+            req.path === '/api/products/upload-file') {
             return true;
         }
 

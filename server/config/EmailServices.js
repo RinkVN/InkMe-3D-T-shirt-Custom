@@ -1,4 +1,4 @@
-require("dotenv").config;
+require("dotenv").config();
 const nodemailer = require("nodemailer");
 
 //Create transporter to send email
@@ -34,7 +34,7 @@ const sendEmailVerification = async (
               Cảm ơn bạn đã đăng ký tài khoản tại InkMe Shop. Để hoàn tất quá trình đăng ký, vui lòng nhấp vào nút bên dưới để xác minh địa chỉ email của bạn.
             </p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${verfificationLink}" style="background-color: #2988BC; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">Xác minh ngay</a>
+              <a href="${verfificationLink}" style="background-color: #2988BC; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">Xác minh tài khoản</a>
             </div>
             <p style="color: #333; font-size: 14px; text-align: center;">
               Nếu bạn không thực hiện đăng ký, vui lòng bỏ qua email này.

@@ -140,18 +140,19 @@ const loginStyles = `
   .loginSection .icon {
     position: absolute;
     left: 1.25rem;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1rem;
+    transform: translateY(0);
     color: #94a3b8;
     z-index: 2;
     font-size: 1.1rem;
     transition: all 0.3s ease;
+    pointer-events: none;
   }
 
   .form-group.focus .icon,
   .form-control:focus + .icon {
     color: #667eea;
-    transform: translateY(-50%) scale(1.1);
+    transform: translateY(0) scale(1.1);
   }
 
   .btn-blue {
@@ -198,6 +199,61 @@ const loginStyles = `
 
   .btn-blue:active {
     transform: translateY(-1px);
+  }
+
+  .toggleShowPassword {
+    position: absolute;
+    right: 1.25rem;
+    top: 1rem;
+    transform: translateY(0);
+    cursor: pointer;
+    color: #94a3b8;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    border-radius: 8px;
+  }
+
+  .toggleShowPassword:hover {
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(0) scale(1.1);
+  }
+
+  /* Error states */
+  .form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 
+      0 0 0 4px rgba(220, 53, 69, 0.15),
+      0 10px 20px rgba(220, 53, 69, 0.1) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  .form-control.is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 
+      0 0 0 4px rgba(220, 53, 69, 0.2),
+      0 10px 20px rgba(220, 53, 69, 0.15) !important;
+  }
+
+  .form-group.focus .form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 
+      0 0 0 4px rgba(220, 53, 69, 0.2),
+      0 10px 20px rgba(220, 53, 69, 0.15) !important;
+  }
+
+  .invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+    background: rgba(255, 255, 255);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border-left: 3px solid #dc3545;
   }
 
   .btn-blue:disabled {
@@ -621,20 +677,30 @@ const LoginScreen = () => {
   const context = useContext(MyContext);
 
   const [formfields, setFormfields] = useState({
-    email: "",
-    phone: "",
+    emailOrPhone: "",
     password: "",
     isAdmin: true,
   });
+
+  const [errors, setErrors] = useState({});
 
   //const context = useContext(MyContext);
   const history = useNavigate();
 
   const onChangeInput = (e) => {
+    const { name, value } = e.target;
     setFormfields({
       ...formfields,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: ""
+      });
+    }
   };
 
   useEffect(() => {
@@ -664,78 +730,97 @@ const LoginScreen = () => {
     fetchUser(); // Gọi hàm async bên trong useEffect
   }, []);
 
-  const signIn = (e) => {
+  // Validation functions
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9]{10,11}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Email or Phone validation
+    if (!formfields.emailOrPhone.trim()) {
+      newErrors.emailOrPhone = "Email hoặc số điện thoại không được để trống";
+    } else if (!validateEmail(formfields.emailOrPhone) && !validatePhone(formfields.emailOrPhone)) {
+      newErrors.emailOrPhone = "Vui lòng nhập email hoặc số điện thoại hợp lệ";
+    }
+
+    // Password validation
+    if (!formfields.password) {
+      newErrors.password = "Mật khẩu không được để trống";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const signIn = async (e) => {
     e.preventDefault();
 
-    if (formfields.email === "") {
-      context.setAlterBox({
-        open: true,
-        error: true,
-        message: "Email can't be blank",
-      });
-      return false;
-    }
-    if (formfields.password === "") {
-      context.setAlterBox({
-        open: true,
-        error: true,
-        message: "Password can't be blank",
-      });
-      return false;
+    if (!validateForm()) {
+      return;
     }
 
     setLoading(true);
 
-    postData(`/api/user/signin`, formfields).then((res) => {
-      try {
-        if (res.error === true) {
-          setLoading(false);
-          context.setAlterBox({
-            open: true,
-            error: true,
-            message: res.message || "Sign in failed",
-          });
-          return;
-        }
+    try {
+      const res = await postData(`/api/user/signin`, formfields);
 
-        if (!res.token || !res.user) {
-          setLoading(false);
-          context.setAlterBox({
-            open: true,
-            error: true,
-            message: "Invalid response from server",
-          });
-          return;
-        }
-
-        localStorage.setItem("token", res.token);
-
-        const user = {
-          name: res.user.name,
-          email: res.user.email,
-          userId: res.user.id,
-        };
-
-        localStorage.setItem('user', JSON.stringify(user));
-
-        context.setAlterBox({
-          open: true,
-          error: false,
-          message: "Sign in successfully",
-        });
-        setTimeout(() => {
-          setLoading(false);
-          window.location.href = "/";
-        }, 2000);
-      } catch (error) {
+      if (res.error === true) {
+        setLoading(false);
         context.setAlterBox({
           open: true,
           error: true,
-          message: "Sign in failed",
+          message: res.message || "Đăng nhập thất bại",
         });
-        setLoading(false);
+        return;
       }
-    });
+
+      if (!res.token || !res.user) {
+        setLoading(false);
+        context.setAlterBox({
+          open: true,
+          error: true,
+          message: "Phản hồi không hợp lệ từ máy chủ",
+        });
+        return;
+      }
+
+      localStorage.setItem("token", res.token);
+
+      const user = {
+        name: res.user.name,
+        email: res.user.email,
+        userId: res.user.id,
+      };
+
+      localStorage.setItem('user', JSON.stringify(user));
+
+      context.setAlterBox({
+        open: true,
+        error: false,
+        message: res.message || "Đăng nhập thành công",
+      });
+
+      setTimeout(() => {
+        setLoading(false);
+        window.location.href = "/";
+      }, 2000);
+    } catch (error) {
+      console.error("Login error:", error);
+      context.setAlterBox({
+        open: true,
+        error: true,
+        message: "Có lỗi xảy ra. Vui lòng thử lại sau.",
+      });
+      setLoading(false);
+    }
   };
 
   const handleSuccess = async (response) => {
@@ -797,17 +882,19 @@ const LoginScreen = () => {
                     >
                       <input
                         type="text"
-                        className="form-control"
-                        placeholder="Tên đăng nhập"
+                        className={`form-control ${errors.emailOrPhone ? 'is-invalid' : ''}`}
+                        placeholder="Email hoặc số điện thoại"
                         onFocus={() => focusInput(0)}
                         onBlur={() => setInputIndex(null)}
                         autoFocus
-                        name="email"
+                        name="emailOrPhone"
+                        value={formfields.emailOrPhone}
                         onChange={onChangeInput}
                       />
                       <span className="icon">
                         <MdEmail />
                       </span>
+                      {errors.emailOrPhone && <div className="invalid-feedback">{errors.emailOrPhone}</div>}
                     </div>
 
                     <div
@@ -816,11 +903,12 @@ const LoginScreen = () => {
                     >
                       <input
                         type={`${isShowPassword === true ? "text" : "password"}`}
-                        className="form-control"
-                        placeholder="Điền mật khẩu"
+                        className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                        placeholder="Mật khẩu"
                         onFocus={() => focusInput(1)}
                         onBlur={() => setInputIndex(null)}
                         name="password"
+                        value={formfields.password}
                         onChange={onChangeInput}
                       />
                       <span className="icon">
@@ -832,6 +920,7 @@ const LoginScreen = () => {
                       >
                         {isShowPassword === true ? <IoMdEyeOff /> : <IoMdEye />}
                       </span>
+                      {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                     </div>
 
                     <div className="form-group">

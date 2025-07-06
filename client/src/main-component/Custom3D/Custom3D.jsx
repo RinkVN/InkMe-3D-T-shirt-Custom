@@ -4,6 +4,7 @@ const Custom3D = () => {
     const iframeRef = useRef(null);
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const userId = user.userId || '';
+    const authorization = localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : '';
     const [isProcessing, setIsProcessing] = useState(false);
 
     const productId = `Inkme-custom-${Math.floor(1000000000 + Math.random() * 9000000000)}`;
@@ -12,13 +13,16 @@ const Custom3D = () => {
         const dataToSend = {
             type: 'initData',
             userId,
-            productId
+            productId,
+            authorization
         };
+        console.log(dataToSend);
 
         const sendMessage = () => {
             if (iframeRef.current) {
                 iframeRef.current.contentWindow.postMessage(dataToSend, '*');
             }
+            console.log(iframeRef.current);
         };
 
         // Đợi iframe load xong rồi mới gửi
@@ -32,7 +36,7 @@ const Custom3D = () => {
                 iframe.removeEventListener('load', sendMessage);
             }
         };
-    }, [userId, productId]);
+    }, [userId, productId, authorization]);
 
     return (
         <div style={{
@@ -73,6 +77,7 @@ const Custom3D = () => {
             <iframe
                 ref={iframeRef}
                 src={`https://inkme-3d-page-custom-production.up.railway.app/index.html`}
+                // src={`http://127.0.0.1:3000/3dpage/index.html`}
                 width="100%"
                 height="100%"
                 style={{

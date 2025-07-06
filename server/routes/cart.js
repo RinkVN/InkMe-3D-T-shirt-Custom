@@ -42,7 +42,7 @@ router.get('/:id', requireAuth, checkUserStatus, async (req, res) => {
     }
 });
 
-router.post('/add', requireAuth, checkUserStatus, async (req, res) => {
+router.post('/add', async (req, res) => {
     try {
         // Check if item with same product, color and size already exists
         const cartItem = await Cart.find({
@@ -83,13 +83,13 @@ router.post('/add', requireAuth, checkUserStatus, async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({
-            error: "Cart could not be created",
+            error: "Cart could not be created" + error,
             success: false
         });
     }
 });
 
-router.post('/', requireAuth, checkUserStatus, async (req, res) => {
+router.post('/',  async (req, res) => {
     try {
         // Check if item with same product, color and size already exists
         const cartItem = await Cart.find({
@@ -130,7 +130,7 @@ router.post('/', requireAuth, checkUserStatus, async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({
-            error: "Cart could not be created",
+            error: "Cart could not be created" + error,
             success: false
         });
     }

@@ -76,7 +76,6 @@ const uploadSingle = multer({
     limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
 }).single("file"); // field name = file
 
-// Chỉ admin mới được upload file layout
 router.post("/upload-file", (req, res) => {
 
     try {

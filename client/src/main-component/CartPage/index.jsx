@@ -85,6 +85,8 @@ const CartPage = () => {
         productId: item.productId,
         userId: user.userId,
         inkmeFile: item.inkmeFile,
+        productColor: item.productColor,
+        productSize: item.productSize,
         classifications: item.classifications?.map(cls => ({
           ...cls,
           quantity: newQuantity,
@@ -193,32 +195,37 @@ const CartPage = () => {
                                           src={item.images[0]}
                                           alt={item.productTitle}
                                           className="product-image"
-                                          style={{ width: '100px', height: '100px' }}
+                                          style={{ width: '150px', height: '150px' }}
                                         />
                                       )}
-                                      <div className="product-info">
-                                        <h6 className="product-title">{item.productTitle}</h6>
-                                        <small className="text-muted">ID: {item.productId}</small>
-                                      </div>
+                                      <span className="tooltip-glass">{item.productTitle}</span>
                                     </div>
                                   </td>
 
                                   <td className="cart-item-color">
-                                    <ColorSizeSelector
-                                      item={item}
-                                      onUpdate={updateColorSize}
-                                      loading={loading[item._id]}
-                                      type="color"
-                                    />
+                                    {item.inkmeFile ? (
+                                      <span className="text-muted"></span>
+                                    ) : (
+                                      <ColorSizeSelector
+                                        item={item}
+                                        onUpdate={updateColorSize}
+                                        loading={loading[item._id]}
+                                        type="color"
+                                      />
+                                    )}
                                   </td>
 
                                   <td className="cart-item-size">
-                                    <ColorSizeSelector
-                                      item={item}
-                                      onUpdate={updateColorSize}
-                                      loading={loading[item._id]}
-                                      type="size"
-                                    />
+                                    {item.inkmeFile ? (
+                                      <span className="text-muted"></span>
+                                    ) : (
+                                      <ColorSizeSelector
+                                        item={item}
+                                        onUpdate={updateColorSize}
+                                        loading={loading[item._id]}
+                                        type="size"
+                                      />
+                                    )}
                                   </td>
 
                                   <td className="cart-item-price">

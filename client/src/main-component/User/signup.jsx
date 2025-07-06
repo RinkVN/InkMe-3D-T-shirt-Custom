@@ -148,25 +148,26 @@ const signupStyles = `
   .signup-form .icon {
     position: absolute;
     left: 1.25rem;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1rem;
+    transform: translateY(0);
     color: #94a3b8;
     z-index: 2;
     font-size: 1.1rem;
     transition: all 0.3s ease;
+    pointer-events: none;
   }
 
   .signup-form .form-group.focus .icon,
   .signup-form .form-control:focus + .icon {
     color: #667eea;
-    transform: translateY(-50%) scale(1.1);
+    transform: translateY(0) scale(1.1);
   }
 
   .signup-form .toggleShowPassword {
     position: absolute;
     right: 1.25rem;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 1rem;
+    transform: translateY(0);
     cursor: pointer;
     color: #94a3b8;
     transition: all 0.3s ease;
@@ -178,7 +179,7 @@ const signupStyles = `
   .signup-form .toggleShowPassword:hover {
     color: #667eea;
     background: rgba(102, 126, 234, 0.1);
-    transform: translateY(-50%) scale(1.1);
+    transform: translateY(0) scale(1.1);
   }
 
   .btn-blue {
@@ -414,11 +415,13 @@ const signupStyles = `
 
     .signup-form .icon {
       left: 1rem;
+      top: 0.875rem;
       font-size: 1rem;
     }
 
     .signup-form .toggleShowPassword {
       right: 1rem;
+      top: 0.875rem;
       font-size: 1rem;
     }
 
@@ -456,11 +459,13 @@ const signupStyles = `
 
     .signup-form .icon {
       left: 0.875rem;
+      top: 0.8rem;
       font-size: 0.95rem;
     }
 
     .signup-form .toggleShowPassword {
       right: 0.875rem;
+      top: 0.8rem;
       font-size: 0.95rem;
     }
 
@@ -499,11 +504,13 @@ const signupStyles = `
 
     .signup-form .icon {
       left: 0.75rem;
+      top: 0.75rem;
       font-size: 0.9rem;
     }
 
     .signup-form .toggleShowPassword {
       right: 0.75rem;
+      top: 0.75rem;
       font-size: 0.9rem;
     }
 
@@ -577,6 +584,50 @@ const signupStyles = `
       0 10px 20px rgba(102, 126, 234, 0.1);
     background: rgba(255, 255, 255, 0.95);
   }
+
+  /* Error states */
+  .signup-form .form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 
+      0 0 0 4px rgba(220, 53, 69, 0.15),
+      0 10px 20px rgba(220, 53, 69, 0.1) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  .signup-form .form-control.is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 
+      0 0 0 4px rgba(220, 53, 69, 0.2),
+      0 10px 20px rgba(220, 53, 69, 0.15) !important;
+  }
+
+  .signup-form .form-group.focus .form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 
+      0 0 0 4px rgba(220, 53, 69, 0.2),
+      0 10px 20px rgba(220, 53, 69, 0.15) !important;
+  }
+
+  .invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+    background: rgba(255, 255, 255);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border-left: 3px solid #dc3545;
+  }
+
+  .text-danger {
+    color: #dc3545 !important;
+  }
+
+  .small {
+    font-size: 0.875rem;
+  }
 `;
 
 // Thêm styles vào head
@@ -592,6 +643,8 @@ const Signup = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('token'));
+  const [isChecked, setIsChecked] = useState(false);
+  const [errors, setErrors] = useState({});
   const context = useContext(MyContext);
 
   const [formfields, setFormfields] = useState({
@@ -621,84 +674,138 @@ const Signup = () => {
   };
 
   const onChangeInput = (e) => {
+    const { name, value } = e.target;
     setFormfields({
       ...formfields,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: ""
+      });
+    }
   };
-  // const signUp = (e) => {
-  //   e.preventDefault();
-  //   console.log(formfields);
-  // };
 
-  const signUp = (e) => {
+  // Validation functions
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9]{10,11}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Name validation
+    if (!formfields.name.trim()) {
+      newErrors.name = "Họ và tên không được để trống";
+    } else if (formfields.name.trim().length < 2) {
+      newErrors.name = "Họ và tên phải có ít nhất 2 ký tự";
+    } else if (formfields.name.trim().length > 50) {
+      newErrors.name = "Họ và tên không được vượt quá 50 ký tự";
+    }
+
+    // Email validation
+    if (!formfields.email.trim()) {
+      newErrors.email = "Email không được để trống";
+    } else if (!validateEmail(formfields.email)) {
+      newErrors.email = "Email không đúng định dạng";
+    }
+
+    // Phone validation
+    if (!formfields.phone.trim()) {
+      newErrors.phone = "Số điện thoại không được để trống";
+    } else if (!validatePhone(formfields.phone)) {
+      newErrors.phone = "Số điện thoại phải có 10-11 chữ số";
+    }
+
+    // Password validation
+    if (!formfields.password) {
+      newErrors.password = "Mật khẩu không được để trống";
+    } else if (formfields.password.length < 8) {
+      newErrors.password = "Mật khẩu phải có ít nhất 8 ký tự";
+    } else if (!validatePassword(formfields.password)) {
+      newErrors.password = "Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt";
+    }
+
+    // Confirm password validation
+    if (!formfields.confirmPassword) {
+      newErrors.confirmPassword = "Xác nhận mật khẩu không được để trống";
+    } else if (formfields.password !== formfields.confirmPassword) {
+      newErrors.confirmPassword = "Xác nhận mật khẩu không khớp";
+    }
+
+    // Terms and conditions validation
+    if (!isChecked) {
+      newErrors.terms = "Bạn phải đồng ý với điều khoản và dịch vụ";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const signUp = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      if (formfields.name === "") {
-        context.setAlterBox({
-          open: true,
-          error: true,
-          message: "name can't be blank",
-        });
-        return false;
-      }
-      if (formfields.phone === "") {
-        context.setAlterBox({
-          open: true,
-          error: true,
-          message: "Phone can't be blank",
-        });
-        return false;
-      }
-      if (formfields.email === "") {
-        context.setAlterBox({
-          open: true,
-          error: true,
-          message: "Email can't be blank",
-        });
-        return false;
-      }
-      if (formfields.password === "") {
-        context.setAlterBox({
-          open: true,
-          error: true,
-          message: "Password can't be blank",
-        });
-        return false;
-      }
-      if (formfields.confirmPassword === "") {
-        context.setAlterBox({
-          open: true,
-          error: true,
-          message: "Confirm Password can't be blank",
-        });
-        return false;
-      }
+      const res = await postData(`/api/user/signup`, formfields);
 
-      setLoading(true);
-
-      const res = postData(`/api/user/signup`, formfields);
       if (res.error !== true) {
         context.setAlterBox({
           open: true,
-          error: true,
-          message: "User created successfully",
+          error: false,
+          message: res.message || "Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản.",
         });
+
+        // Reset form
+        setFormfields({
+          name: "",
+          email: "",
+          phone: "",
+          password: "",
+          confirmPassword: "",
+          isAdmin: false,
+        });
+        setIsChecked(false);
+        setErrors({});
 
         setTimeout(() => {
           setLoading(false);
           history("/login");
-        }, 2000);
+        }, 3000);
       } else {
         context.setAlterBox({
           open: true,
-          error: false,
-          message: res.message,
+          error: true,
+          message: res.message || "Đăng ký thất bại. Vui lòng thử lại.",
         });
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Signup error:", error);
+      context.setAlterBox({
+        open: true,
+        error: true,
+        message: "Có lỗi xảy ra. Vui lòng thử lại sau.",
+      });
       setLoading(false);
     }
   };
@@ -763,14 +870,16 @@ const Signup = () => {
                       </span>
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                         placeholder="Họ và tên"
                         onFocus={() => focusInput(0)}
                         onBlur={() => setInputIndex(null)}
                         autoFocus
                         name="name"
+                        value={formfields.name}
                         onChange={onChangeInput}
                       />
+                      {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                     </div>
 
                     <div
@@ -781,14 +890,16 @@ const Signup = () => {
                         <MdEmail />
                       </span>
                       <input
-                        type="text"
-                        className="form-control"
+                        type="email"
+                        className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                         placeholder="Email"
                         onFocus={() => focusInput(1)}
                         onBlur={() => setInputIndex(null)}
                         name="email"
+                        value={formfields.email}
                         onChange={onChangeInput}
                       />
+                      {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                     </div>
 
                     <div
@@ -799,14 +910,16 @@ const Signup = () => {
                         <FaPhone />
                       </span>
                       <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Số điện thoại"
+                        type="tel"
+                        className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                        placeholder="Số điện thoại"
                         onFocus={() => focusInput(2)}
                         onBlur={() => setInputIndex(null)}
                         name="phone"
+                        value={formfields.phone}
                         onChange={onChangeInput}
                       />
+                      {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
                     </div>
 
                     <div
@@ -818,11 +931,12 @@ const Signup = () => {
                       </span>
                       <input
                         type={`${isShowPassword === true ? "text" : "password"}`}
-                        className="form-control"
-                        placeholder="Điền mật khẩu"
+                        className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                        placeholder="Mật khẩu"
                         onFocus={() => focusInput(3)}
                         onBlur={() => setInputIndex(null)}
                         name="password"
+                        value={formfields.password}
                         onChange={onChangeInput}
                       />
 
@@ -832,6 +946,7 @@ const Signup = () => {
                       >
                         {isShowPassword === true ? <IoMdEyeOff /> : <IoMdEye />}
                       </span>
+                      {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                     </div>
 
                     <div
@@ -844,11 +959,12 @@ const Signup = () => {
                       <input
                         type={`${isShowConfirmPassword === true ? "text" : "password"
                           }`}
-                        className="form-control"
+                        className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
                         placeholder="Xác nhận mật khẩu"
                         onFocus={() => focusInput(4)}
                         onBlur={() => setInputIndex(null)}
                         name="confirmPassword"
+                        value={formfields.confirmPassword}
                         onChange={onChangeInput}
                       />
 
@@ -864,18 +980,46 @@ const Signup = () => {
                           <IoMdEye />
                         )}
                       </span>
+                      {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                     </div>
 
-                    <FormControlLabel
-                      control={<Checkbox />}
-                      label="Tôi đồng ý với điều khoản & dịch vụ"
-                    />
+                    <div className="form-group">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={isChecked}
+                            onChange={(e) => {
+                              setIsChecked(e.target.checked);
+                              if (errors.terms) {
+                                setErrors({
+                                  ...errors,
+                                  terms: ""
+                                });
+                              }
+                            }}
+                            sx={{
+                              color: errors.terms ? '#dc3545' : '#94a3b8',
+                              '&.Mui-checked': {
+                                color: errors.terms ? '#dc3545' : '#667eea',
+                              },
+                            }}
+                          />
+                        }
+                        label="Tôi đồng ý với điều khoản & dịch vụ"
+                        sx={{
+                          '& .MuiFormControlLabel-label': {
+                            color: errors.terms ? '#dc3545' : 'rgb(255, 255, 255)',
+                          },
+                        }}
+                      />
+                      {errors.terms && <div className="text-danger small mt-1">{errors.terms}</div>}
+                    </div>
 
                     <div className="form-group">
                       <Button
                         type="submit"
                         className="btn-blue btn-big w-100"
-                        style={{  color: "white" }}
+                        style={{ color: "white" }}
                         disabled={loading}
                       >
                         {loading ? (

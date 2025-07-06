@@ -85,60 +85,175 @@ router.post(`/upload`, requireAuth, checkUserStatus, upload.array("images"), asy
 
 // ------------ img upload
 
+// Validation functions
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validatePhone = (phone) => {
+  const phoneRegex = /^[0-9]{10,11}$/;
+  return phoneRegex.test(phone);
+};
+
+const validatePassword = (password) => {
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return passwordRegex.test(password);
+};
+
+const validateSignupData = (data) => {
+  const errors = {};
+  const { name, phone, email, password, confirmPassword } = data;
+
+  // Name validation
+  if (!name || !name.trim()) {
+    errors.name = "Họ và tên không được để trống";
+  } else if (name.trim().length < 2) {
+    errors.name = "Họ và tên phải có ít nhất 2 ký tự";
+  } else if (name.trim().length > 50) {
+    errors.name = "Họ và tên không được vượt quá 50 ký tự";
+  }
+
+  // Email validation
+  if (!email || !email.trim()) {
+    errors.email = "Email không được để trống";
+  } else if (!validateEmail(email)) {
+    errors.email = "Email không đúng định dạng";
+  }
+
+  // Phone validation
+  if (!phone || !phone.trim()) {
+    errors.phone = "Số điện thoại không được để trống";
+  } else if (!validatePhone(phone)) {
+    errors.phone = "Số điện thoại phải có 10-11 chữ số";
+  }
+
+  // Password validation
+  if (!password) {
+    errors.password = "Mật khẩu không được để trống";
+  } else if (password.length < 8) {
+    errors.password = "Mật khẩu phải có ít nhất 8 ký tự";
+  } else if (!validatePassword(password)) {
+    errors.password = "Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt";
+  }
+
+  // Confirm password validation
+  if (!confirmPassword) {
+    errors.confirmPassword = "Xác nhận mật khẩu không được để trống";
+  } else if (password !== confirmPassword) {
+    errors.confirmPassword = "Xác nhận mật khẩu không khớp";
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
 router.post(`/signup`, async (req, res) => {
-  const { name, phone, email, password, isAdmin } = req.body;
+  const { name, phone, email, password, confirmPassword, isAdmin } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email: email });
-    const existingUserByPhone = await User.findOne({ phone: phone });
+    // Validate input data
+    const validation = validateSignupData(req.body);
+    if (!validation.isValid) {
+      return res.status(400).json({
+        error: true,
+        message: "Dữ liệu không hợp lệ",
+        errors: validation.errors
+      });
+    }
 
+    // Check if user already exists
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Email already exists" });
-    }
-    if (existingUserByPhone) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Phone already exists" });
+      return res.status(400).json({
+        error: true,
+        message: "Email này đã được sử dụng"
+      });
     }
 
+    const existingUserByPhone = await User.findOne({ phone: phone });
+    if (existingUserByPhone) {
+      return res.status(400).json({
+        error: true,
+        message: "Số điện thoại này đã được sử dụng, bạn có thể đăng nhập bằng số điện thoại này"
+      });
+    }
+
+    // Hash password
     const hashPassword = await bcrypt.hash(password, 10);
-    //create token verify
+
+    // Create verification token
     const verificationToken = crypto.randomBytes(32).toString("hex");
 
+    // Create user
     const result = await User.create({
-      name: name,
-      phone: phone,
-      email: email,
+      name: name.trim(),
+      phone: phone.trim(),
+      email: email.toLowerCase().trim(),
       password: hashPassword,
-      isAdmin: isAdmin,
+      isAdmin: isAdmin || false,
       verificationToken,
+      isVerified: false,
     });
 
+    // Generate JWT token
     const token = jwt.sign(
       { email: result.email, id: result._id },
-      process.env.JSON_WEB_TOKEN_SECRET_KEY
+      process.env.JSON_WEB_TOKEN_SECRET_KEY,
+      { expiresIn: '24h' }
     );
 
-    //create link user click when verify
+    // Create verification link
     const verificationLink = `${req.protocol}://${req.get(
       "host"
     )}/api/user/signup/verify/${verificationToken}`;
-    //call function send email verification
-    await sendEmailVerification(name, email, verificationLink);
+
+    // Send email verification
+    try {
+      await sendEmailVerification(name, email, verificationLink);
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError);
+      // Continue with success response even if email fails
+    }
 
     res.status(200).json({
-      message:
-        "Đăng kí tài khoản thành công, vui lòng kiểm tra mail để xác minh tài khoản",
-      user: result,
+      error: false,
+      message: "Đăng ký tài khoản thành công! Vui lòng kiểm tra email để xác minh tài khoản.",
+      user: {
+        id: result._id,
+        name: result.name,
+        email: result.email,
+        phone: result.phone,
+        isAdmin: result.isAdmin,
+        isVerified: result.isVerified
+      },
       token: token,
     });
   } catch (error) {
+    console.error('Signup error:', error);
+
+    // Handle specific MongoDB errors
+    if (error.code === 11000) {
+      if (error.keyPattern && error.keyPattern.email) {
+        return res.status(400).json({
+          error: true,
+          message: "Email này đã được sử dụng"
+        });
+      }
+      if (error.keyPattern && error.keyPattern.phone) {
+        return res.status(400).json({
+          error: true,
+          message: "Số điện thoại này đã được sử dụng, bạn có thể đăng nhập bằng số điện thoại này"
+        });
+      }
+    }
+
     res.status(500).json({
       error: true,
-      message: "Something went wrong",
-      notify: error.message,
+      message: "Có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại sau.",
+      notify: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 });
@@ -167,44 +282,100 @@ router.get(`/signup/verify/:token`, async (req, res) => {
   }
 });
 
+// Helper function to determine if input is email or phone
+const isEmail = (input) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(input);
+};
+
+const isPhone = (input) => {
+  const phoneRegex = /^[0-9]{10,11}$/;
+  return phoneRegex.test(input);
+};
+
 router.post(`/signin`, async (req, res) => {
-  const { email, password } = req.body;
+  const { emailOrPhone, password } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email: email });
+    // Validate input
+    if (!emailOrPhone || !emailOrPhone.trim()) {
+      return res.status(400).json({
+        error: true,
+        message: "Email hoặc số điện thoại không được để trống"
+      });
+    }
+
+    if (!password) {
+      return res.status(400).json({
+        error: true,
+        message: "Mật khẩu không được để trống"
+      });
+    }
+
+    let existingUser;
+    const cleanInput = emailOrPhone.trim();
+
+    // Determine if input is email or phone and find user accordingly
+    if (isEmail(cleanInput)) {
+      existingUser = await User.findOne({ email: cleanInput.toLowerCase() });
+    } else if (isPhone(cleanInput)) {
+      existingUser = await User.findOne({ phone: cleanInput });
+    } else {
+      return res.status(400).json({
+        error: true,
+        message: "Vui lòng nhập email hoặc số điện thoại hợp lệ"
+      });
+    }
 
     if (!existingUser) {
-      return res.status(500).json({ error: true, message: "User not found" });
+      return res.status(400).json({
+        error: true,
+        message: "Tài khoản không tồn tại"
+      });
     }
 
     if (existingUser.isVerified == false) {
       return res.status(400).json({
         error: true,
-        message:
-          "Account was not verified. Please check your mail to verified your account.",
+        message: "Tài khoản chưa được xác minh. Vui lòng kiểm tra email để xác minh tài khoản.",
       });
     }
 
     const matchPassword = await bcrypt.compare(password, existingUser.password);
 
     if (!matchPassword) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Invalid credentials" });
+      return res.status(400).json({
+        error: true,
+        message: "Mật khẩu không chính xác"
+      });
     }
 
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser._id },
-      process.env.JSON_WEB_TOKEN_SECRET_KEY
+      process.env.JSON_WEB_TOKEN_SECRET_KEY,
+      { expiresIn: '24h' }
     );
 
     res.status(200).json({
-      user: existingUser,
+      error: false,
+      user: {
+        id: existingUser._id,
+        name: existingUser.name,
+        email: existingUser.email,
+        phone: existingUser.phone,
+        isAdmin: existingUser.isAdmin,
+        isVerified: existingUser.isVerified
+      },
       token: token,
-      msg: "Login successful",
+      message: "Đăng nhập thành công",
     });
   } catch (error) {
-    res.status(500).json({ error: true, message: "Something went wrong" });
+    console.error('Signin error:', error);
+    res.status(500).json({
+      error: true,
+      message: "Có lỗi xảy ra. Vui lòng thử lại sau.",
+      notify: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
   }
 });
 
@@ -302,30 +473,75 @@ router.post(`/google-auth`, async (req, res) => {
 
 router.post(`/forgot-password`, async (req, res) => {
   try {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Email was not register in shop" });
+    const { emailOrPhone } = req.body;
+
+    // Validate input
+    if (!emailOrPhone || !emailOrPhone.trim()) {
+      return res.status(400).json({
+        error: true,
+        message: "Email hoặc số điện thoại không được để trống"
+      });
     }
-    //create token verify
+
+    let user;
+    const cleanInput = emailOrPhone.trim();
+
+    // Determine if input is email or phone and find user accordingly
+    if (isEmail(cleanInput)) {
+      user = await User.findOne({ email: cleanInput.toLowerCase() });
+    } else if (isPhone(cleanInput)) {
+      user = await User.findOne({ phone: cleanInput });
+    } else {
+      return res.status(400).json({
+        error: true,
+        message: "Vui lòng nhập email hoặc số điện thoại hợp lệ"
+      });
+    }
+
+    if (!user) {
+      return res.status(400).json({
+        error: true,
+        message: "Không tìm thấy tài khoản với thông tin này"
+      });
+    }
+
+    // Create token verify
     const resetToken = crypto.randomBytes(32).toString("hex");
     user.resetToken = resetToken;
+    user.resetTokenExpires = Date.now() + 3600000; // 1 hour
     await user.save();
-    //create link user click when verify
-    const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
-    //call function send email verification
-    await sendEmailResetPassword(email, resetLink);
+
+    // Create reset link
+    const resetLink = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
+
+    // Send email reset password (only if user has email)
+    if (user.email) {
+      try {
+        await sendEmailResetPassword(user.email, resetLink);
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError);
+        return res.status(500).json({
+          error: true,
+          message: "Không thể gửi email. Vui lòng thử lại sau.",
+        });
+      }
+    } else {
+      return res.status(400).json({
+        error: true,
+        message: "Tài khoản này không có email để gửi link reset password",
+      });
+    }
 
     res.status(200).json({
-      message: "Send mail reset password successfully",
+      error: false,
+      message: "Link đặt lại mật khẩu đã được gửi về email của bạn",
     });
   } catch (error) {
+    console.error('Forgot password error:', error);
     res.status(500).json({
       error: true,
-      message: "Something went wrong",
-      notify: error.message,
+      message: "Có lỗi xảy ra. Vui lòng thử lại sau.",
+      notify: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 });
@@ -333,30 +549,73 @@ router.post(`/forgot-password`, async (req, res) => {
 router.post("/reset-password", async (req, res) => {
   try {
     const { token, password } = req.body;
+
+    // Validate input
+    if (!token) {
+      return res.status(400).json({
+        error: true,
+        message: "Token không hợp lệ"
+      });
+    }
+
+    if (!password) {
+      return res.status(400).json({
+        error: true,
+        message: "Mật khẩu không được để trống"
+      });
+    }
+
+    // Validate password strength
+    if (password.length < 8) {
+      return res.status(400).json({
+        error: true,
+        message: "Mật khẩu phải có ít nhất 8 ký tự"
+      });
+    }
+
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        error: true,
+        message: "Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt"
+      });
+    }
+
     const user = await User.findOne({ resetToken: token });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Token is not valid" });
+      return res.status(400).json({
+        error: true,
+        message: "Token không hợp lệ hoặc đã hết hạn"
+      });
     }
 
-    //create new hash password
+    // Check if token is expired (if resetTokenExpires field exists)
+    if (user.resetTokenExpires && user.resetTokenExpires < Date.now()) {
+      return res.status(400).json({
+        error: true,
+        message: "Token đã hết hạn. Vui lòng tạo yêu cầu mới."
+      });
+    }
+
+    // Create new hash password
     const hashPassword = await bcrypt.hash(password, 10);
     user.password = hashPassword;
 
-    //delete reset token after use
+    // Delete reset token after use
     user.resetToken = null;
+    user.resetTokenExpires = null;
     await user.save();
 
     return res.status(200).json({
-      message: "Password is reseted successfully!",
+      error: false,
+      message: "Đặt lại mật khẩu thành công!",
     });
   } catch (error) {
+    console.error('Reset password error:', error);
     return res.status(500).json({
       error: true,
-      message: "Lỗi máy chủ",
-      notify: error.message,
+      message: "Có lỗi xảy ra. Vui lòng thử lại sau.",
+      notify: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 });

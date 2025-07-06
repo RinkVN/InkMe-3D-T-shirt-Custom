@@ -7,7 +7,11 @@ require("dotenv/config");
 const authJwt = require("./helper/jwt");
 const path = require("path");
 
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+  
 app.options("*", cors());
 
 //middleware

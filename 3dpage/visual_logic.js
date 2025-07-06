@@ -13717,12 +13717,32 @@ Thêm Ảnh
         const filename = state.sceneName + '_layout.sav';
         
         const formData = new FormData();
-        formData.append('file', blob, filename); // gửi dưới field "file"
+        
+        // SỬA: Thử nhiều cách lấy token
+        let authorization = '';
+        
+        // Thử lấy từ các source khác nhau
+        const token = localStorage.getItem('token') || 
+                     localStorage.getItem('authorization') || 
+                     sessionStorage.getItem('token') || 
+                     sessionStorage.getItem('authorization') ||
+                     window.authToken || '';
+        
+        if (token) {
+          // Nếu token chưa có Bearer prefix thì thêm vào
+          authorization = token.startsWith('Bearer ') ? token : \`Bearer \${token}\`;
+        }
+        
+        console.log('🔑 Authorization token:', authorization ? '✅ Có token' : '❌ Không có token');
+        
+        formData.append('file', blob, filename); 
     
         console.log('🚀 Uploading layout to server...', { filename });
-    
-        fetch('http://localhost:4000/api/products/upload-file', {
+        fetch('https://inkme-3d-server-production.up.railway.app/api/products/upload-file', {
           method: 'POST',
+         headers: {
+            'Authorization': authorization,
+          },
           body: formData
         })
         .then(async res => {
@@ -13736,7 +13756,6 @@ Thêm Ảnh
     
           console.log('✅ Uploaded layout file:', inkmeFile);
     
-          // 👉 Gửi thêm vào giỏ hàng
           const cartItem = {
           productTitle: state.sceneName || 'InkMe Custom',
           images: [''],
@@ -13745,6 +13764,8 @@ Thêm Ảnh
           quantity: 1,
           subTotal: 250000,
           productId: localStorage.getItem("productId") || 'lo-custom',
+           productColor: '3D',
+          productSize: '3D',
           userId: localStorage.getItem("userId") || 'guest-user',
           inkmeFile: {
             url: result.url,
@@ -13758,7 +13779,7 @@ Thêm Ảnh
           classifications: [
             {
               name: 'Size M',
-              image: 'https://dummyimage.com/100x100/ccc/000?text=S', // dummy hoặc ảnh thực
+              image: 'https://dummyimage.com/100x100/ccc/000?text=S', 
               price: 250000,
               quantity: 1,
               subTotal: 250000
@@ -13766,10 +13787,11 @@ Thêm Ảnh
           ]
         };
     
-          return fetch('http://localhost:4000/api/cart/add', {
+          return fetch('https://inkme-3d-server-production.up.railway.app/api/cart/add', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Authorization': authorization,
             },
             body: JSON.stringify(cartItem)
           });

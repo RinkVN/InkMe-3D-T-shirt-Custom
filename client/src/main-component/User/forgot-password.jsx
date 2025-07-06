@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { CircularProgress } from "@mui/material";
 import { baseUrl, postData } from "../../utils/api";
 import { MyContext } from "../../context/MyContext";
-import Logo from "../../img/logo.webp";
+import Logo from "../../img/logo/inkme-logo-gradient.png";
 import patern from "../../img/pattern.webp";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../App.css";
@@ -76,10 +76,11 @@ const forgotPasswordStyles = `
   .forgotPasswordSection .icon {
     position: absolute;
     left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0.75rem;
+    transform: translateY(0);
     color: #a0aec0;
     z-index: 1;
+    pointer-events: none;
   }
 
   .btn-blue {
@@ -116,6 +117,30 @@ const forgotPasswordStyles = `
     transform: translateX(-2px);
   }
 
+  /* Error states */
+  .form-control.is-invalid {
+    border-color: #e53e3e !important;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+  }
+
+  .form-control.is-invalid:focus {
+    border-color: #e53e3e !important;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2) !important;
+  }
+
+  .invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #e53e3e;
+    font-weight: 500;
+    background: rgba(229, 62, 62, 0.1);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border-left: 3px solid #e53e3e;
+  }
+
   @media (max-width: 768px) {
     .forgot-password-box {
       margin: 1rem;
@@ -124,6 +149,10 @@ const forgotPasswordStyles = `
     
     .forgot-title {
       font-size: 1.5rem;
+    }
+
+    .forgotPasswordSection .icon {
+      top: 0.75rem;
     }
   }
 `;
@@ -136,48 +165,83 @@ if (typeof document !== 'undefined') {
 }
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
+  const [emailOrPhone, setEmailOrPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [inputIndex, setInputIndex] = useState(null);
+  const [errors, setErrors] = useState({});
   const context = useContext(MyContext);
+
+  // Validation functions
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9]{10,11}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!emailOrPhone.trim()) {
+      newErrors.emailOrPhone = "Email hoặc số điện thoại không được để trống";
+    } else if (!validateEmail(emailOrPhone) && !validatePhone(emailOrPhone)) {
+      newErrors.emailOrPhone = "Vui lòng nhập email hoặc số điện thoại hợp lệ";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setEmailOrPhone(value);
+
+    // Clear error when user starts typing
+    if (errors.emailOrPhone) {
+      setErrors({
+        ...errors,
+        emailOrPhone: ""
+      });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email) {
-      context.setAlterBox({
-        open: true,
-        error: true,
-        message: "Please enter your email",
-      });
+    if (!validateForm()) {
       return;
     }
 
     setLoading(true);
     try {
       const response = await postData(`/api/user/forgot-password`, {
-        email,
+        emailOrPhone: emailOrPhone.trim(),
       });
 
       if (response.error === true) {
         context.setAlterBox({
           open: true,
           error: true,
-          message: response.message || "Failed to process request",
+          message: response.message || "Xử lý yêu cầu thất bại",
         });
       } else {
         context.setAlterBox({
           open: true,
           error: false,
-          message: "Password reset link has been sent to your email",
+          message: response.message || "Link đặt lại mật khẩu đã được gửi về email của bạn",
         });
-        setEmail("");
+        setEmailOrPhone("");
+        setErrors({});
       }
     } catch (error) {
+      console.error("Forgot password error:", error);
       context.setAlterBox({
         open: true,
         error: true,
-        message: "An error occurred. Please try again.",
+        message: "Có lỗi xảy ra. Vui lòng thử lại sau.",
       });
     } finally {
       setLoading(false);
@@ -197,9 +261,9 @@ const ForgotPassword = () => {
             <div className="col-lg-5 col-md-7">
               <div className="forgot-password-box modern-card">
                 <div className="logo text-center mb-4">
-                  <img src={Logo} alt="logo" width="80px" />
+                  <img src={Logo} alt="logo" width="150px" />
                   <h2 className="forgot-title">Quên mật khẩu?</h2>
-                  <p className="forgot-subtitle">Nhập email để nhận link đặt lại mật khẩu</p>
+                  <p className="forgot-subtitle">Nhập email hoặc số điện thoại để nhận link đặt lại mật khẩu</p>
                 </div>
 
                 <div className="wrapper">
@@ -212,20 +276,28 @@ const ForgotPassword = () => {
                         <MdEmail />
                       </span>
                       <input
-                        type="email"
-                        className="form-control"
-                        placeholder="Nhập email của bạn"
+                        type="text"
+                        className={`form-control ${errors.emailOrPhone ? 'is-invalid' : ''}`}
+                        placeholder="Nhập email hoặc số điện thoại"
                         onFocus={() => focusInput(0)}
                         onBlur={() => setInputIndex(null)}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={emailOrPhone}
+                        onChange={handleInputChange}
                         required
                       />
+                      {errors.emailOrPhone && <div className="invalid-feedback">{errors.emailOrPhone}</div>}
                     </div>
 
                     <div className="form-group">
-                      <Button type="submit" className="btn-blue btn-big w-100">
-                        {loading ? <CircularProgress /> : "Gửi yêu cầu"}
+                      <Button type="submit" className="btn-blue btn-big w-100" disabled={loading}>
+                        {loading ? (
+                          <>
+                            <CircularProgress size={20} color="inherit" className="me-2" />
+                            Đang xử lý...
+                          </>
+                        ) : (
+                          "Gửi yêu cầu"
+                        )}
                       </Button>
                     </div>
 

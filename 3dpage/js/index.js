@@ -1,4 +1,3 @@
-
 $(function () {
     function eventTrigger(element) {
         if (!element) return;
@@ -482,18 +481,21 @@ document.addEventListener("DOMContentLoaded", function () {
 window.addEventListener('message', (event) => {
     if (!event.data || event.data.type !== 'initData') return;
 
-    const { userId, productId } = event.data;
+    const { userId, productId, authorization } = event.data;
 
     console.log("📥 Nhận dữ liệu từ parent:", event.data);
 
     if (userId) {
         localStorage.setItem('userId', userId || '');
-    } 
+    }
 
     if (productId) {
         localStorage.setItem('productId', productId);
     }
 
-    // Bạn có thể khởi động app từ đây nếu cần
-    // init3DEditor(userId, productId);
+    // Lưu authorization vào localStorage hoặc biến toàn cục
+    if (authorization) {
+        localStorage.setItem('authorization', authorization);
+        // hoặc window.AUTHORIZATION = authorization;
+    }
 });
